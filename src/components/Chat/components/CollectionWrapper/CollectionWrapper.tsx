@@ -8,6 +8,12 @@ import PermissionIcon from '../../../../assets/icons/chatIcons/PermissionIcon';
 import TrashIcon from '../../../../assets/icons/chatIcons/TrashIcon';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
 import ChatAddModal from '../ChatAddModal';
+import ToolTip from '../../../Tooltip/Tooltip';
+import ChatTooltipWrapper from '../ChatTooltipWrapper/ChatTooltipWrapper';
+import UnreadMessagesIcon from '../../../../assets/icons/chatIcons/UnreadMessagesIcon';
+import UnreadMessagesCard from '../UnreadMessagesCard/UnreadMessagesCard';
+import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
+import { setOpenTootipContent } from '../../../../features/workspace/workspaceSlice';
 
 export interface ICollection {
   name: string;
@@ -19,7 +25,43 @@ interface ICollectionWrapperProps {
 }
 
 export default function CollectionWrapper({ collection }: ICollectionWrapperProps) {
+  const dispatch = useAppDispatch();
+
+  const { isOpenTootipContent } = useAppSelector((state) => state.workspace);
+
   const [isActiveCollection, setActiveCollection] = useState(collection.active);
+  const [openUnreadMessages, setOpenUnreadMessages] = useState(false);
+  const [openTaggedMessages, setOpenTaggedMessages] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const handleHoverIntervalMouseIn = (type: string) => {
+    const timeoutId = setTimeout(() => {
+      if (type === 'notification' && !isOpenTootipContent) {
+        setOpenUnreadMessages(true);
+        dispatch(setOpenTootipContent(true));
+      }
+      if (type === 'tagged' && !isOpenTootipContent) {
+        setOpenTaggedMessages(true);
+        dispatch(setOpenTootipContent(true));
+      }
+    }, 500);
+    setHoverTimeout(timeoutId);
+  };
+
+  const handleHoverIntervalMouseOut = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+  };
+
+  const handleClose = () => {
+    setOpenTaggedMessages(false);
+    setOpenUnreadMessages(false);
+    dispatch(setOpenTootipContent(false));
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+  };
 
   return (
     <div>
@@ -72,18 +114,58 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
             </span>
             Shared
           </div>
-          <div
-            className="flex justify-center items-center bg-white"
-            style={{ minWidth: '16px', height: '16px', fontSize: '8px', borderRadius: '3px' }}
+          <ToolTip
+            open={openUnreadMessages}
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            placement="bottom"
+            title={
+              <ChatTooltipWrapper
+                onClose={handleClose}
+                title="Unread messages"
+                icon={<UnreadMessagesIcon color="white" />}
+                showNotifications
+              >
+                <UnreadMessagesCard />
+              </ChatTooltipWrapper>
+            }
           >
-            <NotificationIcon width="9" height="11" color="orange" />
-          </div>
-          <div
-            className="flex justify-center items-center bg-white"
-            style={{ minWidth: '16px', height: '16px', fontSize: '8px', borderRadius: '3px' }}
+            <button
+              onMouseEnter={() => handleHoverIntervalMouseIn('notification')}
+              onMouseLeave={handleHoverIntervalMouseOut}
+              className="flex justify-center items-center bg-white"
+              style={{ minWidth: '16px', height: '16px', fontSize: '8px', borderRadius: '3px' }}
+            >
+              <NotificationIcon width="9" height="11" color="orange" />
+            </button>
+          </ToolTip>
+          <ToolTip
+            open={openTaggedMessages}
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            placement="bottom"
+            title={
+              <ChatTooltipWrapper
+                onClose={handleClose}
+                title="Tagged messages"
+                icon={<EmailIcon width="14" height="14" color="white" />}
+                showNotifications
+              >
+                <UnreadMessagesCard />
+              </ChatTooltipWrapper>
+            }
           >
-            <EmailIcon width="10" height="10" color="orange" />
-          </div>
+            <button
+              onMouseEnter={() => handleHoverIntervalMouseIn('tagged')}
+              onMouseLeave={handleHoverIntervalMouseOut}
+              className="flex justify-center items-center bg-white"
+              style={{ minWidth: '16px', height: '16px', fontSize: '8px', borderRadius: '3px' }}
+            >
+              <EmailIcon width="10" height="10" color="orange" />
+            </button>
+          </ToolTip>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100">
             <div
               className="w-4 flex justify-center items-center rounded-sm bg-white"

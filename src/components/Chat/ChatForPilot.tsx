@@ -7,10 +7,10 @@ import AddCollectionIcon from '../../assets/icons/chatIcons/AddCollectionIcon';
 import ChatFilter from '../../assets/icons/ChatFilter';
 import ChatSearch from '../../assets/icons/ChatSearch';
 
-interface SectionsProps {
-  id: string;
-  element: JSX.Element;
-}
+// interface SectionsProps {
+//   id: string;
+//   element: JSX.Element;
+// }
 
 const mockChatsData = [
   {
@@ -90,10 +90,10 @@ export default function ChatForPilot() {
       setFilteredCollections(mockChatsData);
     }
   };
-  console.log('isArchived', isArchived);
+
   return (
     <>
-      <div className="w-full h-full border-b border-l border-r">
+      <div className="w-full h-full border-b border-r">
         {/* <Nav activeTabId={activeTabId} setActiveTabId={setActiveTabId} /> */}
         {/* main section */}
         <div className="w-full h-full">
@@ -104,7 +104,7 @@ export default function ChatForPilot() {
               <span className="pr-1">
                 <AddCollectionIcon color="orange" />
               </span>
-              NEW COLLECTION
+              ADD CHAT OR COLLECTION
             </div>
             <div className="flex items-center gap-2">
               <div className="flex justify-center bg-alsoit-gray-125 items-center h-6 w-6 rounded-md">
@@ -135,7 +135,7 @@ export default function ChatForPilot() {
                   className="ring-0 focus:ring-0 focus:outline-0"
                   type="text"
                   value={searchChatValue}
-                  placeholder="Search chat card"
+                  placeholder="Search chats"
                   onChange={(e) => handleSearchChat(e)}
                 />
               </div>

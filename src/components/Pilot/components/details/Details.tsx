@@ -39,7 +39,7 @@ export default function Details() {
           icon={<DetailsIcon active={iconToggle} dimensions={{ width: 18, height: 18 }} />}
         />
       </div>
-      <section className="flex flex-col pl-px overflow-y-scroll h-fit mb-11">
+      <section className="flex flex-col overflow-y-scroll h-fit mb-11">
         <DetailsSubTab />
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>

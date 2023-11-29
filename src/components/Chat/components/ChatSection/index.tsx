@@ -19,6 +19,7 @@ import ChatSearch from '../../../../assets/icons/ChatSearch';
 import ChatArrowLeft from '../../../../assets/icons/ChatArrowLeft';
 import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
+import DropdownArrowIcon from '../../../../assets/icons/chatIcons/DropdownArrowIcon';
 
 export default function ChatSection() {
   const dispatch = useAppDispatch();
@@ -133,21 +134,49 @@ export default function ChatSection() {
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                <div className="flex items-center justify-center w-6 h-6 bg-white rounded-md">
-                  <ShowIcon color="orange" width="21" height="21" />
+              <div className="flex gap-1">
+                <div
+                  className="flex justify-between items-center px-1 py-0.5 bg-white items-center rounded-md"
+                  style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
+                >
+                  Read By Me
+                  <span className="flex items-center pl-1">
+                    <label className="switch small" onClick={(event) => event.stopPropagation()}>
+                      <input className="inputShow" type="checkbox" checked={false} />
+                      <div className="slider" />
+                    </label>
+                  </span>
+                  <DropdownArrowIcon color="orange" />
                 </div>
-                <div className="flex items-center justify-center w-6 h-6 bg-white rounded-md">
+                <div
+                  className="flex justify-between items-center px-1 py-0.5 bg-white items-center rounded-md"
+                  style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
+                >
+                  Quick Filter
+                  <span className="flex items-center pl-1">
+                    <DropdownArrowIcon color="orange" />
+                  </span>
+                </div>
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
                   <ChatFilter />
                 </div>
-                <div className="flex items-center justify-center w-6 h-6 bg-white rounded-md">
-                  <ChatMe />
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
+                  <ShowIcon color="orange" width="21" height="21" />
                 </div>
-                <div className="flex items-center justify-center w-12 h-6 bg-white rounded-md">
-                  <ChatAssign />
-                  <ArrowDrop color="orange" />
+                <div className="flex justify-center bg-alsoit-gray-125 items-center h-6 rounded-md">
+                  <div className="relative flex mr-px bg-white justify-center bg-white items-center h-6 w-6 rounded-tl-md rounded-bl-md">
+                    <ChatMe />
+                    <div
+                      className="absolute top-[2px] -right-px rounded-sm bg-alsoit-gray-100"
+                      style={{ width: '0.5px', height: 'calc(100% - 4px)' }}
+                    />
+                  </div>
+                  <div className="flex justify-center bg-white items-center h-6 pl-1 rounded-tr-md rounded-br-md">
+                    <ChatAssign />
+                    <ArrowDrop color="orange" />
+                  </div>
                 </div>
-                <div className="flex items-center justify-center w-6 h-6 mr-2 bg-white rounded-md">
+                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md mr-2">
                   <ChatSearch />
                 </div>
               </div>

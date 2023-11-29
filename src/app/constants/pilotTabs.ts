@@ -35,5 +35,6 @@ export const pilotTabs = {
   COMING_SOON_2: 'coming_soon_2',
   DEEP_LINKS: 'deep_links',
   FORMS: 'forms',
-  TICKETS: 'tickets'
+  TICKETS: 'tickets',
+  CORI_DOCS: 'cori_docs'
 };
