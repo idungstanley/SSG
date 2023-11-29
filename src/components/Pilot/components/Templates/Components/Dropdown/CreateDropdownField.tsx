@@ -104,7 +104,7 @@ function CreateDropdownField() {
             <label
               htmlFor={`input_${i.id}`}
               className="block mb-1 font-medium uppercase text-alsoit-gray-100 text-alsoit-text-xi"
-            >{`LABEL OPTION ${index + 1}`}</label>
+            >{`LABEL OPTION ${formInputs.length > 1 ? index + 1 : ''}`}</label>
             <div className="flex items-center bg-white rounded-md j">
               {i.color && (
                 <span
