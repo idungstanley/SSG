@@ -155,8 +155,6 @@ function ShareWith({ publicMode, entityPermission, teamsAndGroups }: shareWithPr
     task?.data.task.name ??
     workspaceData?.data.workspace.name;
 
-  console.log(allTeamsandMembers);
-
   return (
     <div className="w-full">
       <h1>Share With</h1>

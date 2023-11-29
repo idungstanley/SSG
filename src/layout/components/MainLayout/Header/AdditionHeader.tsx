@@ -297,7 +297,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   };
 
   return (
-    <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
+    <div className="flex items-center justify-between px-4 border-b" style={{ height: '50px' }}>
       <h1
         style={{ height: '50px' }}
         className={`flex items-center ml-0 ${activePlaceId === pages.ALSO_HR ? '' : 'space-x-3'}`}

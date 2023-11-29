@@ -80,7 +80,10 @@ export default function Badges({ task, setShowSubtasks, showSubtasks }: BadgeTas
         {task.checklist_items_count > 0 && (
           <ToolTip title="Checklist">
             <button className="relative p-1 border rounded-md " onClick={(e) => onShowAddSubtaskField(e, task.id)}>
-              <Checklist />
+              <Checklist
+                width={saveSettingOnline?.CompactView ? '29px' : '29px'}
+                height={saveSettingOnline?.CompactView ? '8px' : '12px'}
+              />
               <p className="alsoit-text-sm h-2 w-2 absolute left-5" style={{ fontSize: '9px', bottom: '12.2px' }}>
                 {task.checklist_done_items_count}/{task.checklist_items_count}
               </p>

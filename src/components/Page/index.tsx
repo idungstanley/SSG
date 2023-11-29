@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { STORAGE_KEYS, calculateWidthForContent, dimensions } from '../../app/config/dimensions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -50,6 +50,41 @@ export default function Page({ header, additionalHeader, children, additional, p
     direction: 'XL'
   });
 
+  const calculateWidthForHeader = () => {
+    const extendedBarWidthFromLS =
+      (JSON.parse(localStorage.getItem(STORAGE_KEYS.EXTENDED_BAR_WIDTH) || '""') as number) ||
+      dimensions.extendedBar.default;
+
+    const sidebarWidthFromLS =
+      (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
+      dimensions.navigationBar.default;
+
+    const { showSidebar, userSettingsData, sidebarWidth, extendedBarWidth } = useAppSelector((state) => state.account);
+    const { sidebarWidthRD, showExtendedBar } = useAppSelector((state) => state.workspace);
+
+    const sidebarWidthRT = showSidebar ? sidebarWidth || userSettingsData?.sidebarWidth : sidebarWidthRD;
+
+    const extendedBarWidthRT = showExtendedBar ? extendedBarWidth || userSettingsData?.extendedBarWidth : 0;
+
+    const calculatedContentWidth = useMemo(() => {
+      return `calc(100vw - ${sidebarWidthRT}px - ${extendedBarWidthRT}px)`;
+    }, [
+      sidebarWidth,
+      extendedBarWidthRT,
+      sidebarWidthRT,
+      extendedBarWidth,
+      userSettingsData?.sidebarWidth,
+      showSidebar,
+      userSettingsData?.extendedBarWidth,
+      userSettingsData?.isPilotMinified,
+      showExtendedBar,
+      userSettingsData,
+      extendedBarWidthFromLS,
+      sidebarWidthFromLS
+    ]);
+    return calculatedContentWidth;
+  };
+
   return (
     <main className="grid w-full h-full grid-cols-autoFr">
       {showOverlay && <div className="absolute inset-0 top-0 left-0 z-40 bg-black opacity-50" />}
@@ -60,7 +95,7 @@ export default function Page({ header, additionalHeader, children, additional, p
       ) : (
         <div></div>
       )}
-      <section className="flex flex-col w-full h-full">
+      <section className="flex flex-col h-full" style={{ width: calculateWidthForHeader() }}>
         {additionalHeader}
         {header}
         <div className="relative grid h-full grid-cols-frAuto">
