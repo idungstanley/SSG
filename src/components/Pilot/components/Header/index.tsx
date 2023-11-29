@@ -47,6 +47,9 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
             'relative flex items-center',
             isMinified ? 'justify-center w-full flex-wrap gap-1 flex-col' : 'flex-col'
           )}
+          style={{
+            marginLeft: !isMinified ? '' : ''
+          }}
         >
           {/* show / hide pilot toggle */}
           <button
@@ -54,7 +57,7 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
             onClick={togglePilot}
             className="text-gray-400 flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
             style={{
-              margin: isMinified ? '0' : '7px 12px 2px 0',
+              margin: isMinified ? '0' : '7px 7px 2px 0',
               borderRadius: '3px',
               width: '20px',
               height: '20px'
@@ -65,7 +68,7 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
           <div
             className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
             style={{
-              margin: isMinified ? '0' : '1px 12px 5px 0',
+              margin: isMinified ? '0' : '1px 7px 5px 0',
               borderRadius: '3px',
               width: '20px',
               height: '20px'

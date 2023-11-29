@@ -1,4 +1,4 @@
-import { DocumentTextIcon, EyeIcon, SignalIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -17,7 +17,6 @@ import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import Views from '../../../../../components/Pilot/components/Views/Index';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
-import { DetailsIcon } from '../../../../../assets/icons';
 import Commnunication from '../../../pilot/components/communication/Communication';
 import Logs from '../../../../../components/Pilot/components/Logs/Logs';
 import AutomationIcon from '../../../../../assets/icons/AutomationIcon';
@@ -30,6 +29,8 @@ import TicketsPilotIcon from '../../../../../assets/icons/TicketsPilotIcon';
 import DeepLinks from './components/DeepLinks';
 import Forms from './components/Forms';
 import Tickets from './components/Tickets';
+import PilotDetailsIcon from '../../../../../assets/icons/PilotDetailsIcon';
+import PilotConnectIcon from '../../../../../assets/icons/PilotConnectIcon';
 
 const sections = [
   {
@@ -94,7 +95,7 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <DetailsIcon active={false} dimensions={{ width: 15, height: 15 }} />
+    icon: <PilotDetailsIcon />
   },
   {
     id: pilotTabs.LOGS,
@@ -109,7 +110,7 @@ const tabs = [
   {
     id: pilotTabs.CONNECT,
     label: 'Connect',
-    icon: <SignalIcon className="w-4 h-4" />
+    icon: <PilotConnectIcon />
   },
   {
     id: pilotTabs.UTILITIES,

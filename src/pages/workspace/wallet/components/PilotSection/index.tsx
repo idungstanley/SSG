@@ -1,4 +1,4 @@
-import { DocumentTextIcon, EyeIcon, InformationCircleIcon, SignalIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -32,6 +32,8 @@ import DeepLinksIcon from '../../../../../assets/icons/DeepLinksIcon';
 import FormsPilotIcon from '../../../../../assets/icons/FormsPilotIcon';
 import TicketsPilotIcon from '../../../../../assets/icons/TicketsPilotIcon';
 import Tickets from '../../../hubs/components/PilotSection/components/Tickets';
+import PilotDetailsIcon from '../../../../../assets/icons/PilotDetailsIcon';
+import PilotConnectIcon from '../../../../../assets/icons/PilotConnectIcon';
 
 const sections = [
   {
@@ -104,7 +106,7 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <InformationCircleIcon className="w-4 h-4" />
+    icon: <PilotDetailsIcon />
   },
   {
     id: pilotTabs.LOGS,
@@ -119,7 +121,7 @@ const tabs = [
   {
     id: pilotTabs.CONNECT,
     label: 'Connect',
-    icon: <SignalIcon className="w-4 h-4" />
+    icon: <PilotConnectIcon />
   },
   {
     id: pilotTabs.TIME_CLOCK,

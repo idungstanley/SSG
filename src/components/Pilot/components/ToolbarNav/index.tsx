@@ -149,7 +149,7 @@ export default function ToolbarNav() {
           }}
         >
           <p
-            className={`py-2 transition duration-500 rounded pilot-nav-child ${
+            className={`transition duration-500 rounded pilot-nav-child ${
               lastItem != item ? 'cursor-pointer hover:bg-alsoit-gray-125' : ''
             }`}
             style={{ fontSize: '13px', paddingLeft: '2.5px', paddingRight: '2.5px', letterSpacing: '0.2px' }}
