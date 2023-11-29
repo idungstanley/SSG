@@ -165,7 +165,7 @@ export default function ViewsModal({
           <HeadMenu.Button>
             <Button active={true}>
               <Icons src={view} />
-              <span className="ml-1 mr-2">View</span>
+              <span className="ml-1 mr-2 text-xs">View</span>
               <span>
                 <ArrowRightPilot active={false} />
               </span>
@@ -173,7 +173,7 @@ export default function ViewsModal({
               <span className="pl-2">
                 <Icons src={List} />
               </span>
-              <span>{isActive}</span>
+              <span className=" text-xs">{isActive}</span>
               <span className="px-1">
                 <ArrowOpenDown color="black" />
               </span>
