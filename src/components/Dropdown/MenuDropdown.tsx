@@ -327,7 +327,7 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
       title: 'Templates',
       handleClick: () => ({}),
       icon: <SparklesIcon color="orange" className="w-4 h-6" aria-hidden="true" />,
-      rightIcon: <ArrowRight color="orange" />,
+      rightIcon: <ArrowRight />,
       isVisible: true,
       isUnusing: true
     },
