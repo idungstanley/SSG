@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
@@ -16,6 +16,7 @@ import {
   useUpdateEntityCustomFieldValue
 } from '../../../../../../features/list/listService';
 import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface dropdownProps {
   optionsFromField:
@@ -28,16 +29,18 @@ interface dropdownProps {
   allOptions: Options | undefined;
   currentProperty: IField;
   taskId: string;
+  task?: Task;
+  activeColumn?: boolean[];
 }
 
-function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId }: dropdownProps) {
+function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId, task, activeColumn }: dropdownProps) {
   const dispatch = useAppDispatch();
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
   const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const { updateCords } = useAppSelector((state) => state.task);
+  const { updateCords, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
@@ -45,6 +48,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
   const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -84,8 +88,25 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
     closeModal();
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setIsOpen(!!containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex items-center justify-center focus:ring-0" ref={containerRef} tabIndex={0}>
       <div className="w-full">
         <button
           type="button"

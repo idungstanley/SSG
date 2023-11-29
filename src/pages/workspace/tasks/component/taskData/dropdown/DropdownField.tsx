@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../../../../app/hooks';
 import { IField, Options } from '../../../../../../features/list/list.interfaces';
 import {
@@ -16,6 +16,7 @@ import {
 import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import SearchIcon from '../../../../../../assets/icons/SearchIcon';
 import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface DropdownModalProps {
   field: {
@@ -31,13 +32,15 @@ interface DropdownModalProps {
   };
   taskId: string;
   currentProperty: IField;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
-export default function DropdownField({ field, taskId, currentProperty }: DropdownModalProps) {
+export default function DropdownField({ field, taskId, currentProperty, activeColumn, task }: DropdownModalProps) {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const { options } = field;
-  const { updateCords } = useAppSelector((state) => state.task);
+  const { updateCords, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
   const [searchValue, setSearchValue] = useState<string>('');
   const [activeOption, setActiveOption] = useState<
     | {
@@ -52,6 +55,7 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
   const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -92,8 +96,25 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
     closeModal();
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setIsOpen(!!containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <>
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex items-center justify-center focus:ring-0">
       <div
         className={cl('flex items-center justify-center w-full h-full', activeOption?.color && 'text-white')}
         style={{ backgroundColor: activeOption?.color }}
@@ -166,6 +187,6 @@ export default function DropdownField({ field, taskId, currentProperty }: Dropdo
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 }
