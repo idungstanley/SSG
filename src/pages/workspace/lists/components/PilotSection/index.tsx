@@ -14,7 +14,6 @@ import Templates from '../../../../../components/Pilot/components/Templates';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import Calendar from '../../../../../components/Pilot/components/Calendar';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
@@ -33,6 +32,7 @@ import FormsPilotIcon from '../../../../../assets/icons/FormsPilotIcon';
 import TicketsPilotIcon from '../../../../../assets/icons/TicketsPilotIcon';
 import PilotDetailsIcon from '../../../../../assets/icons/PilotDetailsIcon';
 import PilotConnectIcon from '../../../../../assets/icons/PilotConnectIcon';
+import PilotUtilityIcon from '../../../../../assets/icons/PilotUtilityIcon';
 
 const sections = [
   {
@@ -101,7 +101,7 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <PilotDetailsIcon />
+    icon: <PilotDetailsIcon active={false} />
   },
   {
     id: pilotTabs.LOGS,
@@ -116,12 +116,12 @@ const tabs = [
   {
     id: pilotTabs.CONNECT,
     label: 'Connect',
-    icon: <PilotConnectIcon />
+    icon: <PilotConnectIcon active={false} />
   },
   {
     id: pilotTabs.UTILITIES,
     label: 'Utilities',
-    icon: <UtilityIcon />
+    icon: <PilotUtilityIcon active={false} />
   },
   {
     id: pilotTabs.CHECKLISTS,

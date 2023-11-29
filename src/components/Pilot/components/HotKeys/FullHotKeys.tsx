@@ -73,8 +73,6 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
     [activeHotkeyIds, hotkeyIdsFromLS]
   );
 
-  console.log(activeHotkeyIds);
-
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (

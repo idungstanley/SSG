@@ -1,4 +1,10 @@
-export default function PilotConnectIcon() {
+import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
+
+interface Props {
+  active: boolean;
+}
+
+export default function PilotConnectIcon({ active = false }: Props) {
   return (
     <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
@@ -43,7 +49,7 @@ export default function PilotConnectIcon() {
           4.64043 16.452 4.71361 16.5674 4.86532C17.1561 5.56084 17.615 6.34582 17.944 7.22028C18.2731 8.09475 18.4376 9.0213 18.4376
           9.99993C18.4376 10.9839 18.2696 11.9083 17.9336 12.7732C17.5976 13.638 17.1353 14.4182 16.5466 15.1137C16.4312 15.2515 16.2822
           15.3212 16.0995 15.3228C15.9168 15.3244 15.7635 15.2633 15.6396 15.1393Z"
-          fill="#424242"
+          fill={active ? ICONS_INTERACTIONS.active : ICONS_INTERACTIONS.default}
         />
       </g>
     </svg>

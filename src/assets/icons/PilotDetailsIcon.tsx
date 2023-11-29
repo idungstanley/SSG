@@ -1,4 +1,14 @@
-export default function PilotDetailsIcon() {
+import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
+
+interface Props {
+  active: boolean;
+  dimensions?: {
+    height: number;
+    width: number;
+  };
+}
+
+export default function PilotDetailsIcon({ active = false, dimensions }: Props) {
   return (
     <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
@@ -7,8 +17,8 @@ export default function PilotDetailsIcon() {
         maskUnits="userSpaceOnUse"
         x="0"
         y="0"
-        width="21"
-        height="20"
+        width={dimensions?.width ?? '21'}
+        height={dimensions?.height ?? '20'}
       >
         <rect x="0.5" width="20" height="20" fill="#D9D9D9" />
       </mask>
@@ -29,7 +39,7 @@ export default function PilotDetailsIcon() {
           15.7971 16.5041 15.7282V4.44185C16.5041 4.37285 16.4754 4.3096 16.4179 4.2521C16.3604 4.19461 16.2971 4.16587 16.2282 4.16587H4.94185C4.87285
           4.16587 4.8096 4.19461 4.7521 4.2521C4.69461 4.3096 4.66587 4.37285 4.66587 4.44185V15.7282C4.66587 15.7971 4.69461 15.8604 4.7521 15.9179C4.8096
           15.9754 4.87285 16.0041 4.94185 16.0041Z"
-          fill="#424242"
+          fill={active ? ICONS_INTERACTIONS.active : ICONS_INTERACTIONS.default}
         />
       </g>
     </svg>

@@ -28,7 +28,7 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
     height: '40px',
     borderLeft: '0',
     borderTop: '0',
-    borderBottom: '.25px solid #B2B2B2'
+    borderBottom: '0.25px solid rgba(178, 178, 178, 0.25)'
   };
 
   const handleClick = (tabId: string) => {
@@ -43,7 +43,7 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
       onClick={() => handleClick(id)}
       className={cl(
         isActiveTab
-          ? 'bg-primary-200 text-primary-700'
+          ? 'bg-alsoit-purple-50 text-alsoit-purple-300'
           : 'alsoit-gray-300 hover:text-gray-700 hover:bg-alsoit-gray-125',
         'group relative flex items-center justify-between cursor-pointer text-sm h-full transition duration-500 border-alsoit-gray-75'
       )}
@@ -57,15 +57,14 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
 
       {/* main content */}
       <div
-        title={label}
         className={cl(
           'flex items-center text-xs gap-2 truncate',
-          isActiveTab && 'text-primary-700 font-medium',
+          isActiveTab && 'text-alsoit-purple-300 font-medium',
           showTabLabel ? 'justify-start w-full' : 'justify-center'
         )}
       >
-        <span className="flex justify-center" style={{ width: '20px' }}>
-          {icon}
+        <span className="flex justify-center" style={{ width: '21px' }}>
+          {React.cloneElement(icon, { active: isActiveTab })}
         </span>
         {showTabLabel ? (
           <p className="truncate font-medium" style={{ fontSize: '13px' }}>

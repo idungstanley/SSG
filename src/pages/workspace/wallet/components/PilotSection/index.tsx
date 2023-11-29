@@ -106,7 +106,7 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <PilotDetailsIcon />
+    icon: <PilotDetailsIcon active={false} />
   },
   {
     id: pilotTabs.LOGS,
@@ -121,7 +121,7 @@ const tabs = [
   {
     id: pilotTabs.CONNECT,
     label: 'Connect',
-    icon: <PilotConnectIcon />
+    icon: <PilotConnectIcon active={false} />
   },
   {
     id: pilotTabs.TIME_CLOCK,
