@@ -104,7 +104,7 @@ function Schedules() {
               {scheduleData.map((schedule) => {
                 return (
                   <div key={schedule.day} className="my-2 w-full">
-                    <ScheduleCard />
+                    <ScheduleCard schedule={schedule} />
                   </div>
                 );
               })}

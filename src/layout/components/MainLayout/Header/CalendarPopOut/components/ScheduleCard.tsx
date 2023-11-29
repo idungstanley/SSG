@@ -3,66 +3,65 @@ import TaskIcon from '../../../../../../assets/icons/TaskIcon';
 import EmailIcon from '../../../../../../assets/icons/EmailIcon';
 import CalendarIcon from '../../../../../../assets/icons/CalendarIcon';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
+import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 
-function ScheduleCard() {
+interface scheduleCards {
+  schedule: {
+    day: string;
+    date: string;
+    schedules: { type: string; title: string }[];
+  };
+}
+
+function ScheduleCard({ schedule }: scheduleCards) {
   return (
     <div className="w-full">
       <div className="flex bg-white rounded p-2">
         <div className="text-center" style={{ width: '15%' }}>
-          <h2 className="text-alsoit-text-md w-full flex justify-center">Mon</h2>
+          <h2 className="text-alsoit-text-md w-full flex justify-center">{schedule.day}</h2>
           <span className="text-alsoit-text-md w-full flex justify-center">
-            <h3 className="w-5 h-5 rounded-full ">4</h3>
+            <h3 className="w-5 h-5 rounded-full ">{schedule.date}</h3>
           </span>
         </div>
         <div className="" style={{ width: '85%' }}>
-          <div className="h-8 flex items-center my-1">
-            <span style={{ width: '2px', backgroundColor: '#0559D6' }} className="h-full"></span>
-            <div className="w-full flex items-center  gap-2 p-1 h-full" style={{ backgroundColor: '#F3F7FD' }}>
-              <ToolTip title="Task">
+          {schedule.schedules.map((item) => {
+            return (
+              <div className="h-8 flex items-center my-1" key={item.title}>
                 <span
-                  className="w-5 h-5 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: '#0559D6' }}
+                  style={{
+                    width: '2px',
+                    backgroundColor: item.type === 'task' ? '#0559D6' : item.type === 'meeting' ? '#FF0E0F' : '#BF01FE'
+                  }}
+                  className="h-full"
+                ></span>
+                <div
+                  className="w-full flex items-center  gap-2 p-1 h-full"
+                  style={{
+                    backgroundColor: item.type === 'task' ? '#F3F7FD' : item.type === 'meeting' ? '#FFF3F3' : '#FCF3FF'
+                  }}
                 >
-                  <TaskIcon color="white" dimenions={{ width: '7', height: '7' }} />
-                </span>
-              </ToolTip>
-              <div>
-                <h2 className="text-alsoit-text-xi">This is a Task</h2>
+                  <ToolTip title={Capitalize(item.type)}>
+                    <span
+                      className="w-5 h-5 rounded-full flex items-center justify-center"
+                      style={{
+                        backgroundColor:
+                          item.type === 'task' ? '#0559D6' : item.type === 'meeting' ? '#FF0E0F' : '#BF01FE'
+                      }}
+                    >
+                      {item.type === 'task' && <TaskIcon color="white" dimenions={{ width: '7', height: '7' }} />}
+                      {item.type === 'meeting' && <EmailIcon color="white" dimensions={{ width: '7', height: '7' }} />}
+                      {item.type === 'event' && (
+                        <CalendarIcon active={false} dimensions={{ width: 7, height: 7 }} color="white" />
+                      )}
+                    </span>
+                  </ToolTip>
+                  <div>
+                    <h2 className="text-alsoit-text-xi">{item.title}</h2>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="h-8 flex items-center my-1" style={{ backgroundColor: '#FFF3F3' }}>
-            <span style={{ width: '2px', backgroundColor: '#FF0E0F' }} className="h-full"></span>
-            <div className="w-full flex items-center gap-2 p-1 h-full">
-              <ToolTip title="Email">
-                <span
-                  className="w-5 h-5 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: '#FF0E0F' }}
-                >
-                  <EmailIcon color="white" dimensions={{ width: '7', height: '7' }} />
-                </span>
-              </ToolTip>
-              <div>
-                <h2 className="text-alsoit-text-xi">This is for meeting</h2>
-              </div>
-            </div>
-          </div>
-          <div className="h-8 flex items-center my-1" style={{ backgroundColor: '#FCF3FF' }}>
-            <span style={{ width: '2px', backgroundColor: '#BF01FE' }} className="h-full"></span>
-            <div className="w-full flex items-center gap-2 p-1 h-full">
-              <ToolTip title="Calendar event">
-                <span
-                  className="w-5 h-5 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: '#BF01FE' }}
-                >
-                  <CalendarIcon active={false} dimensions={{ width: 7, height: 7 }} color="white" />
-                </span>
-              </ToolTip>
-              <div>
-                <h2 className="text-alsoit-text-xi">This is a calendar event</h2>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
