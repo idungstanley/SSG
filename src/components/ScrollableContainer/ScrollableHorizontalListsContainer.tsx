@@ -7,6 +7,7 @@ import LightenColor from '../Views/ui/List/lightenColor/LightenColor';
 
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  backgroud?: string;
   ListColor?: IListColor;
   returnScrollLeft?: (value: number) => void;
 }
@@ -15,6 +16,7 @@ const ARROWS_WRAPPER_WIDTH = 35;
 
 export function ScrollableHorizontalListsContainer({
   children,
+  backgroud,
   ListColor,
   returnScrollLeft,
   ...props
@@ -238,9 +240,11 @@ export function ScrollableHorizontalListsContainer({
       </div>
       {isThumbVisible && (
         <div
-          className="sticky bottom-0 grid w-full grid-cols-2 pt-4 pr-2 group bg-purple-50 rounded-3xl"
+          className="sticky bottom-0 grid w-full grid-cols-2 pt-4 pr-2 group bg-purple-50"
           style={{
-            backgroundColor: LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.95),
+            backgroundColor: backgroud
+              ? backgroud
+              : LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.95),
             zIndex: 2
           }}
         >

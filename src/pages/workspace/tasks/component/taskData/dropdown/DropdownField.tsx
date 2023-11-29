@@ -83,7 +83,14 @@ export default function DropdownField({ field, taskId, currentProperty, activeCo
     dispatch(setEditCustomProperty(currentProperty));
     dispatch(setActiveTabId(pilotTabs.TEMPLATES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
-    dispatch(setNewCustomPropertyDetails({ type: 'Single Label', name: currentProperty.name, color: '' }));
+    dispatch(
+      setNewCustomPropertyDetails({
+        type: 'Single Label',
+        name: currentProperty.name,
+        color: '',
+        id: currentProperty.id
+      })
+    );
     setIsOpen(false);
   };
 
@@ -130,20 +137,20 @@ export default function DropdownField({ field, taskId, currentProperty, activeCo
 
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <div style={{ ...cords, maxWidth: '195px' }} className="fixed overflow-y-auto max-w-full">
+          <div style={{ ...cords, maxWidth: '195px' }} className="fixed max-w-full overflow-y-auto">
             <div
-              className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit"
+              className="flex flex-col items-center justify-center p-4 text-center bg-white border shadow-lg outline-none rounded-xl h-fit"
               style={{ maxWidth: '195px' }}
             >
               <div className="flex items-center max-w-full">
-                <SearchIcon className="h-3 w-3" />
+                <SearchIcon className="w-3 h-3" />
                 <input
                   onChange={handleSearchChange}
                   value={searchValue}
                   ref={inputRef}
                   type="text"
                   placeholder="Search"
-                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0 w-11/12"
+                  className="w-11/12 h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
                 />
               </div>
               <div className="w-full pt-3 space-y-2">

@@ -14,28 +14,40 @@ import {
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import { BsChatLeftText } from 'react-icons/bs';
-import CommentIcon from '../../../../../assets/icons/CommentIcon';
+// import CommentIcon from '../../../../../assets/icons/CommentIcon';
 
 export const communicationOptions = [
-  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
-  {
-    id: pilotTabs.COMMENTS,
-    name: 'Comment',
-    icon: <CommentIcon />,
-    isVisible: false
-  },
   {
     id: pilotTabs.EMAIL,
     name: 'Email',
     icon: <MdAlternateEmail className="w-4 h-4" />,
     isVisible: false
   },
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: true },
   {
-    id: pilotTabs.VOICE_CALL,
-    name: 'Voice Call',
+    id: pilotTabs.PHONE,
+    name: 'Phone',
     icon: <MdOutlineCall className="w-4 h-4" />,
     isVisible: false
   }
+  // {
+  //   id: pilotTabs.COMMENTS,
+  //   name: 'Comment',
+  //   icon: <CommentIcon />,
+  //   isVisible: true
+  // },
+  // {
+  //   id: pilotTabs.EMAIL,
+  //   name: 'Email',
+  //   icon: <MdAlternateEmail className="w-4 h-4" />,
+  //   isVisible: true
+  // }
+  // // {
+  // //   id: pilotTabs.VOICE_CALL,
+  // //   name: 'Voice Call',
+  // //   icon: <MdOutlineCall className="w-4 h-4" />,
+  // //   isVisible: true
+  // // }
 ];
 export default function CommunicationSubTab() {
   const idsFromLS: string[] = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
@@ -77,7 +89,7 @@ export default function CommunicationSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <div
-          className="grid px-1 grid-cols-4"
+          className="grid grid-cols-4 px-1"
           style={{ borderBottom: `3px solid ${activeSubCommunicationTabId ? '#ebd1fc' : 'transparent'}` }}
         >
           {items.map((item) => (
