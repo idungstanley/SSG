@@ -228,7 +228,7 @@ export default function ShowHideSettings({
             <HeadMenu.Button className="flex">
               <Button active={isAnyactive as boolean}>
                 <Icons src={showmenuswitchOn} />
-                <span className="pl-1">{isActive}</span>
+                <span className="pl-1 text-xs">{isActive}</span>
                 <span className="px-1">
                   <ArrowOpenDown color="black" />
                 </span>
