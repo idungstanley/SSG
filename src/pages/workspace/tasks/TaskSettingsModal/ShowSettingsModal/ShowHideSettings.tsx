@@ -3,7 +3,6 @@ import { Menu as HeadMenu } from '@headlessui/react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import { useSwitchSettings } from './SwitchSettings';
-import showmenuswitchOn from '../../../../../assets/icons/showmenuswitchOn.svg';
 import Button from '../../../../../components/Buttons/Button';
 import toast from 'react-hot-toast';
 import SaveSettingsModal from '../SaveSettingsModal/SaveSettingsModal';
@@ -19,8 +18,8 @@ import {
 import { Menu } from '@mui/material';
 import DropdownTitle from '../../../../../components/DropDowns/DropdownTitle';
 import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtitle';
-import Icons from '../../../../../components/Icons/Icons';
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
+import ShowmenuswitchOn from '../../../../../assets/icons/ShowmenuswitchOn';
 
 interface IShowHideSettings {
   isActive: string;
@@ -70,7 +69,7 @@ export default function ShowHideSettings({
   const [isAnyactive, setIsAnyactive] = useState<boolean>();
   const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
 
-  // const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
+  const isActiveColor = isAnyactive ? '#BF01FE' : 'black';
 
   const switchSettings = useSwitchSettings();
 
@@ -227,10 +226,11 @@ export default function ShowHideSettings({
           >
             <HeadMenu.Button className="flex">
               <Button active={isAnyactive as boolean}>
-                <Icons src={showmenuswitchOn} />
+                {/* <Icons src={showmenuswitchOn} /> */}
+                <ShowmenuswitchOn isActive={isAnyactive as boolean} />
                 <span className="pl-1 text-xs">{isActive}</span>
                 <span className="px-1">
-                  <ArrowOpenDown color="black" />
+                  <ArrowOpenDown color={isActiveColor} />
                 </span>
               </Button>
             </HeadMenu.Button>

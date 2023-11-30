@@ -16,8 +16,8 @@ interface AvatarWithInitialsProps {
 function AvatarWithInitials({
   initials,
   textColor = 'white',
-  height = 'h-7',
-  width = 'w-7',
+  height = '28px',
+  width = '28px',
   backgroundColour = '#4D98F2',
   roundedStyle = 'circular',
   textSize = '10px',
@@ -25,13 +25,16 @@ function AvatarWithInitials({
 }: AvatarWithInitialsProps) {
   const { CompactView } = useAppSelector((state) => state.task);
 
+  const modeHeight = CompactView ? '19px' : height;
+  const modeWidth = CompactView ? '19px' : width;
+
   return (
     <div className="relative flex items-center">
       <span
-        className={`inline-flex items-center justify-center z-5 ${height} ${width} ${
-          roundedStyle === 'circular' && 'rounded-full'
-        } ${roundedStyle === 'rounded' && 'rounded'}`}
-        style={{ backgroundColor: backgroundColour }}
+        className={`inline-flex items-center justify-center z-5 ${roundedStyle === 'circular' && 'rounded-full'} ${
+          roundedStyle === 'rounded' && 'rounded'
+        }`}
+        style={{ backgroundColor: backgroundColour, height: modeHeight, width: modeWidth }}
       >
         <span className="font-bold leading-none " style={{ fontSize: textSize, color: textColor }}>
           {initials}
@@ -42,7 +45,7 @@ function AvatarWithInitials({
           src={nonWatcherBadge}
           alt=""
           className="absolute w-2 h-2 z-5"
-          style={CompactView ? { left: '18px' } : { left: '25px', bottom: '1px' }}
+          style={CompactView ? { left: '16px', top: '12px' } : { left: '25px', bottom: '1px' }}
         />
       )}
     </div>
