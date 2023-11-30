@@ -27,7 +27,6 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
 
   const handleInputBlur = () => {
     setEditMode(false);
-    console.log(activeValue);
     if (currentValue && currentValue !== activeValue) {
       onUpdate({
         taskId,
