@@ -21,6 +21,7 @@ import DropdownTitle from '../../../../../components/DropDowns/DropdownTitle';
 import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtitle';
 import Icons from '../../../../../components/Icons/Icons';
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
+import { VerticalScroll } from '../../../../../components/ScrollableContainer/VerticalScroll';
 
 interface IShowHideSettings {
   isActive: string;
@@ -239,78 +240,75 @@ export default function ShowHideSettings({
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div
-          key="showHideSettings"
-          style={{ zIndex: 61, height: '372px', width: '247px', overflow: 'auto' }}
-          className="w-64"
-        >
-          <DropdownTitle content="CUSTOMIZE THIS VIEW" />
-          <DropdownSubtitle content="MAIN SETTINGS" />
-          <div className="flex items-center justify-between mx-auto mt-4" style={{ width: '93%' }}>
-            <p className="text-sm">Property Column </p>
-            <BsChevronRight />
-          </div>
-
-          {viewSettings.map((view, index) => (
-            <Fragment key={view.id}>
-              <div
-                className="flex items-center w-full py-2 font-semibold text-left text-alsoit-text-lg "
-                style={{ lineHeight: '15.6px' }}
-              >
-                <button
-                  className={`flex justify-between items-center w-full group ${
-                    view.label === 'Title Vertical Grid Line' && 'border-t-2 pt-4'
-                  } ${view.label === 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
-                    view.label === 'Split 2 level of subtasks' && 'border-t-2 pt-4'
-                  }`}
+        <VerticalScroll>
+          <div key="showHideSettings" style={{ zIndex: 61, width: '247px' }} className="w-64 h-96 relative">
+            <DropdownTitle content="CUSTOMIZE THIS VIEW" />
+            <DropdownSubtitle content="MAIN SETTINGS" />
+            <div className="flex items-center justify-between mx-auto mt-4" style={{ width: '93%' }}>
+              <p className="text-sm">Property Column </p>
+              <BsChevronRight />
+            </div>
+            {viewSettings.map((view, index) => (
+              <Fragment key={view.id}>
+                <div
+                  className="flex items-center w-full py-2 font-semibold text-left text-alsoit-text-lg"
+                  style={{ lineHeight: '15.6px' }}
                 >
-                  <p className="flex items-center pl-2 space-x-2 text-md whitespace-nowrap">{view.label}</p>
-                  {view.label === 'Task In Multiple Lists' && (
-                    <p className="relative">
-                      <p
-                        className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
-                        style={{ top: '-35px', right: '23px', fontSize: '8px' }}
-                      >
-                        TASKS SETTINGS
+                  <button
+                    className={`flex justify-between items-center w-full group ${
+                      view.label === 'Title Vertical Grid Line' && 'border-t-2 pt-4'
+                    } ${view.label === 'Task In Multiple Lists' && 'border-t-2 pt-4'} ${
+                      view.label === 'Split 2 level of subtasks' && 'border-t-2 pt-4'
+                    }`}
+                  >
+                    <p className="flex items-center pl-2 space-x-2 text-md whitespace-nowrap">{view.label}</p>
+                    {view.label === 'Task In Multiple Lists' && (
+                      <p className="relative">
+                        <p
+                          className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
+                          style={{ top: '-35px', right: '23px', fontSize: '8px' }}
+                        >
+                          TASKS SETTINGS
+                        </p>
                       </p>
-                    </p>
-                  )}
-                  {view.label === 'Title Vertical Grid Line' && (
-                    <p className="relative">
-                      <p
-                        className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
-                        style={{ top: '-35px', right: '28px', fontSize: '8px' }}
-                      >
-                        GRID SETTINGS
+                    )}
+                    {view.label === 'Title Vertical Grid Line' && (
+                      <p className="relative">
+                        <p
+                          className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
+                          style={{ top: '-35px', right: '28px', fontSize: '8px' }}
+                        >
+                          GRID SETTINGS
+                        </p>
                       </p>
-                    </p>
-                  )}
-                  {view.label === 'Split 2 level of subtasks' && (
-                    <p className="relative">
-                      <p
-                        className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
-                        style={{ top: '-35px', right: '20px', fontSize: '8px' }}
-                      >
-                        SUB TASK SETTINGS
+                    )}
+                    {view.label === 'Split 2 level of subtasks' && (
+                      <p className="relative">
+                        <p
+                          className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
+                          style={{ top: '-35px', right: '20px', fontSize: '8px' }}
+                        >
+                          SUB TASK SETTINGS
+                        </p>
                       </p>
+                    )}
+                    <p className="flex items-center pr-2 ">
+                      <label className="switch" onClick={(event) => event.stopPropagation()}>
+                        <input
+                          className="inputShow"
+                          type="checkbox"
+                          checked={checkedStates[index]}
+                          onChange={() => handleChange(view.label, index)}
+                        />
+                        <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
+                      </label>
                     </p>
-                  )}
-                  <p className="flex items-center pr-2 ">
-                    <label className="switch" onClick={(event) => event.stopPropagation()}>
-                      <input
-                        className="inputShow"
-                        type="checkbox"
-                        checked={checkedStates[index]}
-                        onChange={() => handleChange(view.label, index)}
-                      />
-                      <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
-                    </label>
-                  </p>
-                </button>
-              </div>
-            </Fragment>
-          ))}
-        </div>
+                  </button>
+                </div>
+              </Fragment>
+            ))}
+          </div>
+        </VerticalScroll>
       </Menu>
     </>
   );
