@@ -2,7 +2,6 @@ import { Task } from '../../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setSelectedTasksArray } from '../../../../features/task/taskSlice';
 import ListAddModal from './ListAddModal';
-import CollapseIcon from '../collapseIcon/CollapseIcon';
 import { IListColor } from './List';
 import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
 import { Search } from '../../../TasksHeader/ui/Search/Search';
@@ -10,6 +9,8 @@ import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
 import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
 import ActiveEntityAvatar from '../../../avatar/ActiveEntityAvatar';
+import ListCollapseIcon from '../collapseIcon/ListCollapseIcon';
+import LightenColor from './lightenColor/LightenColor';
 
 interface LabelProps {
   showTable: boolean;
@@ -95,21 +96,24 @@ export function Label({
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <div
-          className="flex items-center justify-between space-x-5 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
-          style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
+          className="flex items-center justify-between space-x-5 -mt-1 p-1 pr-2  h-7 rounded-br-[5px]"
+          style={{
+            backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string)
+          }}
         >
-          <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">
+          <div className="flex items-center space-x-2 text-sm text-white w-fit -mt-1">
             <RoundedCheckbox
               onChange={handleCheckedGroupTasks}
               isChecked={allChecked}
               styles={
-                'w-4 h-4 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 text-alsoit-purple-300'
+                'w-4 h-4 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 text-white '
               }
+              onListStyle={LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.2)}
             />
-            <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
+            <ListCollapseIcon color="#A854F7" active={!showTable} onToggle={onClickChevron} hoverBg="white" />
             <h1 className="max-w-34 truncate">{listName ?? 'Loading...'}</h1>
           </div>
-          <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
+          <div className="flex items-center justify-center h-5 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </div>
           {showTable && (

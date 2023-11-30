@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { VscTriangleRight } from 'react-icons/vsc';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   closeMenu,
@@ -14,7 +14,7 @@ import { setPaletteDropDown } from '../../features/account/accountSlice';
 import Palette from '../ColorPalette';
 import MenuDropdown from '../Dropdown/MenuDropdown';
 import SubDropdown from '../Dropdown/SubDropdown';
-import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -122,6 +122,36 @@ export default function WalletItem({
     );
   };
 
+  const renderIcons = (showSubWallet: boolean) => {
+    if (wallet?.children.length || wallet?.lists.length) {
+      if (showSubWallet) {
+        return (
+          <>
+            <VscTriangleDown
+              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
+            {renderOpenFolder()}
+          </>
+        );
+      } else {
+        return (
+          <>
+            <VscTriangleRight
+              className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+              aria-hidden="true"
+              color="rgba(72, 67, 67, 0.64)"
+            />
+            {renderCloseFolder()}
+          </>
+        );
+      }
+    } else {
+      return <div style={{ paddingLeft: '14px' }}>{renderCloseFolder()}</div>;
+    }
+  };
+
   const { isOver, setNodeRef } = useDroppable({
     id: wallet.id,
     data: {
@@ -153,13 +183,6 @@ export default function WalletItem({
   const sidebarWidthFromLS =
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
-
-  const isShowArrow = () => {
-    if (wallet?.children.length || wallet?.lists.length || wallet.has_descendants) {
-      return true;
-    }
-    return false;
-  };
 
   return (
     <div
@@ -199,28 +222,11 @@ export default function WalletItem({
             >
               <Drag />
             </div>
-            <div className="relative flex items-center gap-5">
-              <div
-                className={`flex items-center justify-center w-6 h-6 ${
-                  isShowArrow() && 'opacity-100 group-hover:opacity-0'
-                }`}
-                ref={relativeRef}
-              >
-                {showSubWallet ? renderOpenFolder() : renderCloseFolder()}
+            {/* showsub1 */}
+            <div className="flex items-center gap-5">
+              <div className="flex items-center" style={{ zIndex: '1' }} ref={relativeRef}>
+                {renderIcons(showSubWallet)}
               </div>
-              {isShowArrow() && (
-                <div className="absolute flex justify-center items-center w-6 h-6 opacity-0 group-hover:opacity-100">
-                  <div className="group/open cursor-pointer flex justify-center items-center w-4 h-4 rounded hover:bg-gray-300">
-                    <VscTriangleRight
-                      className={`flex-shrink-0 h-2 group-hover/open:fill-[#BF01FE] duration-200 ${
-                        showSubWallet ? 'rotate-90' : 'rotate-0'
-                      }`}
-                      aria-hidden="true"
-                      color="#919191"
-                    />
-                  </div>
-                </div>
-              )}
               <div
                 onClick={() => handleLocation(wallet.id, wallet.name, wallet as Wallet)}
                 className="truncate cursor-pointer hover:underline hover:decoration-dashed"
@@ -264,6 +270,7 @@ export default function WalletItem({
                   className="cursor-pointer hover:text-alsoit-purple-300"
                   onClick={(e) => {
                     handleWalletSettings(wallet.id, wallet.name, e);
+                    dispatch(setEntityForPermissions(wallet));
                   }}
                   id="menusettings"
                 >

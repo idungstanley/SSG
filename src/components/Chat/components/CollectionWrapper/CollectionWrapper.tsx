@@ -67,12 +67,12 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
     <div>
       {/* header */}
       <div
-        className="flex items-center justify-between border-b mb-2 rounded-md group"
+        className="flex items-center justify-between mb-2 border-b rounded-md group"
         style={{ background: isActiveCollection ? '#E6FAE9' : '#FEF6E6' }}
       >
-        <div className="group/header flex items-center gap-2">
+        <div className="flex items-center gap-2 group/header">
           <div
-            className="flex cursor-default gap-1 py-1 relative px-2 rounded-md rounded-tr-none flex items-center space-x-1 text-white dFlex"
+            className="relative flex items-center gap-1 px-2 py-1 space-x-1 text-white rounded-md rounded-tr-none cursor-default dFlex"
             style={{
               minWidth: '145px',
               minHeight: '32px',
@@ -91,13 +91,13 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
 
         <div className="flex items-center gap-1">
           <div
-            className="flex justify-center items-center p-1 rounded-sm bg-white"
+            className="flex items-center justify-center p-1 bg-white rounded-sm"
             style={{ minWidth: '16px', height: '16px', fontSize: '8px', color: 'orange' }}
           >
             5
           </div>
           <div
-            className="flex justify-center items-center rounded-sm bg-white"
+            className="flex items-center justify-center bg-white rounded-sm"
             style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
           >
             <span className="pr-1">
@@ -106,7 +106,7 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
             Collection
           </div>
           <div
-            className="flex justify-center items-center rounded-sm bg-white"
+            className="flex items-center justify-center bg-white rounded-sm"
             style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
           >
             <span className="pr-1">
@@ -168,19 +168,19 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
           </ToolTip>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100">
             <div
-              className="w-4 flex justify-center items-center rounded-sm bg-white"
+              className="flex items-center justify-center w-4 bg-white rounded-sm"
               style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
             >
               <PermissionIcon color="orange" />
             </div>
             <div
-              className="w-4 flex justify-center items-center rounded-sm bg-white"
+              className="flex items-center justify-center w-4 bg-white rounded-sm"
               style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
             >
               <EditIcon color="orange" />
             </div>
             <div
-              className="w-4 flex justify-center items-center rounded-sm bg-white"
+              className="flex items-center justify-center w-4 bg-white rounded-sm"
               style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
             >
               <TrashIcon color="orange" />

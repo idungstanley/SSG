@@ -44,12 +44,31 @@ export const communicationOptions = [
     icon: <MdAlternateEmail className="w-4 h-4" />,
     isVisible: false
   },
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: true },
   {
     id: pilotTabs.PHONE,
     name: 'Phone',
     icon: <MdOutlineCall className="w-4 h-4" />,
     isVisible: false
   }
+  // {
+  //   id: pilotTabs.COMMENTS,
+  //   name: 'Comment',
+  //   icon: <CommentIcon />,
+  //   isVisible: true
+  // },
+  // {
+  //   id: pilotTabs.EMAIL,
+  //   name: 'Email',
+  //   icon: <MdAlternateEmail className="w-4 h-4" />,
+  //   isVisible: true
+  // }
+  // // {
+  // //   id: pilotTabs.VOICE_CALL,
+  // //   name: 'Voice Call',
+  // //   icon: <MdOutlineCall className="w-4 h-4" />,
+  // //   isVisible: true
+  // // }
 ];
 
 export default function CommunicationSubTab() {
