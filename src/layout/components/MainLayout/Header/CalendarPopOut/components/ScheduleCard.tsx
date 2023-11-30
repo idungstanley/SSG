@@ -4,6 +4,7 @@ import EmailIcon from '../../../../../../assets/icons/EmailIcon';
 import CalendarIcon from '../../../../../../assets/icons/CalendarIcon';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
+import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 
 interface scheduleCards {
   schedule: {
@@ -26,7 +27,19 @@ function ScheduleCard({ schedule }: scheduleCards) {
         <div className="" style={{ width: '85%' }}>
           {schedule.schedules.map((item) => {
             return (
-              <div className="h-8 flex items-center my-1" key={item.title}>
+              <div className="h-8 flex items-center my-1 group" key={item.title}>
+                <div className="h-full flex flex-col justify-between mx-1 opacity-0 group-hover:opacity-100">
+                  <ToolTip title="Add new">
+                    <button>
+                      <PlusIcon dimensions={{ width: 5, height: 5 }} />
+                    </button>
+                  </ToolTip>
+                  <ToolTip title="Add new">
+                    <button>
+                      <PlusIcon dimensions={{ width: 5, height: 5 }} />
+                    </button>
+                  </ToolTip>
+                </div>
                 <span
                   style={{
                     width: '2px',
