@@ -159,16 +159,18 @@ export function StickyCol({
     dispatch(setRootTaskIds(undefined));
     if (!task.parent_id) {
       dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
-    } else {
-      const updateTaskRootIds = { ...taskRootIds };
-      for (const key of task.root_task_ids as string[]) {
-        if (updateTaskRootIds[key]) {
-          const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
-          updateTaskRootIds[key] = taskRootIdsArray;
-        }
-      }
-      dispatch(setTaskRootIds(updateTaskRootIds));
     }
+    // else {
+    //   const updateTaskRootIds = { ...taskRootIds };
+
+    //   for (const key of task?.root_task_ids as string[]) {
+    //     if (updateTaskRootIds[key]) {
+    //       const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
+    //       updateTaskRootIds[key] = taskRootIdsArray;
+    //     }
+    //   }
+    //   dispatch(setTaskRootIds(updateTaskRootIds));
+    // }
   };
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
