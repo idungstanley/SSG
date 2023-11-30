@@ -30,13 +30,13 @@ export default function DropdownOptions() {
   };
 
   return (
-    <div className="w-full">
-      <button className="w-full flex items-center justify-between h-full" onClick={handleClick}>
+    <div className="w-full px-2 pl-1">
+      <button className="flex items-center justify-between w-full h-full" onClick={handleClick}>
         <div className="flex items-center">
-          <span className="mx-1 w-5 h-5">
+          <span className="flex items-center w-5 h-5 mx-1 text-lg">
             <TbMathFunction />
           </span>
-          <p className="text-alsoit-gray-300-lg text-alsoit-text-lg font-semibold">Formula</p>
+          <p className="font-semibold text-alsoit-gray-300-lg text-alsoit-text-lg">Formula</p>
         </div>
         <ArrowRight />
       </button>
@@ -57,8 +57,8 @@ export default function DropdownOptions() {
         }}
       >
         <div key="formulaOptions">
-          <div className="w-full mt-2 flex justify-center">
-            <h1 className="text-alsoit-text-lg font-semibold">FORMULA</h1>
+          <div className="flex justify-center w-full mt-2">
+            <h1 className="font-semibold text-alsoit-text-lg">FORMULA</h1>
           </div>
           <hr />
           <div className="px-1 py-1">
@@ -70,7 +70,7 @@ export default function DropdownOptions() {
                   handleClose();
                 }}
                 style={{ width: '174px' }}
-                className=" group flex gap-4 w-full items-center rounded-md px-2 py-2 text-alsoit-text-lg font-semibold h-10 hover:bg-alsoit-gray-50"
+                className="flex items-center w-full h-10 gap-4 px-2 py-2 font-semibold rounded-md group text-alsoit-text-lg hover:bg-alsoit-gray-50"
               >
                 {item.name}
               </button>

@@ -45,6 +45,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
     sortType,
     keyBoardSelectedIndex
   } = useAppSelector((state) => state.task);
+  const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [listId, setListId] = useState<string>('');
   const [tableHeight, setTableHeight] = useState<string | number>('auto');
@@ -106,6 +107,16 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
       setTableHeight(tableElement.current.offsetHeight);
     }
   }, []);
+
+  useEffect(() => {
+    if (tableElement && selectionArr) {
+      const selectedTaskRow = tableElement.current?.querySelector(`tbody tr[data-select="${activeItemId}"]`);
+
+      if (selectedTaskRow) {
+        selectedTaskRow.scrollIntoView({ block: 'nearest' });
+      }
+    }
+  }, [keyBoardSelectedIndex, activeItemId]);
 
   const checkSelectedRow = (id: string) => {
     if (selectionArr && keyBoardSelectedIndex) {

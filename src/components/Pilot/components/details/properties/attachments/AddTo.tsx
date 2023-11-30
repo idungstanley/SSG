@@ -80,9 +80,12 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       id: 'upload_file',
       title: 'Upload File',
       handleClick: () => {
-        locationn === 'list view'
-          ? dispatch(setOpenFileUploadModal({ ...fileUploadProps, openModal: true }))
-          : dispatch(setShowTaskUploadModal(true));
+        if (locationn === 'list view') {
+          dispatch(setOpenFileUploadModal({ ...fileUploadProps, openModal: true }));
+        } else {
+          dispatch(setShowTaskUploadModal(true));
+          setShowDropdown(null);
+        }
       },
       color: '#d3d3d3',
       bg: 'gray',
@@ -150,8 +153,6 @@ export default function AddTo({ locationn }: { locationn?: string }) {
       icon: <FormatListBullet color={selectedViews === paletteViews.LIST ? 'rgb(191, 0, 255)' : '#424242'} />
     }
   ];
-
-  // const selectedElement = views.find((items) => items.label === selectedViews)?.element;
 
   return (
     <div className="h-full pb-2 m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
@@ -278,14 +279,14 @@ export default function AddTo({ locationn }: { locationn?: string }) {
         <div className="origin-top-right">
           <InlineBorderLabel
             label="SELECT OPTION"
-            topElement={<p className="flex items-center justify-center">ADD</p>}
+            topElement={<p className="flex items-center justify-center my-2 font-extrabold">ADD</p>}
           />
           {statusList.map((i) => (
             <div key={i.id} className="p-1">
               <button
                 type="button"
                 className={cl(
-                  'flex items-center px-4 py-1 text-sm text-gray-600 text-left space-x-2 w-full hover:bg-alsoit-gray-50 rounded-md'
+                  'flex items-center px-4 py-1 text-alsoit-text-lg text-[#424242] text-left space-x-2 w-full hover:bg-alsoit-gray-50 rounded-md'
                 )}
                 onClick={i.handleClick}
               >

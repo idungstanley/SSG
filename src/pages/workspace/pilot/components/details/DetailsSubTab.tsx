@@ -20,13 +20,13 @@ export const DetailOptions = [
     id: pilotTabs.PROPERTIES,
     name: 'Properties',
     icon: <BsClipboardData />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.ATTACHMENTS,
     name: 'Attachments',
     icon: <MdAddToPhotos />,
-    isVisible: false
+    isVisible: true
   }
 ];
 

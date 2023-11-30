@@ -156,7 +156,6 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
-
     dispatch(setRootTaskIds(undefined));
     if (!task.parent_id) {
       dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
@@ -165,7 +164,6 @@ export function StickyCol({
       for (const key of task.root_task_ids as string[]) {
         if (updateTaskRootIds[key]) {
           const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
-
           updateTaskRootIds[key] = taskRootIdsArray;
         }
       }

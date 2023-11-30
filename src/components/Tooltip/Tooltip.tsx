@@ -4,12 +4,16 @@ import React from 'react';
 
 const ToolTip = styled(({ className, placement, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} placement={placement ?? 'top'} />
-))(({ theme }) => ({
+))(() => ({
   [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.black
+    color: '#424242'
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black
+    backgroundColor: '#424242',
+    fontSize: '10px',
+    padding: '2px 5px 2px 5px',
+    borderRadius: '2px',
+    marginLeft: '0'
   }
 }));
 

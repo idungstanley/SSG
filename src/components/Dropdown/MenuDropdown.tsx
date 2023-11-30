@@ -327,7 +327,7 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
       title: 'Templates',
       handleClick: () => ({}),
       icon: <SparklesIcon color="orange" className="w-4 h-6" aria-hidden="true" />,
-      rightIcon: <ArrowRight color="orange" />,
+      rightIcon: <ArrowRight />,
       isVisible: true,
       isUnusing: true
     },
@@ -424,12 +424,14 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
         }}
         PaperProps={{
           style: {
-            borderRadius: '12px'
+            borderRadius: '5px'
           }
         }}
       >
         <div key="menuDropdown">
-          <div className="flex items-center justify-center my-2">{showMenuDropdownType?.toUpperCase()} PROPERTIES</div>
+          <div className="flex items-center justify-center my-2 text-alsoit-text-sm">
+            {showMenuDropdownType?.toUpperCase()} PROPERTIES
+          </div>
           <VerticalScroll>
             <div className="relative h-96">
               <InlineBorderLabel label="DEFAULT SETTINGS" />
@@ -476,7 +478,7 @@ function GroupMenuOptions({ items }: ItemsProps) {
         item.isVisible ? (
           <div key={index}>
             <div
-              className="flex items-center justify-between p-1 py-2 space-x-2 text-sm text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
+              className="flex items-center justify-between p-1 py-2 space-x-2 text-alsoit-text-lg text-left text-gray-600 rounded-md cursor-pointer hover:bg-alsoit-gray-50"
               onClick={(e: React.MouseEvent<HTMLDivElement>) => item.handleClick(e)}
             >
               <div className="flex items-center gap-2">
@@ -494,7 +496,7 @@ function GroupMenuOptions({ items }: ItemsProps) {
 
 export function InlineBorderLabel({ label, topElement }: InlineBorderProps) {
   return (
-    <div className="relative items-center justify-center">
+    <div className="relative items-center justify-center text-alsoit-text-sm">
       {topElement}
       <div className="flex items-center py-1">
         <div className="flex-grow border-t border-gray-400"></div>

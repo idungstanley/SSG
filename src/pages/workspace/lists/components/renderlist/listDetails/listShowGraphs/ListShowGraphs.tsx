@@ -60,7 +60,8 @@ export default function ListShowGraphs() {
       >
         <Menu.Button className="flex ml-1">
           <Button active={!!showedGraphs.length as boolean}>
-            <ShowIcon color={isActiveColor} width="21" height="21" /> <span>Show</span>{' '}
+            <ShowIcon color={isActiveColor} width="21" height="21" />
+            <span>Show</span>
             <ArrowDrop color={isActiveColor} />
           </Button>
         </Menu.Button>
