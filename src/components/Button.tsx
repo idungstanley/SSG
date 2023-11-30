@@ -111,12 +111,12 @@ function Button({
           <Spinner size={10} color={buttonStyle === 'primary' ? '#ffffff' : '#6B7280'} />
         </div>
       ) : (
-        <>
+        <div className="flex flex-row items-center">
           {icon && iconPosition === 'center' && <span>{icon}</span>}
           {icon && (iconPosition === 'left' || iconPosition === null) && <span className="mr-1">{icon}</span>}
           {label && <span className={`${labelSize}`}>{label}</span>}
           {icon && iconPosition === 'right' && <span className="ml-1">{icon}</span>}
-        </>
+        </div>
       )}
     </button>
   );

@@ -13,7 +13,7 @@ export const communicationOptions = [
     element: <></>
   },
   { id: pilotTabs.CHAT, element: <ChatForPilot /> },
-  { id: pilotTabs.VOICE_CALL, element: <></> },
+  { id: pilotTabs.PHONE, element: <></> },
   { id: pilotTabs.COMMENTS, element: <CommentsForPilot /> }
 ];
 export default function Commnunication() {

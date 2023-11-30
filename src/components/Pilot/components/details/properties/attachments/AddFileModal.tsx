@@ -65,6 +65,7 @@ export default function AddFileModal({ invalidateQuery, endpoint }: UploadFileMo
       onRequestClose={() => dispatch(setShowTaskUploadModal(false))}
       showRemoveButtonAfterComplete={false}
       animateOpenClose={true}
+      showProgressDetails
     />
   );
 }

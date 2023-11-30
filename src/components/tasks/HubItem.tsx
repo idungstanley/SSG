@@ -389,7 +389,7 @@ export default function HubItem({
                   className="cursor-pointer"
                   id="menusettings"
                 >
-                  <ThreeDotIcon className="hover:text-alsoit-purple-300" />
+                  <ThreeDotIcon />
                 </span>
               </ToolTip>
             </div>
