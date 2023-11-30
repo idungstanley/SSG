@@ -299,3 +299,8 @@ input:focus {
     transform: scaleY(1);
   }
 }
+
+.hot-keys-wrapper svg {
+  width: 26px;
+  height: 26px;
+}

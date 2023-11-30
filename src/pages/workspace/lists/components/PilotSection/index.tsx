@@ -15,7 +15,6 @@ import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import Calendar from '../../../../../components/Pilot/components/Calendar';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
-import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
 import Views from '../../../../../components/Pilot/components/Views/Index';
 import Commnunication from '../../../pilot/components/communication/Communication';
@@ -33,6 +32,13 @@ import TicketsPilotIcon from '../../../../../assets/icons/TicketsPilotIcon';
 import PilotDetailsIcon from '../../../../../assets/icons/PilotDetailsIcon';
 import PilotConnectIcon from '../../../../../assets/icons/PilotConnectIcon';
 import PilotUtilityIcon from '../../../../../assets/icons/PilotUtilityIcon';
+import PilotActivityIcon from '../../../../../assets/icons/PilotActivityIcon';
+import PilotDeepLinksIcon from '../../../../../assets/icons/PilotDeepLinksIcon';
+import PilotEntityManagerIcon from '../../../../../assets/icons/PilotEntityManagerIcon';
+import PilotEfficiencyIcon from '../../../../../assets/icons/PilotEfficiencyIcon';
+import Efficiency from '../../../hubs/components/PilotSection/components/Efficiency';
+import Activity from '../../../hubs/components/PilotSection/components/Activity';
+import Ties from '../../../hubs/components/PilotSection/components/Ties';
 
 const sections = [
   {
@@ -94,6 +100,18 @@ const sections = [
   {
     id: pilotTabs.TICKETS,
     element: <Tickets />
+  },
+  {
+    id: pilotTabs.EFFICIENCY,
+    element: <Efficiency />
+  },
+  {
+    id: pilotTabs.ACTIVITY,
+    element: <Activity />
+  },
+  {
+    id: pilotTabs.TIES,
+    element: <Ties />
   }
 ];
 
@@ -104,19 +122,14 @@ const tabs = [
     icon: <PilotDetailsIcon active={false} />
   },
   {
-    id: pilotTabs.LOGS,
-    label: 'Logs',
-    icon: <DocumentTextIcon className="w-5 h-5" />
-  },
-  {
-    id: pilotTabs.WATCHERS,
-    label: 'Watchers',
-    icon: <EyeIcon className="w-5 h-5" />
-  },
-  {
     id: pilotTabs.CONNECT,
     label: 'Connect',
     icon: <PilotConnectIcon active={false} />
+  },
+  {
+    id: pilotTabs.ACTIVITY,
+    label: 'Activity',
+    icon: <PilotActivityIcon active={false} />
   },
   {
     id: pilotTabs.UTILITIES,
@@ -124,19 +137,39 @@ const tabs = [
     icon: <PilotUtilityIcon active={false} />
   },
   {
-    id: pilotTabs.CHECKLISTS,
-    label: 'Checklist',
-    icon: <VscChecklist className="w-5 h-5" />
+    id: pilotTabs.TIES,
+    label: 'Ties',
+    icon: <PilotDeepLinksIcon active={false} />
   },
   {
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
-    icon: <EntityManagerIcon />
+    icon: <PilotEntityManagerIcon active={false} />
   },
   {
     id: pilotTabs.VIEWS,
     label: 'Views',
     icon: <PilotViewIcon />
+  },
+  {
+    id: pilotTabs.EFFICIENCY,
+    label: 'Efficiency',
+    icon: <PilotEfficiencyIcon active={false} />
+  },
+  {
+    id: pilotTabs.WATCHERS,
+    label: 'Watchers',
+    icon: <EyeIcon className="w-5 h-5" />
+  },
+  {
+    id: pilotTabs.CHECKLISTS,
+    label: 'Checklist',
+    icon: <VscChecklist className="w-5 h-5" />
+  },
+  {
+    id: pilotTabs.LOGS,
+    label: 'Logs',
+    icon: <DocumentTextIcon className="w-5 h-5" />
   },
   {
     id: pilotTabs.TEMPLATES,

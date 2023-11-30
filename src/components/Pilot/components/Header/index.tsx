@@ -7,6 +7,7 @@ import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
 import CompactIcon from '../../../../assets/icons/CompactIcon';
 import { STORAGE_KEYS } from '../../../../app/config/dimensions';
 import GroupIcon from '../../../../assets/icons/GroupIcon';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface HeaderProps {
   isMinified: boolean;
@@ -52,30 +53,35 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
           }}
         >
           {/* show / hide pilot toggle */}
-          <button
-            type="button"
-            onClick={togglePilot}
-            className="text-gray-400 flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
-            style={{
-              margin: isMinified ? '0' : '7px 7px 2px 0',
-              borderRadius: '3px',
-              width: '20px',
-              height: '20px'
-            }}
-          >
-            {isMinified ? <CompactIcon /> : <GroupIcon />}
-          </button>
-          <div
-            className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
-            style={{
-              margin: isMinified ? '0' : '1px 7px 5px 0',
-              borderRadius: '3px',
-              width: '20px',
-              height: '20px'
-            }}
-          >
-            {menu}
-          </div>
+
+          <ToolTip placement="left" title="Collapse pilot">
+            <button
+              type="button"
+              onClick={togglePilot}
+              className="text-gray-400 flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
+              style={{
+                margin: isMinified ? '0' : '7px 7px 2px 0',
+                borderRadius: '3px',
+                width: '20px',
+                height: '20px'
+              }}
+            >
+              {isMinified ? <CompactIcon /> : <GroupIcon />}
+            </button>
+          </ToolTip>
+          <ToolTip placement="left" title="Pilot settings">
+            <div
+              className="flex justify-center items-center hover:bg-alsoit-gray-125 transition duration-500"
+              style={{
+                margin: isMinified ? '0' : '1px 7px 5px 0',
+                borderRadius: '3px',
+                width: '20px',
+                height: '20px'
+              }}
+            >
+              {menu}
+            </div>
+          </ToolTip>
         </div>
       </div>
     </div>

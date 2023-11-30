@@ -34,6 +34,9 @@ import PilotActivityIcon from '../../../../../assets/icons/PilotActivityIcon';
 import PilotDeepLinksIcon from '../../../../../assets/icons/PilotDeepLinksIcon';
 import PilotEntityManagerIcon from '../../../../../assets/icons/PilotEntityManagerIcon';
 import PilotEfficiencyIcon from '../../../../../assets/icons/PilotEfficiencyIcon';
+import Activity from './components/Activity';
+import Ties from './components/Ties';
+import Efficiency from './components/Efficiency';
 
 const sections = [
   {
@@ -94,7 +97,15 @@ const sections = [
   },
   {
     id: pilotTabs.EFFICIENCY,
-    element: <Tickets />
+    element: <Efficiency />
+  },
+  {
+    id: pilotTabs.ACTIVITY,
+    element: <Activity />
+  },
+  {
+    id: pilotTabs.TIES,
+    element: <Ties />
   }
 ];
 

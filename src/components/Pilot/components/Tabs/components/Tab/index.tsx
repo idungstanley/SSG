@@ -23,12 +23,13 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
   const style = {
     transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined,
     transition,
-    backgroundColor: isDragging ? '#f3f4f6' : undefined, // ? bg for draggable, can be replaced by any style
+    opacity: isDragging ? '.4' : '1',
+    backgroundColor: isDragging ? '#fff' : undefined, // ? bg for draggable, can be replaced by any style
     zIndex: isDragging ? 1 : undefined, // important for overlay
-    height: '40px',
+    height: showTabLabel ? '40px' : '100%',
     borderLeft: '0',
     borderTop: '0',
-    borderBottom: '0.25px solid rgba(178, 178, 178, 0.25)'
+    borderBottom: showTabLabel ? '0.25px solid rgba(178, 178, 178, 0.25)' : 'none'
   };
 
   const handleClick = (tabId: string) => {
@@ -45,7 +46,8 @@ export default function Tab({ id, label, icon, showTabLabel }: TabProps) {
         isActiveTab
           ? 'bg-alsoit-purple-50 text-alsoit-purple-300'
           : 'alsoit-gray-300 hover:text-gray-700 hover:bg-alsoit-gray-125',
-        'group relative flex items-center justify-between cursor-pointer text-sm h-full transition duration-500 border-alsoit-gray-75'
+        'group relative flex items-center justify-between cursor-pointer text-sm h-full transition duration-500 border-alsoit-gray-75',
+        showTabLabel ? '' : 'px-0.5 py-2 pr-5'
       )}
       aria-current={isActiveTab ? 'page' : undefined}
     >

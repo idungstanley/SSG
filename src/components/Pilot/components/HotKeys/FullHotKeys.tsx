@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
@@ -80,7 +80,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
           <div className="pr-2" style={{ paddingLeft: '5px' }}>
             <SlideToggle activeSlide={activeSlide} fullCount={slidesCount} setActiveSlide={setActiveSlide} />
           </div>
-          <div className="flex flex-row w-full col-span-1">
+          <div className="flex flex-row w-full col-span-1 hot-keys-wrapper">
             {hotkeys.map((hotkey) => (
               <div key={hotkey.label}>
                 <ToolTip placement="right" title={hotkey.label}>
@@ -94,7 +94,7 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
                       style={{ width: '32px', height: '30px', margin: '0 12px 0 3px' }}
                       key={hotkey.id}
                     >
-                      {hotkey.icon}
+                      {React.cloneElement(hotkey.icon, { dimensions: { width: '21px', height: '21px' } })}
                     </button>
                   </div>
                 </ToolTip>

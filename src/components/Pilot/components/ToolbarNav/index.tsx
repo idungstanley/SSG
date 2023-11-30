@@ -6,6 +6,7 @@ import { useState } from 'react';
 import ModalPilotNav from '../../../Modal/ModalPilotNav';
 import { initialPlaces } from '../../../../layout/components/MainLayout/Sidebar/components/Places';
 import PilotNavIcon from '../../../../assets/icons/PilotNavIcon';
+import ToolTip from '../../../Tooltip/Tooltip';
 
 interface ToolbarNavInterface {
   id: string | null;
@@ -148,15 +149,17 @@ export default function ToolbarNav() {
             paddingLeft: '3px'
           }}
         >
-          <p
-            className={`transition duration-500 rounded pilot-nav-child ${
-              lastItem != item ? 'cursor-pointer hover:bg-alsoit-gray-125' : ''
-            }`}
-            style={{ fontSize: '13px', paddingLeft: '2.5px', paddingRight: '2.5px', letterSpacing: '0.2px' }}
-            onClick={() => handleLocation(item.url)}
-          >
-            {item.name}
-          </p>
+          <ToolTip placement="right" title={item.name}>
+            <p
+              className={`transition duration-500 rounded pilot-nav-child ${
+                lastItem != item ? 'cursor-pointer hover:bg-alsoit-gray-125' : ''
+              }`}
+              style={{ fontSize: '13px', paddingLeft: '2.5px', paddingRight: '2.5px', letterSpacing: '0.2px' }}
+              onClick={() => handleLocation(item.url)}
+            >
+              {item.name}
+            </p>
+          </ToolTip>
           {lastItem !== item && (
             <span
               className="relative overflow-visible cursor-pointer rounded pilot-nav-arrow"
