@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cl } from '../../../../../../utils';
 import { Dialog, Transition } from '@headlessui/react';
 import { useAbsolute } from '../../../../../../hooks/useAbsolute';
@@ -16,6 +16,7 @@ import {
   useUpdateEntityCustomFieldValue
 } from '../../../../../../features/list/listService';
 import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface dropdownProps {
   optionsFromField:
@@ -28,16 +29,18 @@ interface dropdownProps {
   allOptions: Options | undefined;
   currentProperty: IField;
   taskId: string;
+  task?: Task;
+  activeColumn?: boolean[];
 }
 
-function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId }: dropdownProps) {
+function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId, task, activeColumn }: dropdownProps) {
   const dispatch = useAppDispatch();
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
   const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const { updateCords } = useAppSelector((state) => state.task);
+  const { updateCords, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
   const { cords, relativeRef } = useAbsolute(updateCords, 160);
 
   const valueIds = optionsFromField?.map((obj) => ({ value: obj.id }));
@@ -45,6 +48,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
   const filteredOptions = allOptions?.filter((option) => option.name.toLowerCase().includes(searchValue.toLowerCase()));
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -59,7 +63,12 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
     dispatch(setActiveTabId(pilotTabs.TEMPLATES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(
-      setNewCustomPropertyDetails({ type: 'Multi Label', name: currentProperty.name, color: currentProperty.color })
+      setNewCustomPropertyDetails({
+        type: 'Multi Label',
+        name: currentProperty.name,
+        color: currentProperty.color,
+        id: currentProperty.id
+      })
     );
     setIsOpen(false);
   };
@@ -84,8 +93,25 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
     closeModal();
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setIsOpen(!!containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full">
+    <div className="w-full h-full flex items-center justify-center focus:ring-0" ref={containerRef} tabIndex={0}>
       <div className="w-full">
         <button
           type="button"
@@ -94,7 +120,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
         >
           <div ref={relativeRef} className="w-full">
             {optionsFromField?.length ? (
-              <div className="w-full flex flex-wrap justify-center gap-1 items-center p-1">
+              <div className="flex flex-wrap items-center justify-center w-full gap-1 p-1">
                 {optionsFromField?.map((value) => {
                   return (
                     <div
@@ -105,7 +131,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                       )}
                       style={{ backgroundColor: value.color }}
                     >
-                      <h3 className="text-alsoit-text-md max-w-full truncate">{value.name}</h3>
+                      <h3 className="max-w-full truncate text-alsoit-text-md">{value.name}</h3>
                     </div>
                   );
                 })}
@@ -119,9 +145,9 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
 
       <Transition appear show={isOpen} as="div">
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <div style={{ ...cords, maxWidth: '195px' }} className="fixed overflow-y-auto max-w-full">
+          <div style={{ ...cords, maxWidth: '195px' }} className="fixed max-w-full overflow-y-auto">
             <div
-              className="flex flex-col items-center justify-center p-4 text-center bg-white border rounded-xl shadow-lg outline-none h-fit"
+              className="flex flex-col items-center justify-center p-4 text-center bg-white border shadow-lg outline-none rounded-xl h-fit"
               style={{ maxWidth: '195px' }}
             >
               <div className="flex items-center max-w-full">
@@ -132,7 +158,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId 
                   ref={inputRef}
                   type="text"
                   placeholder="Search"
-                  className="h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0 w-11/12"
+                  className="w-11/12 h-4 border-0 ring-0 outline-0 focus:ring-0 focust:outline-0 focus:border-0"
                 />
               </div>
 

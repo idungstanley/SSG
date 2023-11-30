@@ -107,7 +107,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   const generateEntityName = (name: string) => {
     return (
       <ToolTip title={activeItemName}>
-        <span className="font-bold text-left truncate text-alsoit-text-lg w-72">
+        <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">
           {activeItemName || name ? Capitalize(activeItemName ? activeItemName : name) : ''}
         </span>
       </ToolTip>
@@ -417,7 +417,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
                 : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
             </span>
             {clockModal && (
-              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
+              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-36 w-44">
                 <HeaderTimeModal />
               </HeaderModal>
             )}

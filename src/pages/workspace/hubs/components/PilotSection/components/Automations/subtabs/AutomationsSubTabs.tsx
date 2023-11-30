@@ -19,13 +19,13 @@ export const automationsOptions = [
     id: pilotTabs.COMING_SOON,
     name: 'Coming soon',
     icon: <IoTimeOutline />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.COMING_SOON_2,
     name: 'Coming soon',
     icon: <IoTimeOutline />,
-    isVisible: false
+    isVisible: true
   }
 ];
 
@@ -72,7 +72,7 @@ export default function AutomationsSubTabs() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-2"
+            className="grid grid-cols-2 px-1"
             style={{ borderBottom: `3px solid ${activeSubComingTabId ? '#ebd1fc' : 'transparent'}` }}
           >
             {automationsOptions.map((item) => (

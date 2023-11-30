@@ -17,6 +17,9 @@ interface InputDataTypes {
   borderRadius?: string;
   height?: string;
   isBorder?: boolean;
+  classes?: string;
+  styles?: { color: string };
+  labelClasses?: string;
 }
 function Input({
   label,
@@ -34,7 +37,10 @@ function Input({
   bgColor,
   borderRadius,
   height,
-  isBorder = true
+  isBorder = true,
+  classes,
+  styles,
+  labelClasses
 }: InputDataTypes) {
   const handleTrailingIconClick = () => {
     if (trailingClick) {
@@ -46,7 +52,7 @@ function Input({
     <div className="w-full">
       {label && (
         <div className="flex justify-between mb-1">
-          <label htmlFor={name} className="block text-gray-700">
+          <label htmlFor={name} className={` ${labelClasses} block`}>
             {label}
           </label>
           {cornerHint && <span className="text-sm text-gray-500">{cornerHint}</span>}
@@ -68,11 +74,11 @@ function Input({
               : 'border-transparent focus:border-transparent focus:ring-0 focus:outline-none'
           } ${
             borderRadius ? borderRadius : name === 'search' && !borderRadius ? 'rounded-md py-0.5' : 'rounded-md py-2'
-          }  placeholder-gray-400   sm:text-sm ${bgColor} ${height}`}
+          }  placeholder-gray-400   sm:text-sm ${bgColor} ${height} ${classes}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          style={{ fontSize: '13px' }}
+          style={{ ...styles, fontSize: '13px' }}
         />
 
         {trailingIcon && (

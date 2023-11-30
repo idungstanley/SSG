@@ -104,7 +104,7 @@ function CreateDropdownField() {
             <label
               htmlFor={`input_${i.id}`}
               className="block mb-1 font-medium uppercase text-alsoit-gray-100 text-alsoit-text-xi"
-            >{`OPTION ${index + 1}`}</label>
+            >{`LABEL OPTION ${index + 1}`}</label>
             <div className="flex items-center bg-white rounded-md j">
               {i.color && (
                 <span
@@ -116,7 +116,7 @@ function CreateDropdownField() {
                 min={1}
                 required
                 type="text"
-                placeholder="Please input property option"
+                placeholder="Please input text option"
                 name={`input_${index + 1}`}
                 value={i.value}
                 onChange={(event) => handleInputChange(event, i.id)}
@@ -143,10 +143,10 @@ function CreateDropdownField() {
       {/* add new option */}
       <button
         onClick={handleAddOption}
-        className="flex items-center gap-2 p-1 my-2 text-white rounded bg-alsoit-purple-300"
+        className="flex items-center gap-2 p-1 my-2 text-white rounded bg-alsoit-gray-100"
       >
         <PlusCircleIcon className="w-5 h-5 text-white" />
-        <span>Add new option</span>
+        <span>Add option</span>
       </button>
       <SaveCols
         handleSubmit={handleSubmit}

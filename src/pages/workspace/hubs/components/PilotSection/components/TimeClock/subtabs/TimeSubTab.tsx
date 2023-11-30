@@ -20,13 +20,13 @@ export const timeClockOptions = [
     id: pilotTabs.TIME_CLOCK,
     name: 'Timeclock',
     icon: <ClockIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.SCREEN_RECORD,
     name: 'Screen Record',
     icon: <ScreenRecordIcon />,
-    isVisible: false
+    isVisible: true
   }
 ];
 
@@ -73,7 +73,7 @@ export default function TimeSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-2"
+            className="grid grid-cols-2 px-1"
             style={{ borderBottom: `3px solid ${activeSubTimeClockTabId ? '#ebd1fc' : 'transparent'}` }}
           >
             {timeClockOptions.map((item) => (

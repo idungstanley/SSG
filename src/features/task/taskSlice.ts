@@ -42,6 +42,7 @@ export type SortOption = {
 };
 
 interface customPropertyInfo {
+  id: string;
   name: string;
   type: string;
   color: string | null;
@@ -434,6 +435,7 @@ const initialState: TaskState = {
   customSuggestionField: [],
   newTaskData: undefined,
   newCustomPropertyDetails: {
+    id: '',
     name: '',
     type: 'Select Property Type',
     color: null,

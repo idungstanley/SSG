@@ -273,7 +273,7 @@ export const useCreateDropdownField = () => {
 
   return useMutation(createDropdownField, {
     onSuccess: (data) => {
-      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null, id: '' }));
       const updatedList = createCustomFieldColumnManager(
         entityForCustom.type === EntityType.task ? subtasks : tasks,
         data.data.custom_field,
@@ -307,7 +307,7 @@ export const useUpdateDropdownField = (parentId: string) => {
 
   return useMutation(updateDropdownField, {
     onSuccess: (data) => {
-      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null }));
+      dispatch(setNewCustomPropertyDetails({ name: '', type: 'Select Property Type', color: null, id: '' }));
       const { updatedTasks, updatedSubtasks } = updateCustomFieldColumnManager(
         tasks,
         subtasks,
