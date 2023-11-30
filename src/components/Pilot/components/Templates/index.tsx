@@ -9,8 +9,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import AddProperty from './Properties/component/AddProperty';
 import CardWrapper from '../CardWrapper';
 import { columnTypes, columnTypesProps } from './Components/CustomPropertyList';
-import { FaCaretRight } from 'react-icons/fa';
-import ToolTip from '../../../Tooltip/Tooltip';
+import NamedIconPair from './Components/NamedIconPair';
 
 const mockChatsData = [
   {
@@ -138,31 +137,16 @@ function Templates() {
           <CardWrapper
             type="properties"
             titleElement={
-              <div
-                className="grid items-center justify-between gap-2 text-left text-white cursor-pointer"
-                style={{ width: 'calc(100% - 45px)', gridTemplateColumns: '50% 20px 35%' }}
-              >
-                <div className="flex items-center w-full gap-1">
-                  <div className="flex items-center justify-center w-5 h-5 cursor-pointer">{collection?.icon}</div>
-                  <ToolTip title={collection?.title}>
-                    <div className="font-semibold truncate">{collection?.title}</div>
-                  </ToolTip>
-                </div>
-                <span className="flex items-center w-4 h-4">
-                  <FaCaretRight />
-                </span>
-                <div className="flex items-center w-full gap-1">
-                  <div className="flex items-center justify-center w-5 h-5 cursor-pointer">
-                    {collection.children[0]?.icon}
-                  </div>
-                  <ToolTip title={collection.children[0].name}>
-                    <p className="font-semibold truncate">{collection.children[0].name}</p>
-                  </ToolTip>
-                </div>
-              </div>
+              <NamedIconPair
+                parentName={collection?.title}
+                parentIcon={collection?.icon}
+                childIcon={collection.children[0]?.icon as JSX.Element}
+                childName={collection.children[0].name}
+              />
             }
             key={collection.title + index}
             collection={collection}
+            cardName={collection?.title}
           />
         ))}
       </div>

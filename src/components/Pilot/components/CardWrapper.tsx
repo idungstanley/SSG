@@ -20,9 +20,17 @@ interface ICollectionWrapperProps {
   collection: columnTypesProps;
   titleElement?: JSX.Element;
   type?: string;
+  bodyElement?: JSX.Element;
+  cardName?: string;
 }
 
-export default function CardWrapper({ collection, titleElement, type = 'chat' }: ICollectionWrapperProps) {
+export default function CardWrapper({
+  collection,
+  titleElement,
+  cardName,
+  bodyElement,
+  type = 'chat'
+}: ICollectionWrapperProps) {
   const [isActiveCollection, setActiveCollection] = useState(collection.active);
   const [openCard, setOpenCard] = useState<boolean>(false);
 
@@ -56,9 +64,11 @@ export default function CardWrapper({ collection, titleElement, type = 'chat' }:
               </div>
             )}
           </div>
-          <ToolTip title={collection.title}>
-            <div className="flex items-center w-10 text-left truncate cursor-pointer">{collection.title}</div>
-          </ToolTip>
+          {cardName && (
+            <ToolTip title={cardName}>
+              <div className="flex items-center w-10 text-left truncate cursor-pointer">{cardName}</div>
+            </ToolTip>
+          )}
         </div>
         <div className="flex items-center gap-1">
           <div
@@ -132,7 +142,7 @@ export default function CardWrapper({ collection, titleElement, type = 'chat' }:
           </div>
         </div>
       </div>
-      {openCard && <div></div>}
+      {openCard && <div>{bodyElement}</div>}
     </div>
   );
 }
