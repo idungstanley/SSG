@@ -4,9 +4,9 @@ import DetailsIndex from './properties/DetailsIndex';
 import DetailsSubTab from './DetailsSubTab';
 import { useAppSelector } from '../../../../app/hooks';
 import SectionArea from '../SectionArea';
-import { DetailsIcon } from '../../../../assets/icons';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import Checklists from '../Checklist/Checklist';
+import PilotDetailsIcon from '../../../../assets/icons/PilotDetailsIcon';
 
 export const DetailOptions = [
   {
@@ -36,7 +36,7 @@ export default function Details() {
       <div onMouseEnter={() => setIconToggle(true)} onMouseLeave={() => setIconToggle(false)}>
         <SectionArea
           label="Details"
-          icon={<DetailsIcon active={iconToggle} dimensions={{ width: 18, height: 18 }} />}
+          icon={<PilotDetailsIcon active={iconToggle} dimensions={{ width: 15, height: 15 }} />}
         />
       </div>
       <section className="flex flex-col pl-px overflow-y-scroll h-fit mb-11">
