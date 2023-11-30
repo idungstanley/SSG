@@ -11,7 +11,8 @@ import AssigneeIcon from '../../../../assets/icons/Assignee';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import { Menu } from '@mui/material';
-import ArrowDrop from '../../../../assets/icons/ArrowDrop';
+// import ArrowDrop from '../../../../assets/icons/ArrowDrop';
+import ArrowOpenDown from '../../../../assets/icons/ArrowOpenDown';
 
 const unassigned = {
   color: '#626262',
@@ -124,7 +125,10 @@ export default function FilterByAssigneeModal() {
           <HeadMenu.Button className="flex items-center">
             <AssigneeIcon active={isAssignee && !meMode} width={20} />
             <span>Assignee</span>
-            <ArrowDrop color={isAssignee && !meMode ? '#BF01FE' : '#424242'} />
+            <span className="px-1">
+              <ArrowOpenDown color="black" />
+            </span>
+            {/* <ArrowDrop color={isAssignee && !meMode ? '#BF01FE' : '#424242'} /> */}
           </HeadMenu.Button>
         </HeadMenu>
       </div>

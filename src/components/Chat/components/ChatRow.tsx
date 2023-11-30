@@ -17,7 +17,6 @@ interface IChatRowProps {
 
 export function ChatRow({ chat, columns }: IChatRowProps) {
   const [isCopied, setIsCopied] = useState<number>(0);
-  const [hoverOn, setHoverOn] = useState(false);
 
   const otherColumns = columns.slice(1);
 
@@ -30,18 +29,14 @@ export function ChatRow({ chat, columns }: IChatRowProps) {
   };
 
   return (
-    <tr
-      className="relative contents group dNFlex"
-      onMouseEnter={() => setHoverOn(true)}
-      onMouseLeave={() => setHoverOn(false)}
-    >
-      <ChatStickyCol chat={chat} hoverOn={hoverOn}>
+    <tr className="relative contents group dNFlex">
+      <ChatStickyCol chat={chat}>
         {/* actions */}
         <div className="flex items-center justify-center mr-1 space-x-1">
           {/* Copy */}
           <ToolTip title={isCopied === 0 ? 'Copy Chat Name' : 'Copied'}>
             <button
-              className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+              className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
               onClick={handleCopyTexts}
             >
               <Copy />
@@ -50,7 +45,7 @@ export function ChatRow({ chat, columns }: IChatRowProps) {
           {/* effects */}
           <ToolTip title="Apply Effects">
             <button
-              className={`p-1 bg-white border rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+              className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
               style={{ backgroundColor: 'orange' }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -61,7 +56,7 @@ export function ChatRow({ chat, columns }: IChatRowProps) {
           {/* show create subtask field */}
           <ToolTip title="Enhance View">
             <button
-              className={`p-1 pl-4 bg-white rounded-md ${hoverOn ? 'opacity-100' : 'opacity-0'}`}
+              className="p-1 pl-4 bg-white rounded-md opacity-0 group-hover:opacity-100"
               onClick={(e) => e.stopPropagation()}
             >
               <Enhance className="w-3 h-3" style={{ color: 'orange' }} />

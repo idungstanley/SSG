@@ -118,15 +118,17 @@ export function Assignee() {
   };
 
   return (
-    <div className="flex items-center h-8 cursor-pointer rounded-2xl">
+    <div className="flex items-center h-8 cursor-pointer rounded-2xl text-xs">
       <Button active={forMe && meMode} onClick={onToggleMe}>
-        <Me active={forMe && meMode} className="w-5 h-5" />
+        <Me active={forMe && meMode} className="w-5 h-5 text-xs" />
         <span>Me</span>
       </Button>
 
-      <Button active={isAssignee && !meMode}>
-        <FilterByAssigneeModal />
-      </Button>
+      <div className="-ml-2.5 border-l border-l-gray-400 text-xs">
+        <Button active={isAssignee && !meMode}>
+          <FilterByAssigneeModal />
+        </Button>
+      </div>
     </div>
   );
 }

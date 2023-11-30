@@ -71,8 +71,18 @@ interface IChatData {
   team_members: ITeamMember[];
 }
 
+interface ILastMessage {
+  id: string;
+  mention_users: IMentionUser[];
+  message: string;
+  team_member: ITeamMember;
+}
+
 export interface IChatFromList extends IChatData {
   new_messages_count: number;
+  messages_count: number;
+  last_message: ILastMessage | null;
+  updated_at: string;
 }
 
 export interface IChat extends IChatData {
