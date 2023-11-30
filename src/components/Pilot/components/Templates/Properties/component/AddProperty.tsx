@@ -40,7 +40,7 @@ export default function AddProperty() {
                 <ClosePalette fill="white" />
               </span>
             </ToolTip>
-            <ToolTip title="Update Hub">
+            <ToolTip title="Add Property">
               <span className="cursor-pointer" onClick={() => ({})}>
                 <SavePalette />
               </span>

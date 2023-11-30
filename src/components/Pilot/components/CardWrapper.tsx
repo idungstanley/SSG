@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import EmailIcon from '../../../../assets/icons/EmailIcon';
-import NotificationIcon from '../../../../assets/icons/NotificationIcon';
-import SharePilotIcon from '../../../../assets/icons/SharePilotIcon';
-import CollectionsIcon from '../../../../assets/icons/chatIcons/CollectionsIcon';
-import EditIcon from '../../../../assets/icons/chatIcons/EditIcon';
-import PermissionIcon from '../../../../assets/icons/chatIcons/PermissionIcon';
-import TrashIcon from '../../../../assets/icons/chatIcons/TrashIcon';
-import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
-import ChatAddModal from '../ChatAddModal';
+import React, { useState } from 'react';
+import CollapseIcon from '../../Views/ui/collapseIcon/CollapseIcon';
+import CollectionsIcon from '../../../assets/icons/chatIcons/CollectionsIcon';
+import SharePilotIcon from '../../../assets/icons/SharePilotIcon';
+import NotificationIcon from '../../../assets/icons/NotificationIcon';
+import EmailIcon from '../../../assets/icons/EmailIcon';
+import EditIcon from '../../../assets/icons/chatIcons/EditIcon';
+import TrashIcon from '../../../assets/icons/chatIcons/TrashIcon';
+import PermissionIcon from '../../../assets/icons/chatIcons/PermissionIcon';
+import { columnTypesProps } from './Templates/Components/CustomPropertyList';
+import ChatAddModal from '../../Chat/components/ChatAddModal';
+import ToolTip from '../../Tooltip/Tooltip';
 
 export interface ICollection {
   name: string;
@@ -15,36 +17,48 @@ export interface ICollection {
 }
 
 interface ICollectionWrapperProps {
-  collection: ICollection;
+  collection: columnTypesProps;
+  titleElement?: JSX.Element;
+  type?: string;
 }
 
-export default function CollectionWrapper({ collection }: ICollectionWrapperProps) {
+export default function CardWrapper({ collection, titleElement, type = 'chat' }: ICollectionWrapperProps) {
   const [isActiveCollection, setActiveCollection] = useState(collection.active);
+  const [openCard, setOpenCard] = useState<boolean>(false);
 
   return (
     <div>
       {/* header */}
       <div
-        className="flex items-center justify-between mb-2 border-b rounded-md group"
-        style={{ background: isActiveCollection ? '#E6FAE9' : '#FEF6E6' }}
+        className="grid items-center justify-between w-full gap-2 mb-2 border-b rounded-md group"
+        style={{ background: isActiveCollection ? '#E6FAE9' : '#FEF6E6', gridTemplateColumns: '50% 50%' }}
       >
-        <div className="flex items-center gap-2 group/header">
+        <div className="grid items-center gap-1 group/header" style={{ gridTemplateColumns: '80% 50px' }}>
           <div
-            className="relative flex items-center gap-1 px-2 py-1 space-x-1 text-white rounded-md rounded-tr-none cursor-default dFlex"
+            className="relative flex items-center w-full gap-2 px-2 py-1 space-x-1 text-white rounded-md rounded-tr-none cursor-default grow dFlex"
             style={{
-              minWidth: '145px',
               minHeight: '32px',
               backgroundColor: isActiveCollection ? '#00CC25' : '#F7A100'
             }}
           >
-            <div className="cursor-pointer">
+            <div
+              className={`flex items-center justify-center w-5 h-5 cursor-pointer ${
+                openCard ? 'origin-center rotate-90' : ''
+              }`}
+              onClick={() => setOpenCard((prev) => !prev)}
+            >
               <CollapseIcon color="#A854F7" active={true} onToggle={() => null} hoverBg="white" />
             </div>
-            {collection.name}
-            <div className="hidden group-hover/header:flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
-              <ChatAddModal />
-            </div>
+            {titleElement}
+            {type === 'chat' && (
+              <div className="hidden group-hover/header:flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
+                <ChatAddModal />
+              </div>
+            )}
           </div>
+          <ToolTip title={collection.title}>
+            <div className="flex items-center w-10 text-left truncate cursor-pointer">{collection.title}</div>
+          </ToolTip>
         </div>
         <div className="flex items-center gap-1">
           <div
@@ -118,6 +132,7 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
           </div>
         </div>
       </div>
+      {openCard && <div></div>}
     </div>
   );
 }
