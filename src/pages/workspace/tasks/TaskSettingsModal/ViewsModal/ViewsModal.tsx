@@ -167,7 +167,9 @@ export default function ViewsModal({
         <HeadMenu>
           <HeadMenu.Button>
             <Button active={true}>
-              <Icons src={view} />
+              <div className="mt-1 ml-1">
+                <Icons src={view} />
+              </div>
               <span className="ml-1 mr-2 text-xs">View</span>
               <span>
                 <ArrowRightPilot active={false} />
