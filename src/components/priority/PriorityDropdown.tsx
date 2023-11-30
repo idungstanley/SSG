@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cl } from '../../utils';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
@@ -7,6 +7,7 @@ import { priorities } from '../../app/constants/priorities';
 import AlsoitMenuDropdown from '../DropDowns';
 import { priorityArr } from '../../utils/PriorityArr';
 import Priority from '../../assets/icons/Priority';
+import { Task } from '../../features/task/interface.tasks';
 
 export interface priorityType {
   id: string;
@@ -19,12 +20,20 @@ export interface priorityType {
 interface TaskCurrentPriorityProps {
   taskCurrentPriority: string | [{ id: string; initials: string; color: string }] | null | undefined;
   icon?: React.ReactNode;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
-export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurrentPriorityProps) {
+export default function PriorityDropdown({ taskCurrentPriority, icon, activeColumn, task }: TaskCurrentPriorityProps) {
   const { priority, priorityList, setPriority } = priorityArr();
-  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
-  const [isOpen, setIsOpen] = useState<HTMLButtonElement | null>(null);
+
+  const { selectedTasksArray, selectedListIds, selectedTaskParentId, taskColumnIndex, KeyBoardSelectedTaskData } =
+    useAppSelector((state) => state.task);
+  // const { activeItemId } = useAppSelector((state) => state.workspace);
+
+  const [isOpen, setIsOpen] = useState<HTMLElement | null>(null);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { isSuccess } = UseUpdateTaskPrioritiesServices({
     task_id_array: selectedTasksArray,
@@ -55,9 +64,26 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
     }
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setIsOpen(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <>
-      <div>
+    <div tabIndex={0} ref={containerRef} className="w-full h-full flex items-center justify-center focus:ring-0">
+      <div className="w-full h-full flex items-center justify-center focus:ring-0">
         <button
           type="button"
           onClick={(e) => handleOpenDropdown(e)}
@@ -91,6 +117,6 @@ export default function PriorityDropdown({ taskCurrentPriority, icon }: TaskCurr
           </div>
         </div>
       </AlsoitMenuDropdown>
-    </>
+    </div>
   );
 }

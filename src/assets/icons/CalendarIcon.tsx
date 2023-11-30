@@ -14,8 +14,8 @@ interface Props {
 export default function CalendarIcon({ active, fixed, dimensions, color }: Props) {
   return (
     <svg
-      width={dimensions?.width ?? '15'}
-      height={dimensions?.height ?? '15'}
+      width={dimensions?.width ?? '16'}
+      height={dimensions?.height ?? '16'}
       viewBox="0 0 21 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

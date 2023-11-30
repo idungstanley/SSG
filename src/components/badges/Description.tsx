@@ -27,7 +27,6 @@ export default function Description({ width = '12px', height = '12px' }: Descrip
             fill="#424242"
           />
         </g>
-        <rect x="0.848828" y="0.05" width="11.9" height="11.9" rx="1.95" stroke="#B2B2B2" strokeWidth="0.1" />
       </svg>
     </div>
   );

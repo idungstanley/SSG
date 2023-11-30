@@ -161,7 +161,7 @@ export default function ViewsModal({
   return (
     <>
       <div
-        className="flex items-center justify-center viewSettingsParent"
+        className="flex items-center justify-center viewSettingsParent rounded-md"
         onClick={(e: React.MouseEvent<HTMLDivElement>) => setDropdownEl(e.currentTarget)}
       >
         <HeadMenu>

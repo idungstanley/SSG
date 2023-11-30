@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { VscTriangleRight } from 'react-icons/vsc';
+import { VscTriangleDown, VscTriangleRight } from 'react-icons/vsc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   closeMenu,
@@ -14,7 +14,7 @@ import AvatarWithInitials from '../avatar/AvatarWithInitials';
 import Palette from '../ColorPalette';
 import UploadImage from '../ColorPalette/component/UploadImage';
 import { InvalidateQueryFilters } from '@tanstack/react-query';
-import { setCreateWlLink } from '../../features/workspace/workspaceSlice';
+import { setCreateWlLink, setEntityForPermissions } from '../../features/workspace/workspaceSlice';
 import { ListColourProps } from './ListItem';
 import { useParams } from 'react-router-dom';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
@@ -119,6 +119,10 @@ export default function HubItem({
     }
   };
 
+  const renderEmptyArrowBlock = () => {
+    return <div className="pl-3.5" />;
+  };
+
   const { isOver, setNodeRef } = useDroppable({
     id: item.id,
     data: {
@@ -146,16 +150,16 @@ export default function HubItem({
 
   const paddingLeft = () => {
     if (!showSidebar) {
-      return '18';
+      return '7';
     }
     if (type === EntityType.subHub) {
       if (isExtendedBar) {
-        return '30';
+        return '17';
       } else {
-        return '38';
+        return '25';
       }
     } else {
-      return '30';
+      return '17';
     }
   };
 
@@ -224,15 +228,15 @@ export default function HubItem({
     (JSON.parse(localStorage.getItem(STORAGE_KEYS.SIDEBAR_WIDTH) || '""') as number) ||
     dimensions.navigationBar.default;
 
-  const isShowArrow = () => {
-    if (
-      (item?.wallets?.length || item?.lists?.length || item.has_descendants) &&
-      (placeHubType === APP_TASKS || placeHubType === APP_HR)
-    ) {
-      return true;
-    }
-    return false;
-  };
+  // const isShowArrow = () => {
+  //   if (
+  //     (item?.wallets?.length || item?.lists?.length || item.has_descendants) &&
+  //     (placeHubType === APP_TASKS || placeHubType === APP_HR)
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
   return (
     <div
@@ -298,14 +302,32 @@ export default function HubItem({
               }
               style={{ zIndex: 1 }}
             >
-              <div
-                className={`relative flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-2'}`}
-              >
+              {((item?.wallets?.length || item?.lists?.length || item.has_descendants) && placeHubType === APP_TASKS) ||
+              placeHubType === APP_HR ? (
+                <div>
+                  {showChildren ? (
+                    <span className="flex flex-col">
+                      <VscTriangleDown
+                        className="flex-shrink-0 h-2 hover:fill-[#BF01FE]"
+                        aria-hidden="true"
+                        color="#919191"
+                      />
+                    </span>
+                  ) : (
+                    <VscTriangleRight
+                      className="flex-shrink-0 h-2 hover:fill-[#BF01FE]"
+                      aria-hidden="true"
+                      color="#919191"
+                    />
+                  )}
+                </div>
+              ) : (
+                renderEmptyArrowBlock()
+              )}
+              <div className={`flex items-center flex-1 min-w-0 ${placeHubType == APP_HR ? 'gap-1' : 'gap-5'}`}>
                 <div
                   onClick={(e) => handleHubColour(item.id, e)}
-                  className={`flex items-center justify-center w-6 h-6 ${
-                    isShowArrow() && 'opacity-100 group-hover:opacity-0'
-                  }`}
+                  className="flex items-center justify-center w-6 h-6"
                   ref={relativeRef}
                 >
                   {item.path !== null ? (
@@ -329,19 +351,6 @@ export default function HubItem({
                     />
                   )}
                 </div>
-                {isShowArrow() && (
-                  <div className="absolute flex justify-center items-center w-6 h-6 opacity-0 group-hover:opacity-100">
-                    <div className="group/open flex justify-center items-center w-4 h-4 rounded hover:bg-gray-300">
-                      <VscTriangleRight
-                        className={`flex-shrink-0 h-2 group-hover/open:fill-[#BF01FE] duration-200 ${
-                          showChildren ? 'rotate-90' : 'rotate-0'
-                        }`}
-                        aria-hidden="true"
-                        color="#919191"
-                      />
-                    </div>
-                  </div>
-                )}
                 <span
                   className="pr-2 overflow-hidden"
                   style={{ width: sidebarWidthFromLS - 135 - Number(paddingLeft()) }}
@@ -382,11 +391,12 @@ export default function HubItem({
                 <span
                   onClick={(e) => {
                     handleHubSettings(item.id, item.name, e);
+                    dispatch(setEntityForPermissions(item));
                   }}
                   className="cursor-pointer"
                   id="menusettings"
                 >
-                  <ThreeDotIcon className="hover:text-alsoit-purple-300" />
+                  <ThreeDotIcon />
                 </span>
               </ToolTip>
             </div>
@@ -407,7 +417,7 @@ export default function HubItem({
         />
       ) : null}
       {showMenuDropdown === item.id && showSidebar ? (
-        <MenuDropdown item={item as Hub} entityType={EntityType.hub} isExtendedBar={isExtendedBar} cords={menuCords} />
+        <MenuDropdown item={item as Hub} isExtendedBar={isExtendedBar} cords={menuCords} />
       ) : null}
       {SubMenuId === item.id && showSidebar ? <SubDropdown cords={menuCords} placeHubType={placeHubType} /> : null}
     </div>

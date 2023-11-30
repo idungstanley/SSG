@@ -1,4 +1,5 @@
 import { IField } from '../../../../../../features/list/list.interfaces';
+import { Task } from '../../../../../../features/task/interface.tasks';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import DropdownField from './DropdownField';
 
@@ -7,13 +8,17 @@ interface DropdownFieldWrapperProps {
   fieldId: string;
   taskId: string;
   entityCustomProperty?: IField[];
+  task?: Task;
+  activeColumn?: boolean[];
 }
 
 export default function DropdownFieldWrapper({
   taskId,
   fieldId,
   taskCustomFields,
-  entityCustomProperty
+  entityCustomProperty,
+  activeColumn,
+  task
 }: DropdownFieldWrapperProps) {
   const customFields = entityCustomProperty ?? [];
   const field = customFields.find((i) => i.id === fieldId);
@@ -26,6 +31,8 @@ export default function DropdownFieldWrapper({
       field={{ id: field.id, options: field.options, activeProperty }}
       taskId={taskId}
       currentProperty={field}
+      activeColumn={activeColumn}
+      task={task}
     />
   ) : null;
 }

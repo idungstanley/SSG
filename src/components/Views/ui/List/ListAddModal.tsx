@@ -12,6 +12,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
 import { IListColor } from './List';
 import ArrowDownFilled from '../../../../assets/icons/ArrowDownFilled';
+import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 
 export default function ListAddModal({
   handleCheckedGroupTasks,
@@ -143,29 +144,34 @@ export default function ListAddModal({
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
-          style: { minHeight: '300px', minWidth: '250px' }
+          style: { minHeight: '300px' }
         }}
       >
-        {items.map((item) => (
-          <div key={item.id}>
-            <div className="w-full m-2">
-              {(item.label === 'List Info' || item.label === 'Archive') && <p className="mr-5 border-t-2"></p>}
-            </div>
-            <MenuItem
-              key={item.label}
-              onClick={() => {
-                item.handleClick();
-                handleClose();
-              }}
-            >
-              <div className="flex items-center w-full space-x-1 ">
-                <p className="mr-2">{item.icon}</p>
-                <p>{item.label}</p>
+        <VerticalScroll>
+          <div className="h-96 relative">
+            {items.map((item) => (
+              <div key={item.id}>
+                <div className="w-full m-2 ">
+                  {(item.label === 'List Info' || item.label === 'Archive') && <p className="mr-5 border-t-2"></p>}
+                </div>
+                <MenuItem
+                  sx={{ fontFamily: 'montserrat', textTransform: 'none', fontSize: '13px', fontWeight: 600 }}
+                  key={item.label}
+                  onClick={() => {
+                    item.handleClick();
+                    handleClose();
+                  }}
+                >
+                  <div className="flex items-center w-full space-x-1 text-alsoit-text-lg">
+                    <p className="mr-2">{item.icon}</p>
+                    <p>{item.label}</p>
+                  </div>
+                  {item.arrowRight}
+                </MenuItem>
               </div>
-              {item.arrowRight}
-            </MenuItem>
+            ))}
           </div>
-        ))}
+        </VerticalScroll>
         <p className="border-t-2"></p>
         <p
           className="flex items-center p-2 mx-3 my-2 text-white rounded-md cursor-pointer border-y-2"
@@ -175,7 +181,9 @@ export default function ListAddModal({
           Sharing & Permissions
         </p>
         <p className="border-t-2"></p>
+
         <MenuItem
+          sx={{ fontFamily: 'montserrat', textTransform: 'none', fontSize: '13px', fontWeight: 600 }}
           className="flex items-center p-3 cursor-pointer"
           onClick={() => {
             handleCheckedGroupTasks();

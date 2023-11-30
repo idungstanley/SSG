@@ -299,3 +299,30 @@ input:focus {
     transform: scaleY(1);
   }
 }
+
+.chatSearch {
+  display: flex;
+  align-items: center;
+  padding: 6px 4px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.25);
+}
+
+.chatSearch .chatSearch_icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatSearch input {
+  padding: 0;
+  border: none;
+  font-size: 11px;
+}
+
+.hot-keys-wrapper svg {
+  width: 26px;
+  height: 26px;
+}
