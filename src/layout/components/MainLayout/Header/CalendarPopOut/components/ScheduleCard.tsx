@@ -62,7 +62,7 @@ function ScheduleCard({ schedule }: scheduleCards) {
                       }}
                     >
                       {item.type === 'task' && <TaskIcon color="white" dimenions={{ width: '7', height: '7' }} />}
-                      {item.type === 'meeting' && <EmailIcon color="white" dimensions={{ width: '7', height: '7' }} />}
+                      {item.type === 'meeting' && <EmailIcon color="white" width="7" height="7" />}
                       {item.type === 'event' && (
                         <CalendarIcon active={false} dimensions={{ width: 7, height: 7 }} color="white" />
                       )}
