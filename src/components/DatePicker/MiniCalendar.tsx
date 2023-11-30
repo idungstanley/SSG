@@ -177,7 +177,7 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
                           onMouseEnter={() => setIconToggle((prev) => ({ ...prev, leftIcon: true }))}
                           onMouseLeave={() => setIconToggle((prev) => ({ ...prev, leftIcon: false }))}
                         >
-                          <ArrowLeft />
+                          <ArrowLeft color="#919191" />
                         </button>
                       </ToolTip>
                       <ToolTip title="Next Month" placement="left">
@@ -187,14 +187,14 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
                           onMouseEnter={() => setIconToggle((prev) => ({ ...prev, rightIcon: true }))}
                           onMouseLeave={() => setIconToggle((prev) => ({ ...prev, rightIcon: false }))}
                         >
-                          <ArrowRight />
+                          <ArrowRight color="#919191" />
                         </button>
                       </ToolTip>
                     </div>
                   </div>
                 </div>
-                <div className="bg-white mx-auto py-2" style={{ width: '95%' }}>
-                  <div className={cl('w-full flex justify-center space-x-3')}>
+                <div className="bg-white mx-auto py-2" style={{ width: '90%' }}>
+                  <div className={cl('w-full flex justify-center space-x-2')}>
                     {rows[0].map(({ value }, i) => (
                       <ToolTip title={value.format('ddd')} placement="top" key={i}>
                         <div
@@ -208,7 +208,7 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
                   </div>
                   <div className="flex flex-col w-full mx-auto">
                     {rows.map((cells, rowIndex) => (
-                      <div key={rowIndex} className={cl('flex justify-center my-1 space-x-3')}>
+                      <div key={rowIndex} className={cl('flex justify-center my-1 space-x-2')}>
                         {cells.map(({ text, value }, i) => (
                           <ToolTip title="Select date" placement="top" key={i}>
                             <div
