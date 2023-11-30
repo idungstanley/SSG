@@ -16,25 +16,29 @@ interface AvatarWithInitialsProps {
 function AvatarWithInitials({
   initials,
   textColor = 'white',
-  height = '28px',
-  width = '28px',
+  height = 'h-7',
+  width = 'w-7',
   backgroundColour = '#4D98F2',
   roundedStyle = 'circular',
-  textSize = '10px',
+  textSize = '8px',
   badge
 }: AvatarWithInitialsProps) {
   const { CompactView } = useAppSelector((state) => state.task);
 
-  const modeHeight = CompactView ? '19px' : height;
-  const modeWidth = CompactView ? '19px' : width;
+  const modeHeight = CompactView ? '19px' : '28px';
+  const modeWidth = CompactView ? '19px' : '28px';
 
   return (
     <div className="relative flex items-center">
       <span
-        className={`inline-flex items-center justify-center z-5 ${roundedStyle === 'circular' && 'rounded-full'} ${
-          roundedStyle === 'rounded' && 'rounded'
-        }`}
-        style={{ backgroundColor: backgroundColour, height: modeHeight, width: modeWidth }}
+        className={`inline-flex items-center justify-center z-5 ${height} ${width} ${
+          roundedStyle === 'circular' && 'rounded-full'
+        } ${roundedStyle === 'rounded' && 'rounded'}`}
+        style={{
+          backgroundColor: backgroundColour,
+          height: modeHeight,
+          width: modeWidth
+        }}
       >
         <span className="font-bold leading-none " style={{ fontSize: textSize, color: textColor }}>
           {initials}
