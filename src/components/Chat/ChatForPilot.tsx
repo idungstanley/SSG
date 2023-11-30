@@ -85,7 +85,7 @@ export default function ChatForPilot() {
       setFilteredCollections(mockChatsData);
     }
   };
-  console.log('isArchived', isArchived);
+
   return (
     <>
       <div className="w-full h-full border-b border-l border-r">
