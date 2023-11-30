@@ -20,6 +20,11 @@ import ChatArrowLeft from '../../../../assets/icons/ChatArrowLeft';
 import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import DropdownArrowIcon from '../../../../assets/icons/chatIcons/DropdownArrowIcon';
+import { getInitials } from '../../../../app/helpers';
+import ToolTip from '../../../Tooltip/Tooltip';
+import PinIcon from '../../../../assets/icons/chatIcons/PinIcon';
+import ThreeDotIcon from '../../../../assets/icons/ThreeDotIcon';
+import BlurEffect from '../../../BlurEffect';
 
 export default function ChatSection() {
   const dispatch = useAppDispatch();
@@ -112,25 +117,37 @@ export default function ChatSection() {
         <FullScreenMessage title="Oops, an error occurred :(" description="Please try again later." />
       ) : messages && chat ? (
         <div className="grid h-full gap-1 p-2 bg-white grid-rows-autoFrAuto">
-          <div style={{ background: '#F4F4F4' }}>
+          <div className="bg-alsoit-purple-50">
             {/* header */}
             <div className="flex items-center justify-between pb-2 border-b">
               <div className="flex items-center gap-2">
-                <p
-                  className="py-0.5 relative px-2 rounded-tl-md rounded-br-md flex items-center space-x-1 text-white dFlex"
-                  style={{
-                    backgroundColor: 'rgb(165, 165, 165)',
-                    height: '25px',
-                    gap: '5px'
-                  }}
-                >
-                  {Capitalize(chat.name)}
-                </p>
-                <div
-                  onClick={handleDisconnect}
-                  className="flex items-center justify-center w-6 h-6 bg-white rounded-md cursor-pointer"
-                >
-                  <ChatArrowLeft />
+                <div className="relative group py-[6px] pl-[2px] pr-[9px] bg-alsoit-purple-300 relative px-2 rounded-tl-md rounded-br-md flex items-center text-white dFlex">
+                  <ToolTip title="Return to chat Collection" placement="top-start">
+                    <div onClick={handleDisconnect} className="flex items-center justify-center w-6 h-6 cursor-pointer">
+                      <ChatArrowLeft />
+                    </div>
+                  </ToolTip>
+                  <div className="flex justify-center items-center mx-1 w-5 h-5 text-[10px] bg-[#4d98f2] rounded-full font-bold text-white">
+                    {getInitials(chat.name)}
+                  </div>
+                  <ToolTip title={chat.name}>
+                    <div>{Capitalize(chat.name)}</div>
+                  </ToolTip>
+                  <div className="absolute bg-alsoit-purple-300 flex items-center h-full right-0 top-0 opacity-0 group-hover:opacity-100">
+                    <BlurEffect
+                      top="0"
+                      right="auto"
+                      bottom="0"
+                      left="-15px"
+                      width="15px"
+                      height="100%"
+                      backgroundImage="linear-gradient(to right, transparent , #bf01fe)"
+                    />
+                    <span className="ml-[2px]">
+                      <ThreeDotIcon />
+                    </span>
+                    <PinIcon />
+                  </div>
                 </div>
               </div>
 
@@ -140,7 +157,7 @@ export default function ChatSection() {
                   style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
                 >
                   Read By Me
-                  <span className="flex items-center pl-1">
+                  <span className="flex items-center pl-1 pr-1">
                     <label className="switch small" onClick={(event) => event.stopPropagation()}>
                       <input className="inputShow" type="checkbox" checked={false} />
                       <div className="slider" />
@@ -163,11 +180,11 @@ export default function ChatSection() {
                 <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
                   <ShowIcon color="orange" width="21" height="21" />
                 </div>
-                <div className="flex justify-center bg-alsoit-gray-125 items-center h-6 rounded-md">
+                <div className="flex justify-center items-center h-6 rounded-md">
                   <div className="relative flex mr-px bg-white justify-center bg-white items-center h-6 w-6 rounded-tl-md rounded-bl-md">
                     <ChatMe />
                     <div
-                      className="absolute top-[2px] -right-px rounded-sm bg-alsoit-gray-100"
+                      className="absolute top-[2px] -right-[0.5px] rounded-sm bg-alsoit-gray-100"
                       style={{ width: '0.5px', height: 'calc(100% - 4px)' }}
                     />
                   </div>
@@ -182,7 +199,7 @@ export default function ChatSection() {
               </div>
             </div>
 
-            <div className="px-2">
+            <div className="px-4">
               <MessagesList messages={allMessages} />
             </div>
 

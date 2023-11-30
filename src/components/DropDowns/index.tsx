@@ -22,7 +22,7 @@ export default function AlsoitMenuDropdown({ handleClose, anchorEl, children, st
       }}
       PaperProps={{
         style: {
-          borderRadius: '10px'
+          borderRadius: '5px'
         }
       }}
     >

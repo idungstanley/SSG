@@ -159,7 +159,7 @@ export default function ChatsList() {
                   style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
                 >
                   Read By Me
-                  <span className="flex items-center pl-1">
+                  <span className="flex items-center pl-1 pr-1">
                     <label className="switch small" onClick={(event) => event.stopPropagation()}>
                       <input className="inputShow" type="checkbox" checked={false} />
                       <div className="slider" />
@@ -182,11 +182,11 @@ export default function ChatsList() {
                 <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
                   <ShowIcon color="orange" width="21" height="21" />
                 </div>
-                <div className="flex justify-center bg-alsoit-gray-125 items-center h-6 rounded-md">
+                <div className="flex justify-center items-center h-6 rounded-md">
                   <div className="relative flex mr-px bg-white justify-center bg-white items-center h-6 w-6 rounded-tl-md rounded-bl-md">
                     <ChatMe />
                     <div
-                      className="absolute top-[2px] -right-px rounded-sm bg-alsoit-gray-100"
+                      className="absolute top-[2px] -right-[0.5px] rounded-sm bg-alsoit-gray-100"
                       style={{ width: '0.5px', height: 'calc(100% - 4px)' }}
                     />
                   </div>
