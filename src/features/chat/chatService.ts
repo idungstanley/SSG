@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { itemType } from '../../types';
 import { IChatsRes, IChatFromList, IChatRes, IChat, IMessage } from './chat.interfaces';
-import { UploadResult, UploadedUppyFile } from '@uppy/core';
+// import { UploadResult, UploadedUppyFile } from '@uppy/core';
 
 export const useGetChats = (data: { type?: itemType; id?: string | null }) =>
   useQuery<IChatsRes, unknown, IChatFromList[]>(
@@ -78,10 +78,12 @@ const sendMessageToChat = (data: {
   message: string;
   selectedMessage: IMessage | null;
   // files: UploadedUppyFile<Record<string, unknown>, Record<string, unknown>>[];
-  // files: Blob[] | File[];
-  files: string[];
+  // files: Blob[] | File[] | Promise<Blob> | Blob;
+  files: Blob;
+  // files: string[];
 }) => {
   const { chatId, message, selectedMessage, files } = data;
+  console.log(files, 'from service');
   const request = requestNew({
     url: `chats/${chatId}/message`,
     method: 'POST',

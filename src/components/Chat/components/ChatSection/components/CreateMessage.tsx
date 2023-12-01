@@ -53,6 +53,25 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
 
   const [selectedMembers, setSelectedMembers] = useState<{ id: string; name: string }[]>([]);
 
+  const ObjectURLToBlob = function (url: string): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.blob();
+        })
+        .then((blob) => {
+          console.log(blob);
+          resolve(blob);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
+
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -78,11 +97,15 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
       }
     }
     if (!message?.length && chatAttachmentsFiles.length) {
-      onSendMessage({
-        message: '',
-        chatId,
-        selectedMessage: selectedMessage as IMessage | null,
-        files: chatAttachmentsFiles.length ? chatAttachmentsFiles.map((fileData) => fileData.preview as string) : []
+      const blobPromise = ObjectURLToBlob(chatAttachmentsFiles[0].preview as string);
+
+      blobPromise.then((result) => {
+        onSendMessage({
+          message: '',
+          chatId,
+          selectedMessage: selectedMessage as IMessage | null,
+          files: (chatAttachmentsFiles.length ? result : []) as Blob
+        });
       });
     }
     dispatch(setChatAttachmentsFiles([]));
