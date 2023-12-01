@@ -14,12 +14,33 @@ import {
 import { arrayMove, rectSortingStrategy, SortableContext, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import { BsChatLeftText } from 'react-icons/bs';
-// import CommentIcon from '../../../../../assets/icons/CommentIcon';
+import TicketsPilotIcon from '../../../../../assets/icons/TicketsPilotIcon';
+import CoriDocsIcon from '../../../../../assets/icons/chatIcons/CoriDocsIcon';
+import CommentsIcon from '../../../../../assets/icons/chatIcons/CommentsIcon';
 
 export const communicationOptions = [
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
+  {
+    id: pilotTabs.TICKETS,
+    name: 'Tickets',
+    icon: <TicketsPilotIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.COMMENTS,
+    name: 'Comments',
+    icon: <CommentsIcon />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.CORI_DOCS,
+    name: 'CoriDocs',
+    icon: <CoriDocsIcon />,
+    isVisible: false
+  },
   {
     id: pilotTabs.EMAIL,
-    name: 'Email',
+    name: 'Emails',
     icon: <MdAlternateEmail className="w-4 h-4" />,
     isVisible: false
   },
@@ -49,6 +70,7 @@ export const communicationOptions = [
   // //   isVisible: true
   // // }
 ];
+
 export default function CommunicationSubTab() {
   const idsFromLS: string[] = JSON.parse(localStorage.getItem('subTab') || '[]') as string[];
   const { showPilot, activeSubCommunicationTabId } = useAppSelector((state) => state.workspace);

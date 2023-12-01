@@ -4,16 +4,18 @@ import React from 'react';
 
 const ToolTip = styled(({ className, placement, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} placement={placement ?? 'top'} />
-))(() => ({
+))(({ theme }) => ({
   [`& .${tooltipClasses.arrow}`]: {
-    color: '#424242'
+    color: theme.palette.common.black,
+    '&:before': {
+      transform: 'rotate(45deg) skew(14deg, 14deg)',
+      borderRadius: '1px'
+    }
   },
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#424242',
-    fontSize: '10px',
-    padding: '2px 5px 2px 5px',
-    borderRadius: '2px',
-    marginLeft: '0'
+    backgroundColor: theme.palette.common.black,
+    padding: '4px',
+    maxWidth: 'max-content'
   }
 }));
 

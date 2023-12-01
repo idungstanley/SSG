@@ -10,6 +10,13 @@ import AddProperty from './Properties/component/AddProperty';
 import CardWrapper from '../CardWrapper';
 import { columnTypes, columnTypesProps } from './Components/CustomPropertyList';
 import NamedIconPair from './Components/NamedIconPair';
+import NewColumn from './Components/NewColumn';
+import PermissionIcon from '../../../../assets/icons/chatIcons/PermissionIcon';
+import InformationsolidIcon from '../../../../assets/icons/InformationsolidIcon';
+import ToolTip from '../../../Tooltip/Tooltip';
+import ClosePalette from '../../../../assets/icons/ClosePalette';
+import SavePalette from '../../../../assets/icons/SavePalette';
+import CollectionsIcon from '../../../../assets/icons/chatIcons/CollectionsIcon';
 
 const mockChatsData = [
   {
@@ -112,7 +119,7 @@ function Templates() {
                     checked={isArchived}
                     onChange={() => setArchived(!isArchived)}
                   />
-                  <div className={`slider ${isArchived ? 'checked' : ''}`} />
+                  <div className={`slider sliderGray ${isArchived ? 'checked' : ''}`} />
                 </label>
               </span>
             </div>
@@ -147,6 +154,42 @@ function Templates() {
             key={collection.title + index}
             collection={collection}
             cardName={collection?.title}
+            bodyElement={
+              <div className="p-2 pl-4">
+                <NewColumn />
+                <div className="my-2 text-xs">CLICK HERE TO HOST IN TEMPLATE</div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
+                      <PermissionIcon />
+                      <div className="text-black">Permissions</div>
+                      <InformationsolidIcon />
+                    </div>
+                    <div
+                      className="flex items-center justify-center bg-white rounded-sm"
+                      style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
+                    >
+                      <span className="pr-1">
+                        <CollectionsIcon color="orange" />
+                      </span>
+                      Collection
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-end gap-2 p-1">
+                    <ToolTip title="Cancel">
+                      <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
+                        <ClosePalette fill="white" />
+                      </span>
+                    </ToolTip>
+                    <ToolTip title="Add Property">
+                      <span className="cursor-pointer" onClick={() => ({})}>
+                        <SavePalette />
+                      </span>
+                    </ToolTip>
+                  </div>
+                </div>
+              </div>
+            }
           />
         ))}
       </div>

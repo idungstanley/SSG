@@ -56,21 +56,21 @@ function Schedules() {
         header="Schedule"
         headerTrailing={
           <div className="w-full flex items-center justify-end gap-1 mr-2">
-            <ToolTip title="Search schedule" placement="left">
-              <button className="h-6 w-6 bg-white rounded flex justify-center items-center">
-                <SearchIcon className="w-4 h-4 hover:text-alsoit-purple-300" />
-              </button>
-            </ToolTip>
             <ToolTip title="Filter schedule" placement="left">
               <button className="h-6 w-6 bg-white rounded flex justify-center items-center">
                 <FilterIcon />
               </button>
             </ToolTip>
+            <ToolTip title="Search schedule" placement="left">
+              <button className="h-6 w-6 bg-white rounded flex justify-center items-center">
+                <SearchIcon className="w-4 h-4 hover:text-alsoit-purple-300" />
+              </button>
+            </ToolTip>
           </div>
         }
       >
-        <div className="mx-auto" style={{ width: '95%' }}>
-          <div className="flex items-center justify-between my-1">
+        <div className="mx-auto">
+          <div className="flex items-center justify-between my-1 mx-auto" style={{ width: '95%' }}>
             <button className="h-6 rounded px-1 bg-alsoit-purple-100 text-white text-alsoit-text-md">Today</button>
             <div className="bg-alsoit-purple-50 text-alsoit-purple-300 rounded h-6 flex items-center">
               <button className="flex items-center px-1 gap-2 text-alsoit-text-md">
@@ -87,23 +87,23 @@ function Schedules() {
                 </span>
               </button>
             </div>
-            <div className="flex gap-2 items-center">
-              <h2 className="text-alsoit-text-md">November</h2>
+            <div className="flex items-center">
+              <h2 className="text-alsoit-text-md">November 2023</h2>
               <div className="flex items-center gap-2 mr-2">
                 <button>
-                  <ArrowLeft />
+                  <ArrowLeft color="#919191" />
                 </button>
                 <button>
-                  <ArrowRight />
+                  <ArrowRight color="#919191" />
                 </button>
               </div>
             </div>
           </div>
           <VerticalScroll>
-            <div className="m-auto" style={{ maxWidth: '100%', maxHeight: '43vh' }}>
+            <div className="m-auto" style={{ maxWidth: '90%', maxHeight: '43vh' }}>
               {scheduleData.map((schedule) => {
                 return (
-                  <div key={schedule.day} className="my-2 w-full">
+                  <div key={schedule.day} className="my-1 w-full">
                     <ScheduleCard schedule={schedule} />
                   </div>
                 );

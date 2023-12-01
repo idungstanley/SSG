@@ -93,7 +93,7 @@ function EditDropdown() {
   }, [editCustomProperty]);
 
   return (
-    <div className="p-4 my-2 bg-alsoit-gray-50 rounded-2xl">
+    <div className="p-4">
       <div className="w-full">
         <p className="my-2 font-semibold text-alsoit-text-xi text-alsoit-gray-100">Tittle</p>
         <div

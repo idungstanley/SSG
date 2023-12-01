@@ -160,7 +160,6 @@ function CreateDropdownField() {
         header="Dropdown"
         body="This custom property which allows creation of different dropdown title as and each fields"
       /> */}
-      <p className="flex items-center gap-2 p-1 my-2 mt-2 rounded text-alsoit-gray-300">Host in template center</p>
     </>
   );
 }
