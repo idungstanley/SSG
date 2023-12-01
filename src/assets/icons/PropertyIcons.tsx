@@ -4,6 +4,7 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 import { IconProps } from './IconType';
 
 export default function PropertyIcons({ active = false, dimensions, color, ...props }: IconProps) {
+  console.log(active);
   return (
     <svg
       {...props}
