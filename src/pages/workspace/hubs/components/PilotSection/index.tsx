@@ -1,4 +1,4 @@
-import { DocumentTextIcon, EyeIcon, SignalIcon } from '@heroicons/react/24/outline';
+import { DocumentTextIcon, EyeIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
@@ -12,12 +12,9 @@ import Templates from '../../../../../components/Pilot/components/Templates';
 import Calendar from '../../../../../components/Pilot/components/Calendar';
 import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
 import { EntityType } from '../../../../../utils/EntityTypes/EntityType';
-import EntityManagerIcon from '../../../../../assets/icons/EntityManagerIcon';
-import { UtilityIcon } from '../../../../../assets/icons/Utility';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import Views from '../../../../../components/Pilot/components/Views/Index';
 import PilotViewIcon from '../../../../../assets/icons/PilotViewIcon';
-import { DetailsIcon } from '../../../../../assets/icons';
 import Commnunication from '../../../pilot/components/communication/Communication';
 import Logs from '../../../../../components/Pilot/components/Logs/Logs';
 import AutomationIcon from '../../../../../assets/icons/AutomationIcon';
@@ -30,6 +27,16 @@ import TicketsPilotIcon from '../../../../../assets/icons/TicketsPilotIcon';
 import DeepLinks from './components/DeepLinks';
 import Forms from './components/Forms';
 import Tickets from './components/Tickets';
+import PilotDetailsIcon from '../../../../../assets/icons/PilotDetailsIcon';
+import PilotConnectIcon from '../../../../../assets/icons/PilotConnectIcon';
+import PilotUtilityIcon from '../../../../../assets/icons/PilotUtilityIcon';
+import PilotActivityIcon from '../../../../../assets/icons/PilotActivityIcon';
+import PilotDeepLinksIcon from '../../../../../assets/icons/PilotDeepLinksIcon';
+import PilotEntityManagerIcon from '../../../../../assets/icons/PilotEntityManagerIcon';
+import PilotEfficiencyIcon from '../../../../../assets/icons/PilotEfficiencyIcon';
+import Activity from './components/Activity';
+import Ties from './components/Ties';
+import Efficiency from './components/Efficiency';
 
 const sections = [
   {
@@ -87,6 +94,18 @@ const sections = [
   {
     id: pilotTabs.TICKETS,
     element: <Tickets />
+  },
+  {
+    id: pilotTabs.EFFICIENCY,
+    element: <Efficiency />
+  },
+  {
+    id: pilotTabs.ACTIVITY,
+    element: <Activity />
+  },
+  {
+    id: pilotTabs.TIES,
+    element: <Ties />
   }
 ];
 
@@ -94,37 +113,47 @@ const tabs = [
   {
     id: pilotTabs.DETAILS,
     label: 'Details',
-    icon: <DetailsIcon active={false} dimensions={{ width: 15, height: 15 }} />
-  },
-  {
-    id: pilotTabs.LOGS,
-    label: 'Logs',
-    icon: <DocumentTextIcon className="w-4 h-4" />
-  },
-  {
-    id: pilotTabs.WATCHERS,
-    label: 'Watchers',
-    icon: <EyeIcon className="w-4 h-4" />
+    icon: <PilotDetailsIcon active={false} />
   },
   {
     id: pilotTabs.CONNECT,
     label: 'Connect',
-    icon: <SignalIcon className="w-4 h-4" />
+    icon: <PilotConnectIcon active={false} />
+  },
+  {
+    id: pilotTabs.ACTIVITY,
+    label: 'Activity',
+    icon: <PilotActivityIcon active={false} />
   },
   {
     id: pilotTabs.UTILITIES,
     label: 'Utilities',
-    icon: <UtilityIcon />
+    icon: <PilotUtilityIcon active={false} />
+  },
+  {
+    id: pilotTabs.TIES,
+    label: 'Ties',
+    icon: <PilotDeepLinksIcon active={false} />
   },
   {
     id: pilotTabs.ENTITY_MANAGER,
     label: 'Entity Manager',
-    icon: <EntityManagerIcon />
+    icon: <PilotEntityManagerIcon active={false} />
   },
   {
     id: pilotTabs.VIEWS,
     label: 'Views',
     icon: <PilotViewIcon />
+  },
+  {
+    id: pilotTabs.EFFICIENCY,
+    label: 'Efficiency',
+    icon: <PilotEfficiencyIcon active={false} />
+  },
+  {
+    id: pilotTabs.WATCHERS,
+    label: 'Watchers',
+    icon: <EyeIcon className="w-4 h-4" />
   },
   {
     id: pilotTabs.TEMPLATES,
@@ -140,6 +169,11 @@ const tabs = [
     id: pilotTabs.AUTOMATIONS,
     label: 'Automations',
     icon: <AutomationIcon />
+  },
+  {
+    id: pilotTabs.LOGS,
+    label: 'Logs',
+    icon: <DocumentTextIcon className="w-4 h-4" />
   },
   {
     id: pilotTabs.LIBRARY,

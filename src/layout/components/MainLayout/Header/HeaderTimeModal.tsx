@@ -5,7 +5,12 @@ import { useEffect, useState } from 'react';
 import MiniDatePicker from '../../../../components/DatePicker/MiniCalendar';
 import { useAppSelector } from '../../../../app/hooks';
 import AnalogClock from '../../../../components/DatePicker/AnalogClock';
-// import Agenda from '../../../../components/Pilot/components/Calendar/Agenda';
+import { cl } from '../../../../utils';
+import Dradnddrop from '../../../../assets/icons/Dradnddrop';
+import PinnedIcon from '../../../../assets/icons/PinnedIcon';
+import AddProperty from './CalendarPopOut/components/AddProperty';
+import Schedules from './CalendarPopOut/components/Schedules';
+import ToolTip from '../../../../components/Tooltip/Tooltip';
 
 export default function HeaderTimeModal() {
   dayjs.extend(timezone);
@@ -21,34 +26,49 @@ export default function HeaderTimeModal() {
 
     return () => document.addEventListener('visibilitychange', timeUpdateFn);
   }, []);
+
   return (
-    <div className="flex flex-col space-y-4 w-80 z-50 bg-alsoit-gray-50 h-4/6 opacity-0 transform transition-transform opacity-100 translate-y-0 delay-700">
-      <div
-        className={
-          clock_type === 'd'
-            ? 'flex justify-start flex-col space-y-1 w-full border-b border-alsoit-gray-300 px-4 py-6'
-            : 'flex justify-center flex-col space-y-2 w-full mx-auto border-b border-alsoit-gray-300 px-4 py-6'
-        }
-      >
-        {clock_type === 'd' ? (
-          <span style={{ fontSize: '35px', padding: '0 0 8px 0' }}>{time}</span>
-        ) : (
-          <AnalogClock time={clock} setTime={setClock} zone={zone} />
-        )}
-        <span className={clock_type === 'd' ? 'text-left' : 'text-center'}>{dayjs().format('dddd MMMM D, YYYY')}</span>
+    <div
+      className="flex flex-col w-80 z-50 bg-alsoit-gray-125 h-4/6 opacity-0 transform transition-transform opacity-100 translate-y-0 delay-700"
+      style={{ borderRadius: '5px' }}
+    >
+      <div className="flex justify-between items-center mx-2 group">
+        <div className="w-1/4 opacity-0 group-hover:opacity-100">
+          <Dradnddrop />
+        </div>
+        <div
+          className={cl(
+            clock_type === 'd' ? 'flex justify-center flex-col w-full' : 'flex justify-center flex-col w-full mx-auto',
+            'w-2/4'
+          )}
+        >
+          {clock_type === 'd' ? (
+            <span style={{ fontSize: '20px' }} className="w-full flex justify-center">
+              {time}
+            </span>
+          ) : (
+            <AnalogClock time={clock} setTime={setClock} zone={zone} />
+          )}
+          <span className={cl('flex justify-center', clock_type === 'd' ? 'text-left' : 'text-center')}>
+            {dayjs().format('dddd, D MMMM')}
+          </span>
+        </div>
+        <div className="flex items-center justify-end w-1/4 opacity-0 group-hover:opacity-100">
+          <ToolTip title="Unpin calendar and schedule card" placement="left-end">
+            <div className="rotate-45 transform">
+              <PinnedIcon dimensions={{ width: 16, height: 16 }} />
+            </div>
+          </ToolTip>
+        </div>
       </div>
-      <div className="border-b border-alsoit-gray-300 px-4 py-6">
-        <MiniDatePicker />
+      <div className="w-full">
+        <MiniDatePicker type="pop-out" />
       </div>
-      <div className="w-full flex flex-col space-y-2 px-4 py-6">
-        <span className="font-semibold text-alsoit-text-lg">Schedule</span>
-        <input
-          type="text"
-          className="w-72 h-6 text-alsoit-text-md rounded border-alsoit-border-base px-1"
-          placeholder="search..."
-        />
-        {/* {entityTaskData?.length && <Agenda entityTaskData={entityTaskData} />} */}
-        {/* <span className="italic text-alsoit-text-md font-semibold">No activity found for the selected time</span> */}
+      <div className="w-full">
+        <AddProperty />
+      </div>
+      <div className="w-full">
+        <Schedules />
       </div>
     </div>
   );

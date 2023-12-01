@@ -26,7 +26,7 @@ function HeaderModal({ toggleFn, clickAway, children, styles }: HeaderModalprops
 
   return (
     <div
-      className={`rounded-lg shadow-2xl bg-white absolute z-50 ${styles}`}
+      className={`rounded-lg shadow-inner bg-white absolute z-50 ${styles}`}
       ref={modalRef}
       onClick={(e) => e.stopPropagation()}
       onMouseLeave={() => !clickAway && toggleFn(false)}

@@ -340,3 +340,8 @@ input:focus {
   border: none;
   font-size: 11px;
 }
+
+.hot-keys-wrapper svg {
+  width: 26px;
+  height: 26px;
+}
