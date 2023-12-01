@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
@@ -8,25 +8,33 @@ import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface EmailFieldProps {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
   fieldType: string;
+  task?: Task;
+  activeColumn?: boolean[];
 }
 
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const websitePattern = /^(?:(https?:\/\/|www\.)[\w.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})|[\w.-]+\.[a-zA-Z]{2,})$/;
 
-function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: EmailFieldProps) {
+function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activeColumn, task }: EmailFieldProps) {
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
   const [isValidValue, setIsValidValue] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
@@ -109,8 +117,26 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType }: Ema
     setIsValidValue(isValidEntry(e.target.value as string));
   };
 
+  const handleKeyBoardDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && currentValue && currentValue !== '-') {
+      setAnchorEl(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        if (!currentValue || currentValue === '-') setEditMode(true);
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyBoardDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyBoardDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full h-full flex justify-center items-center p-4">
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4">
       {!editMode ? (
         <div className="w-full h-full group/parent" onClick={() => setEditMode(true)}>
           <span

@@ -1,20 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import Copy from '../../../../../../assets/icons/Copy';
 import { cl } from '../../../../../../utils';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface TextFielProps {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
-function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
+function TextField({ taskCustomFields, taskId, fieldId, activeColumn, task }: TextFielProps) {
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
   const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
@@ -57,8 +66,17 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
     }, 500);
   };
 
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+        setEditMode(true);
+      }
+    }
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center" ref={containerRef} tabIndex={0}>
       {!editMode ? (
         <div
           className="w-full h-full border-2 border-transparent hover:border-alsoit-gray-50 group/parent p-1"
@@ -85,6 +103,7 @@ function TextField({ taskCustomFields, taskId, fieldId }: TextFielProps) {
         </div>
       ) : (
         <input
+          ref={inputRef}
           type="text"
           autoFocus={true}
           value={currentValue === '-' ? '' : currentValue}
