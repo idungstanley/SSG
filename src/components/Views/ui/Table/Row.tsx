@@ -233,7 +233,7 @@ export function Row({
           {/* actions */}
           <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
             <button
-              className={`relative opacity-0 group-hover:opacity-100 ${
+              className={`relative mr-0.5 h-full opacity-0 group-hover:opacity-100 ${
                 saveSettingOnline?.CompactView ? 'bottom-1' : 'bottom-2'
               }`}
               onClick={handleCopyTexts}

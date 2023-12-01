@@ -480,9 +480,9 @@ export function StickyCol({
                 </div>
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className={`opacity-0 group-hover:opacity-100 ${
+                  className={`${
                     task.name.length > 20 ? 'absolute right-0' : ''
-                  } ${COL_BG} h-full flex items-center justify-between pl-2 min-h-fit`}
+                  } ${COL_BG} h-5/6 flex items-center justify-between pl-2 min-h-fit`}
                 >
                   {children}
                 </div>
