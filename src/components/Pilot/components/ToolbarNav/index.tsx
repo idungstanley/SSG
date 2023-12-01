@@ -14,6 +14,8 @@ interface ToolbarNavInterface {
   url: string | null;
   parent: string | null;
   nesting: number;
+  color: string | undefined;
+  entity: string;
 }
 
 export default function ToolbarNav() {
@@ -42,7 +44,9 @@ export default function ToolbarNav() {
       name: element.getAttribute('data-name'),
       url: element.getAttribute('data-url'),
       parent: element.getAttribute('data-parent'),
-      nesting: 0
+      nesting: 0,
+      color: element.getAttribute('data-color'),
+      entity: element.getAttribute('data-entity')
     } as ToolbarNavInterface);
     if (activeItemName === element.getAttribute('data-name')) {
       i = activeItems.length;
@@ -56,7 +60,15 @@ export default function ToolbarNav() {
     while (currentId !== null) {
       const item: ToolbarNavInterface | undefined = data.find((obj: ToolbarNavInterface) => obj.id === currentId);
       if (item) {
-        paginationTree.unshift({ id: item.id, name: item.name, url: item.url, parent: item.parent, nesting: 0 });
+        paginationTree.unshift({
+          id: item.id,
+          name: item.name,
+          url: item.url,
+          parent: item.parent,
+          nesting: 0,
+          color: item.color,
+          entity: item.entity
+        });
         currentId = item.parent;
       } else {
         currentId = null;
@@ -91,7 +103,9 @@ export default function ToolbarNav() {
         name: element.getAttribute('data-name'),
         url: element.getAttribute('data-url'),
         parent: element.getAttribute('data-parent'),
-        nesting: 0
+        nesting: 0,
+        color: element.getAttribute('data-color'),
+        entity: element.getAttribute('data-entity')
       } as ToolbarNavInterface);
     }
 

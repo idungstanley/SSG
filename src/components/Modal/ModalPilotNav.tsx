@@ -5,6 +5,9 @@ import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { useChatScroll } from '../../hooks';
 import SearchIcon from '../../assets/icons/SearchIcon';
 import { useState } from 'react';
+import { getInitials } from '../../app/helpers';
+import { FaFolderOpen } from 'react-icons/fa';
+import { VscTriangleRight } from 'react-icons/vsc';
 
 interface ToolbarNavInterface {
   id: string | null;
@@ -12,6 +15,8 @@ interface ToolbarNavInterface {
   url: string | null;
   parent: string | null;
   nesting: number;
+  color: string | undefined;
+  entity: string;
 }
 
 interface ModalPilotNavProps {
@@ -105,6 +110,10 @@ export default function ModalPilotNav({
     }
   });
 
+  const hasChildren = (itemId: string | null) => {
+    return filteredNavTree.filter((item) => item.parent == itemId).length > 0;
+  };
+
   return (
     <div
       id="pilot_nav_modal"
@@ -141,7 +150,7 @@ export default function ModalPilotNav({
             Select page
           </p>
         </div>
-        <div className="relative modal-search px-5">
+        <div className="relative modal-search px-5 mt-1">
           <SearchIcon active={false} color="#919191" width="11.34" height="11.36" className="absolute top-1/3 left-7" />
           <input
             className="rounded w-full font-normal pl-6"
@@ -166,7 +175,7 @@ export default function ModalPilotNav({
                 item.nesting >= currentNestedLevel[0].nesting && (
                   <p
                     key={item.id}
-                    className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 ${
+                    className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center ${
                       activeNavItem == item.id ? 'font-semibold' : 'font-medium'
                     } `}
                     onClick={() => modalItemClick(item.url)}
@@ -174,13 +183,58 @@ export default function ModalPilotNav({
                       maxWidth: '164px'
                     }}
                   >
-                    <span
-                      className={`modal-item ${item.nesting == 1 ? paddingLeftFirst : ''} ${
+                    <div
+                      className={`flex items-center ${item.nesting == 1 ? paddingLeftFirst : ''} ${
                         item.nesting == 2 ? paddingLeftSecond : ''
                       } ${item.nesting == 3 ? paddingLeftThird : ''}`}
                     >
-                      {item.name}
-                    </span>
+                      {hasChildren(item.id) && (
+                        <VscTriangleRight
+                          className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
+                          aria-hidden="true"
+                          color="rgba(72, 67, 67, 0.64)"
+                        />
+                      )}
+                      {item.entity == 'hub' ? (
+                        <div className="relative flex items-center">
+                          <div
+                            className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded"
+                            style={{ backgroundColor: item.color ? item.color : 'blue' }}
+                          >
+                            <span className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded">
+                              <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
+                                {getInitials(item.name)}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      ) : item.entity == 'subhub' ? (
+                        <div className="relative flex items-center">
+                          <div
+                            className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded"
+                            style={{ backgroundColor: item.color ? item.color : 'orange' }}
+                          >
+                            <span className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded">
+                              <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
+                                {getInitials(item.name)}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      ) : item.entity == 'wallet' ? (
+                        <div>
+                          <FaFolderOpen className="w-4 h-3" color={item.color ? item.color : 'black'} />
+                        </div>
+                      ) : (
+                        <div>
+                          <span
+                            className="flex items-center justify-center w-3 h-3 rounded-full"
+                            style={{ backgroundColor: item.color ? item.color : 'orange' }}
+                          ></span>
+                        </div>
+                      )}
+                    </div>
+                    <span className="modal-item pl-2">{item.name}</span>
                     {item.name.length > 25 && (
                       <BlurEffect
                         top="0"
