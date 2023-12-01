@@ -7,7 +7,7 @@ import SearchIcon from '../../assets/icons/SearchIcon';
 import { useState } from 'react';
 import { getInitials } from '../../app/helpers';
 import { FaFolderOpen } from 'react-icons/fa';
-import { VscTriangleRight } from 'react-icons/vsc';
+import DropDownArrow from '../../assets/icons/DropDownArrow';
 
 interface ToolbarNavInterface {
   id: string | null;
@@ -79,8 +79,8 @@ export default function ModalPilotNav({
 
   const currentNestedLevel = modalNavTree.filter((item) => item.id == activeArrowItem);
 
-  let paddingLeftFirst = 'pl-1';
-  let paddingLeftSecond = 'pl-2';
+  let paddingLeftFirst = 'pl-4 ml-0.5';
+  let paddingLeftSecond = 'pl-9 ml-1';
   let paddingLeftThird = 'pl-3';
 
   if (currentNestedLevel[0].nesting == 1) {
@@ -119,13 +119,13 @@ export default function ModalPilotNav({
       id="pilot_nav_modal"
       className="bg-white fixed pb-3 pilot-modal-wrapper"
       style={{
-        width: '204px',
-        height: 'auto',
-        maxHeight: '272px',
+        width: '200px',
+        height: '100%',
+        maxHeight: '372px',
         minHeight: '100px',
         top: '40px',
         zIndex: '51',
-        borderRadius: '10px',
+        borderRadius: '5px',
         boxShadow: '0px 0px 5px 0px #00000040'
       }}
     >
@@ -139,7 +139,7 @@ export default function ModalPilotNav({
         </span>
         <div className="flex w-full justify-center relative px-5">
           <p className="uppercase" style={{ color: '#424242', fontSize: '8px' }}>
-            Breadcrumbs
+            ENTITY LOCATION
           </p>
         </div>
         <div className="flex w-full justify-center relative">
@@ -147,14 +147,30 @@ export default function ModalPilotNav({
             <hr />
           </span>
           <p className="px-2 z-10 uppercase" style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2' }}>
-            Select page
+            CHOOSE ENTITY
           </p>
         </div>
-        <div className="relative modal-search px-5 mt-1">
-          <SearchIcon active={false} color="#919191" width="11.34" height="11.36" className="absolute top-1/3 left-7" />
+        <div className="relative modal-search px-2.5 mt-1">
+          <SearchIcon
+            active={false}
+            color="#919191"
+            width="13.34"
+            height="13.36"
+            className="absolute"
+            style={{ top: '7px', left: '17px' }}
+          />
           <input
-            className="rounded w-full font-normal pl-6"
-            style={{ border: '1px solid #B2B2B2', height: '30px', color: '#919191', fontSize: '12px' }}
+            className="rounded w-full font-normal pl-5"
+            style={{
+              border: '1px solid #B2B2B2',
+              height: '28px',
+              color: '#919191',
+              fontSize: '12px',
+              paddingTop: '2px',
+              paddingBottom: '5px',
+              paddingLeft: '22px',
+              letterSpacing: '-.3px'
+            }}
             type="text"
             placeholder="Search"
             value={searchQuery}
@@ -167,15 +183,15 @@ export default function ModalPilotNav({
           )}
         </div>
       </div>
-      <div className="overflow-hidden pl-5" style={{ maxHeight: '150px' }}>
+      <div className="overflow-hidden pl-3" style={{ maxHeight: '230px' }}>
         <VerticalScroll>
-          <div ref={ref} style={{ maxHeight: '150px' }}>
+          <div ref={ref} style={{ maxHeight: '230px' }}>
             {filteredNavTree.map(
               (item) =>
                 item.nesting >= currentNestedLevel[0].nesting && (
-                  <p
+                  <div
                     key={item.id}
-                    className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center ${
+                    className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-2 ${
                       activeNavItem == item.id ? 'font-semibold' : 'font-medium'
                     } `}
                     onClick={() => modalItemClick(item.url)}
@@ -188,20 +204,24 @@ export default function ModalPilotNav({
                         item.nesting == 2 ? paddingLeftSecond : ''
                       } ${item.nesting == 3 ? paddingLeftThird : ''}`}
                     >
-                      {hasChildren(item.id) && (
-                        <VscTriangleRight
-                          className="flex-shrink-0 h-2 hover:fill-[#BF01FE] cursor-pointer"
-                          aria-hidden="true"
-                          color="rgba(72, 67, 67, 0.64)"
-                        />
-                      )}
                       {item.entity == 'hub' ? (
                         <div className="relative flex items-center">
                           <div
-                            className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded"
-                            style={{ backgroundColor: item.color ? item.color : 'blue' }}
+                            className="inline-flex items-center justify-center z-5 false rounded relative"
+                            style={{ backgroundColor: item.color ? item.color : 'blue', width: '15px', height: '15px' }}
                           >
-                            <span className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded">
+                            {hasChildren(item.id) && (
+                              <>
+                                <span
+                                  className="absolute w-full h-full opacity-0 transition duration-500 group-hover:opacity-100"
+                                  style={{ background: 'rgba(255,255,255,.5)' }}
+                                ></span>
+                                <span className="absolute transition duration-500 opacity-0 group-hover:opacity-100">
+                                  <DropDownArrow />
+                                </span>
+                              </>
+                            )}
+                            <span className="inline-flex items-center justify-center z-5 h-full w-full false rounded">
                               <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
                                 {getInitials(item.name)}
                               </span>
@@ -211,9 +231,20 @@ export default function ModalPilotNav({
                       ) : item.entity == 'subhub' ? (
                         <div className="relative flex items-center">
                           <div
-                            className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded"
+                            className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded relative"
                             style={{ backgroundColor: item.color ? item.color : 'orange' }}
                           >
+                            {hasChildren(item.id) && (
+                              <>
+                                <span
+                                  className="absolute w-full h-full opacity-0 transition duration-500 group-hover:opacity-100"
+                                  style={{ background: 'rgba(255,255,255,.5)' }}
+                                ></span>
+                                <span className="absolute transition duration-500 opacity-0 group-hover:opacity-100">
+                                  <DropDownArrow />
+                                </span>
+                              </>
+                            )}
                             <span className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded">
                               <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
                                 {getInitials(item.name)}
@@ -222,8 +253,23 @@ export default function ModalPilotNav({
                           </div>
                         </div>
                       ) : item.entity == 'wallet' ? (
-                        <div>
-                          <FaFolderOpen className="w-4 h-3" color={item.color ? item.color : 'black'} />
+                        <div className="relative">
+                          {hasChildren(item.id) && (
+                            <>
+                              <span
+                                className="absolute w-full h-full opacity-0 transition duration-500 group-hover:opacity-100"
+                                style={{ background: 'rgba(255,255,255,.5)' }}
+                              ></span>
+                              <span className="absolute transition duration-500 opacity-0 group-hover:opacity-100">
+                                <DropDownArrow />
+                              </span>
+                            </>
+                          )}
+                          <FaFolderOpen
+                            className="w-5 h-6"
+                            style={{ width: '18px', height: '15px' }}
+                            color={item.color ? item.color : 'black'}
+                          />
                         </div>
                       ) : (
                         <div>
@@ -231,11 +277,17 @@ export default function ModalPilotNav({
                             className="flex items-center justify-center w-3 h-3 rounded-full"
                             style={{ backgroundColor: item.color ? item.color : 'orange' }}
                           ></span>
+                          {hasChildren(item.id) && <DropDownArrow />}
                         </div>
                       )}
                     </div>
-                    <span className="modal-item pl-2">{item.name}</span>
-                    {item.name.length > 25 && (
+                    <span className="modal-item" style={{ fontSize: '13px', paddingLeft: '5px' }}>
+                      {item.name}
+                    </span>
+                    {((item.nesting == 0 && item.name.length > 20) ||
+                      (item.nesting == 2 && item.name.length > 15) ||
+                      (item.nesting == 3 && item.name.length > 10) ||
+                      (item.nesting == 3 && item.name.length > 5)) && (
                       <BlurEffect
                         top="0"
                         right="-5px"
@@ -246,7 +298,7 @@ export default function ModalPilotNav({
                         backgroundImage="linear-gradient(to right, transparent , white)"
                       />
                     )}
-                  </p>
+                  </div>
                 )
             )}
           </div>
