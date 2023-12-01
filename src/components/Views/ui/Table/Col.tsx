@@ -200,6 +200,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     website: (
@@ -265,6 +267,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields as ICustomField[]}
         taskCustomFieldsColumns={task.custom_field_columns}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     people: (
@@ -273,6 +277,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     files: (
@@ -281,6 +287,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         listId={task.list_id}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     location: (
@@ -288,6 +296,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     )
   };
