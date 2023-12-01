@@ -21,6 +21,7 @@ const HubsOptions = [
   { id: pilotTabs.CALENDAR_SETTINGS, element: <CustomSuggestion /> },
   { id: pilotTabs.PROPERTIES, element: <Templates /> },
   { id: pilotTabs.PERMISSIONS, element: <Permissions /> },
+  { id: pilotTabs.NAV_ENTITIES, element: <></> },
   { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> }
 ];
 
