@@ -9,7 +9,8 @@ import { InlineBorderLabel } from '../../../../Dropdown/MenuDropdown';
 import ChatSearch from '../../../../../assets/icons/ChatSearch';
 import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
 import { columnTypes, columnTypesProps } from './CustomPropertyList';
-import { FaCaretRight } from 'react-icons/fa';
+// import { FaCaretRight } from 'react-icons/fa';
+import NamedIconPair from './NamedIconPair';
 
 export default function ColumnTypeDropdown() {
   const dispatch = useAppDispatch();
@@ -71,26 +72,26 @@ export default function ColumnTypeDropdown() {
           style={{ borderRadius: '6px' }}
         >
           {selectedChildProperty?.name && (
-            <>
-              <div className="flex items-center gap-1" style={{ maxWidth: '30%' }}>
-                <div>{selectedPropertyType?.icon}</div>
-                <div className="w-full font-semibold truncate text-alsoit-gray-300">{selectedPropertyType?.title}</div>
-              </div>
-
-              <span className="flex items-center w-4 h-4">
-                <FaCaretRight />
-              </span>
-            </>
+            <NamedIconPair
+              color="text-alsoit-gray-300"
+              isLeadingIcon={true}
+              parentName={selectedPropertyType?.title as string}
+              parentIcon={selectedPropertyType?.icon as JSX.Element}
+              childIcon={selectedChildProperty?.icon as JSX.Element}
+              childName={selectedChildProperty?.name}
+            />
           )}
-          <div
-            className="flex items-center gap-1"
-            style={{ maxWidth: selectedChildProperty?.name ? '40%' : undefined }}
-          >
-            <div>{selectedChildProperty?.icon}</div>
-            <p className="w-full font-semibold truncate text-alsoit-gray-300">
-              {Capitalize(newCustomPropertyDetails.type)}
-            </p>
-          </div>
+          {!selectedChildProperty?.name && (
+            <div
+              className="flex items-center gap-1"
+              style={{ maxWidth: selectedChildProperty?.name ? '40%' : undefined }}
+            >
+              <div>{selectedChildProperty?.icon}</div>
+              <p className="w-full font-semibold truncate text-alsoit-gray-300">
+                {Capitalize(newCustomPropertyDetails.type)}
+              </p>
+            </div>
+          )}
           <span className="flex items-center w-4 h-4">
             <ArrowDown className="w-3 h-3" color="#919191" />
           </span>

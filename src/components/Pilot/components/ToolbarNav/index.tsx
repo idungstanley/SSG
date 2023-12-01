@@ -138,13 +138,13 @@ export default function ToolbarNav() {
 
   return (
     <>
-      <div className="flex items-center w-5 h-5 overflow-hidden mr-1" style={{ margin: '1px 0 0 4px' }}>
-        {activePlaceId == 'tasks' ? <PilotNavIcon /> : activePlace[0].icon}
+      <div className="flex items-center w-5 h-5 mr-1 overflow-hidden" style={{ margin: '1px 0 0 4px' }}>
+        {activePlaceId == 'tasks' ? <PilotNavIcon /> : activePlace[0]?.icon}
       </div>
       {toolbarNavTree.map((item) => (
         <div
           key={item.name}
-          className="flex text-xs font-medium truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded transition duration-500 pilot-nav-parent"
+          className="flex items-center overflow-visible text-xs font-medium truncate transition duration-500 rounded text-alsoit-gray-300 whitespace-nowrap pilot-nav-parent"
           style={{
             paddingLeft: '3px'
           }}
@@ -162,7 +162,7 @@ export default function ToolbarNav() {
           </ToolTip>
           {lastItem !== item && (
             <span
-              className="relative overflow-visible cursor-pointer rounded pilot-nav-arrow"
+              className="relative overflow-visible rounded cursor-pointer pilot-nav-arrow"
               style={{ padding: '13px 5px 13px 2.5px' }}
               onClick={() => arrowClick(item.name)}
             >
@@ -181,7 +181,7 @@ export default function ToolbarNav() {
       ))}
       {!toolbarNavTree.length && (
         <div
-          className="capitalize text-xs font-semibold truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded py-1 hover:bg-alsoit-gray-125 transition duration-500"
+          className="items-center py-1 overflow-visible text-xs font-semibold capitalize truncate transition duration-500 rounded text-alsoit-gray-300 whitespace-nowrap hover:bg-alsoit-gray-125"
           style={{ paddingLeft: '5px', paddingRight: '5px' }}
         >
           {activeItemName}

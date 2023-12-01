@@ -10,7 +10,13 @@ import { generateFilters } from '../../components/TasksHeader/lib/generateFilter
 import { UseGetHubDetails } from '../hubs/hubService';
 import { IList } from '../hubs/hubs.interfaces';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
-import { ICustomField, setNewCustomPropertyDetails, setSubtasks, setTasks } from '../task/taskSlice';
+import {
+  ICustomField,
+  setCustomFiledsColumns,
+  setNewCustomPropertyDetails,
+  setSubtasks,
+  setTasks
+} from '../task/taskSlice';
 import {
   createCustomFieldColumnManager,
   deleteCustomFieldManager,
@@ -200,8 +206,10 @@ export const UseGetListDetails = (listId: string | null | undefined) => {
       enabled: !!listId,
       onSuccess: (data) => {
         const listStatusTypes = data.data.list.task_statuses;
+        const listCustomFileds = data.data.list.custom_field_columns;
         const listViews = data.data.list.task_views;
         dispatch(setSpaceStatuses(listStatusTypes));
+        dispatch(setCustomFiledsColumns(listCustomFileds));
         dispatch(setSpaceViews(listViews));
         dispatch(setChecklists(data?.data.list.checklists as ICheckListRes[]));
       },

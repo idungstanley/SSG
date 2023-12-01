@@ -79,14 +79,14 @@ function NewColumn() {
         <div className="w-full">
           <div className="flex items-center justify-between w-full gap-2 my-4">
             <div className="w-2/4">
-              <p className="mb-1 text-alsoit-text-xi text-alsoit-gray-100">TYPE</p>
+              <p className="mb-1 ml-1 text-alsoit-text-xi text-alsoit-gray-1001">TYPE</p>
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
               <div className="flex items-center w-full rounded-md" style={{ borderRadius: '6px' }}>
                 <div className="relative flex grow">
                   <Input
-                    labelClasses="text-alsoit-text-xi text-alsoit-gray-100"
+                    labelClasses="text-alsoit-text-xi text-alsoit-gray-100 ml-1"
                     placeholder="Hub Name"
                     height="h-8"
                     label="TITLE"

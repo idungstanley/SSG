@@ -145,6 +145,9 @@ function Templates() {
             type="properties"
             titleElement={
               <NamedIconPair
+                type="card"
+                isLeadingIcon={true}
+                fadeOutColour={collection.active}
                 parentName={collection?.title}
                 parentIcon={collection?.icon}
                 childIcon={collection.children[0]?.icon as JSX.Element}
