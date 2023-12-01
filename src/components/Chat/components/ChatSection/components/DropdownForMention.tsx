@@ -27,11 +27,11 @@ export default function DropdownForMention({ setSelectedUsers, selectedUsers }: 
 
   return (
     <>
-      <div onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
+      <div className="h-6" onClick={(e: React.MouseEvent<HTMLDivElement>) => setAnchorEl(e.currentTarget)}>
         <HeadMenu as="div">
           <HeadMenu.Button>
             <div
-              className="flex justify-center bg-white items-center h-6 cursor-pointer rounded-md"
+              className="flex justify-center bg-white items-center h-6 cursor-pointer rounded-[3px]"
               style={{ minWidth: '24px' }}
             >
               <ChatEmail />
