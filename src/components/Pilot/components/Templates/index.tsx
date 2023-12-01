@@ -3,12 +3,13 @@ import CreateNewColumn from './Components/CreateNewColumn';
 import { useAppSelector } from '../../../../app/hooks';
 import EditDropdown from './Edit/EditDropdown';
 import Button from '../../../Button';
-// import PlusCircle from '../../../../assets/icons/AddCircle';
 import ChatSearch from '../../../../assets/icons/ChatSearch';
 import ChatFilter from '../../../../assets/icons/ChatFilter';
-import CollectionWrapper, { ICollection } from '../../../Chat/components/CollectionWrapper/CollectionWrapper';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import AddProperty from './Properties/component/AddProperty';
+import CardWrapper from '../CardWrapper';
+import { columnTypes, columnTypesProps } from './Components/CustomPropertyList';
+import NamedIconPair from './Components/NamedIconPair';
 
 const mockChatsData = [
   {
@@ -66,7 +67,7 @@ function Templates() {
 
   const [isArchived, setArchived] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [filteredCollections, setFilteredCollections] = useState<ICollection[]>(mockChatsData);
+  const [filteredCollections, setFilteredCollections] = useState<columnTypesProps[]>(columnTypes);
   const [addProperties, setAddProperties] = useState<boolean>(false);
 
   const handleSearchChat = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,16 +75,16 @@ function Templates() {
     setSearchValue(value);
     if (value.length) {
       setFilteredCollections(
-        mockChatsData.filter((collection) => collection.name.toLowerCase().startsWith(value.toLowerCase()))
+        columnTypes.filter((collection) => collection.title.toLowerCase().startsWith(value.toLowerCase()))
       );
     } else {
-      setFilteredCollections(mockChatsData);
+      setFilteredCollections(columnTypes);
     }
   };
 
   return (
     <div className="flex-col w-full h-full gap-3 p-2 pl-3 space-y-2 overflow-scroll">
-      <span className="flex items-center justify-between">
+      <span className="flex items-center gap-12">
         <Button
           height="h-8 text-white"
           icon={<IoIosAddCircleOutline className="text-base text-white" />}
@@ -94,7 +95,7 @@ function Templates() {
           bgColor="#B2B2B2"
         />
         {mockChatsData.length && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 grow">
             <div className="flex items-center justify-center w-6 h-6 rounded-md bg-alsoit-gray-125">
               <ChatFilter />
             </div>
@@ -115,7 +116,7 @@ function Templates() {
                 </label>
               </span>
             </div>
-            <div className="flex items-center justify-center bg-white rounded-md grow chatSearch">
+            <div className="flex items-center justify-start h-8 bg-white rounded-md grow chatSearch">
               <span className="chatSearch_icon">
                 <ChatSearch color="#919191" />
               </span>
@@ -129,12 +130,24 @@ function Templates() {
             </div>
           </div>
         )}
-        {/* {'designers'.startsWith(searchValue) || !searchValue.length ? <CreateNewColumn /> : null} */}
       </span>
       {addProperties && <AddProperty />}
       <div className="mt-2">
         {filteredCollections.map((collection, index) => (
-          <CollectionWrapper key={collection.name + index} collection={collection} />
+          <CardWrapper
+            type="properties"
+            titleElement={
+              <NamedIconPair
+                parentName={collection?.title}
+                parentIcon={collection?.icon}
+                childIcon={collection.children[0]?.icon as JSX.Element}
+                childName={collection.children[0].name}
+              />
+            }
+            key={collection.title + index}
+            collection={collection}
+            cardName={collection?.title}
+          />
         ))}
       </div>
       {entityForCustom.id && entityForCustom.type && <CreateNewColumn />}

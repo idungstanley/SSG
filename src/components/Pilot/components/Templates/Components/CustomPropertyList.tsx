@@ -14,22 +14,26 @@ import FormulaOptions from './Formula/Formula';
 import FilesOptions from './Files/FileOption';
 import PeopleOptions from './People/PeopleOptions';
 import LocationOptions from './Location/LocationOptions';
-import { MdAccessTime, MdOutlineStarRate } from 'react-icons/md';
-import DropdownIcon from '../../../../../assets/branding/DropdownIcon';
+import {
+  MdAccessTime,
+  MdAlternateEmail,
+  MdOutlineAttachEmail,
+  MdOutlinePeopleAlt,
+  MdOutlineStarRate,
+  MdTextFields
+} from 'react-icons/md';
 import Text from '../../../../../assets/branding/Text';
-import CalendarIcon from '../../../../../assets/icons/CalendarIcon';
-import { CiDollar } from 'react-icons/ci';
-import Number from '../../../../../assets/branding/Number';
-import Email from '../../../../../assets/branding/Email';
-import { BiGlobe } from 'react-icons/bi';
+import { CiCalendarDate, CiDollar, CiHashtag } from 'react-icons/ci';
+import { BiGlobe, BiLabel, BiSolidCaretDownSquare } from 'react-icons/bi';
 import { BsFillTelephoneOutboundFill } from 'react-icons/bs';
 import { ImCheckboxChecked } from 'react-icons/im';
 import { GiProgression } from 'react-icons/gi';
 import { TbMathFunction } from 'react-icons/tb';
-import { FaFileSignature } from 'react-icons/fa';
-import AssigneeIcon from '../../../../../assets/icons/Assignee';
+import { FaFileSignature, FaPeopleArrows } from 'react-icons/fa';
 import { IoLocation } from 'react-icons/io5';
 import { pilotTabs } from '../../../../../app/constants/pilotTabs';
+import { RxCalendar } from 'react-icons/rx';
+import { GoNumber } from 'react-icons/go';
 
 export interface columnTypesProps {
   id: string;
@@ -43,6 +47,7 @@ export interface columnTypesProps {
     onclick?: () => void;
     type?: string;
   }[];
+  active: boolean;
 }
 
 export const columnTypes: columnTypesProps[] = [
@@ -50,30 +55,31 @@ export const columnTypes: columnTypesProps[] = [
     id: 'Dropdown',
     title: 'Dropdown',
     options: <DropdownOptions />,
-    icon: <DropdownIcon />,
+    icon: <BiSolidCaretDownSquare />,
+    active: true,
     children: [
       {
         id: 'single_label',
         name: 'Single Label',
-        icon: <DropdownIcon />,
+        icon: <BiLabel />,
         onclick: () => null
       },
       {
         id: 'multi_label',
         name: 'Multi Label',
-        icon: <DropdownIcon />,
+        icon: <BiSolidCaretDownSquare />,
         onclick: () => null
       },
       {
         id: 'tags',
         name: 'Tags',
-        icon: <DropdownIcon />,
+        icon: <BiSolidCaretDownSquare />,
         onclick: () => null
       },
       {
         id: 'directories',
         name: 'Directories',
-        icon: <DropdownIcon />,
+        icon: <BiSolidCaretDownSquare />,
         onclick: () => null
       }
     ]
@@ -81,14 +87,15 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Text',
     title: 'Text',
+    active: true,
     options: <TextOptions />,
-    icon: <Text />,
+    icon: <MdTextFields />,
     children: [
       {
         id: 'short_text',
         name: 'Short Text',
         onclick: () => null,
-        icon: <Text />
+        icon: <GoNumber />
       },
       {
         id: 'long_text',
@@ -113,20 +120,22 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Date',
     title: 'Date',
+    active: true,
     options: <DateOptions />,
-    icon: <CalendarIcon active={false} />,
+    icon: <RxCalendar />,
     children: [
       {
         id: 'date',
         name: 'Date',
         onclick: () => null,
-        icon: <CalendarIcon active={false} />
+        icon: <CiCalendarDate />
       }
     ]
   },
   {
     id: 'Currency',
     title: 'Currency',
+    active: true,
     options: <CurrencyOptions />,
     icon: <CiDollar className="text-lg" />,
     children: [
@@ -141,34 +150,37 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Number',
     title: 'Number',
+    active: true,
     options: <NumberOptions />,
-    icon: <Number />,
+    icon: <CiHashtag />,
     children: [
       {
         id: 'number',
         name: 'Number',
         onclick: () => null,
-        icon: <Number />
+        icon: <GoNumber />
       }
     ]
   },
   {
     id: 'Email',
     title: 'Email',
+    active: true,
     options: <EmailOptions />,
-    icon: <Email />,
+    icon: <MdAlternateEmail />,
     children: [
       {
         id: 'email_options',
         name: 'Email',
         onclick: () => null,
-        icon: <Email />
+        icon: <MdOutlineAttachEmail />
       }
     ]
   },
   {
     id: 'Website',
     title: 'Website',
+    active: true,
     options: <WebsiteOptions />,
     icon: <BiGlobe />,
     children: [
@@ -183,6 +195,7 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Phone',
     title: 'Phone',
+    active: true,
     options: <PhoneOptions />,
     icon: <BsFillTelephoneOutboundFill />,
     children: [
@@ -197,6 +210,7 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Checkbox',
     title: 'Checkbox',
+    active: true,
     options: <CheckBoxOptions />,
     icon: <ImCheckboxChecked />,
     children: [
@@ -210,6 +224,8 @@ export const columnTypes: columnTypesProps[] = [
   },
   {
     id: 'Rating',
+    active: true,
+
     title: 'Rating',
     options: <RatingOption />,
     icon: <MdOutlineStarRate />,
@@ -225,6 +241,8 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Progress',
     title: 'Progress',
+    active: true,
+
     options: <ProgressOptions />,
     icon: <GiProgression />,
     children: [
@@ -247,6 +265,8 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Time',
     title: 'Time',
+    active: true,
+
     options: <TimeOption />,
     icon: <MdAccessTime />,
     children: [
@@ -261,6 +281,7 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Formula',
     title: 'Formula',
+    active: false,
     options: <FormulaOptions />,
     icon: <TbMathFunction />,
     children: [
@@ -275,6 +296,7 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Files',
     title: 'Files',
+    active: false,
     options: <FilesOptions />,
     icon: <FaFileSignature />,
     children: [
@@ -289,13 +311,14 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'People',
     title: 'People',
+    active: false,
     options: <PeopleOptions />,
-    icon: <AssigneeIcon active={false} />,
+    icon: <MdOutlinePeopleAlt />,
     children: [
       {
         id: 'people',
         name: 'People',
-        icon: <AssigneeIcon active={false} />,
+        icon: <FaPeopleArrows />,
         onclick: () => null
       }
     ]
@@ -303,6 +326,7 @@ export const columnTypes: columnTypesProps[] = [
   {
     id: 'Location',
     title: 'location',
+    active: false,
     options: <LocationOptions />,
     icon: <IoLocation />,
     children: [
