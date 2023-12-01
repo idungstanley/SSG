@@ -103,13 +103,13 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         </div>
       ) : null}
       {selectedMessage ? (
-        <div className="flex justify-between px-4 pt-4 pb-2 bg-alsoit-gray-50">
+        <div className="flex justify-between px-4 pt-2 pb-2 bg-[#D9D9D9]">
           <div
-            className="relative p-1 overflow-hidden bg-white border-gray-300 rounded-md shadow-sm sm:text-sm"
+            className="relative p-1 overflow-hidden bg-white border-gray-300 rounded-md shadow-sm text-[13px]"
             style={{ minWidth: '217px', maxWidth: '90%' }}
           >
             <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
-            <div className="ml-2 text-sm text-alsoit-purple-300">{selectedMessage.team_member.user.name}</div>
+            <div className="ml-2 text-alsoit-purple-300">{selectedMessage.team_member.user.name}</div>
             <div className="ml-2 text-alsoit-gray-75">
               {generateMessageWithUserNames(selectedMessage).map((item, index) => (
                 <span key={index}>{item.value}</span>
@@ -122,12 +122,12 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         </div>
       ) : null}
       <form
-        className="relative flex items-center gap-2 p-2 rounded-bl-md rounded-br-md"
+        className="relative flex items-center gap-1 py-[2px] px-1 rounded-bl-md rounded-br-md"
         onSubmit={(e) => sendMessage(e)}
         style={{ background: '#919191' }}
       >
         <div
-          className="flex items-center justify-center h-6 bg-white rounded-md cursor-pointer"
+          className="flex items-center justify-center h-6 bg-white rounded-[3px] cursor-pointer"
           style={{ minWidth: '24px' }}
         >
           <ChatEmoticons />
@@ -136,7 +136,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         <DropdownForMention selectedUsers={selectedMembers} setSelectedUsers={setSelectedMembers} />
 
         <div
-          className="flex items-center justify-center h-6 bg-white rounded-md cursor-pointer"
+          className="flex items-center justify-center h-6 bg-white rounded-[3px] cursor-pointer"
           style={{ minWidth: '24px' }}
           onClick={() => dispatch(setShowFileAttachModal(true))}
         >
@@ -148,7 +148,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
             type="text"
             placeholder="Type Message..."
             ref={messageRef}
-            className="block w-full border-gray-300 rounded-md shadow-sm ring-0 focus:ring-0 sm:text-sm"
+            className="block w-full border-gray-300 rounded-[5px] shadow-sm ring-0 focus:ring-0 sm:text-sm"
           />
         </div>
         <button

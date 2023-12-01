@@ -12,6 +12,7 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { CiMail } from 'react-icons/ci';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import { getInitials } from '../../../../../app/helpers';
+import MessageSuccess from '../../../../../assets/icons/chatIcons/MessageSuccess';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -43,13 +44,13 @@ export default function MessagesList({ messages }: MessagesListProps) {
 
   return (
     <>
-      <div className="p-2 bg-white border rounded-xl">
+      <div className="py-2 bg-white rounded-[5px]">
         <VerticalScroll>
           <div ref={ref} className="flex flex-col w-full" style={{ height: '60vh' }}>
             {sortedByTimeMessages.map((message) => (
               <div
                 className={cl(
-                  'flex items-start gap-3 px-2 py-1',
+                  'relative flex items-start gap-1 pl-4 pr-5 py-1 group hover:bg-[#D9D9D9]',
                   isCurrentUser(message.team_member.user.id) ? 'justify-end' : 'justify-start'
                 )}
                 key={message.id}
@@ -60,15 +61,16 @@ export default function MessagesList({ messages }: MessagesListProps) {
                   backgroundColour={message.team_member.user.color}
                 />
 
-                <div className="w-3/4" style={{ background: '#F4F4F4' }}>
-                  <div className="flex flex-col justify-start gap-1 p-2 border group rounded-xl">
+                <div
+                  className={`max-w-[75%] min-w-[150px] rounded-[5px] ${
+                    isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
+                  }`}
+                >
+                  <div className="flex flex-col justify-start gap-1 p-2">
                     {/* top */}
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       {!isCurrentUser(message.team_member.user.id) ? (
-                        <>
-                          <p>{message.team_member.user.name}</p>
-                          <DropdownMenuForMessage message={message} />
-                        </>
+                        <p style={{ color: message.team_member.user.color }}>{message.team_member.user.name}</p>
                       ) : null}
                     </div>
 
@@ -86,7 +88,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
                     ) : null}
 
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-end">
                       {/* message */}
                       <div className="flex items-center">
                         <p className="text-alsoit-purple-300">
@@ -102,11 +104,20 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
 
                       {/* bottom */}
-                      <div className="flex items-end pl-3">
-                        <p className="text-xs text-gray-500">{moment(message.created_at).format('HH:mm')}</p>
+                      <div className="flex items-center pl-3">
+                        <span className="pl-[2px] text-[10px] text-gray-500">
+                          {moment(message.created_at).format('HH:mm')}
+                        </span>
+                        <span>
+                          <MessageSuccess />
+                        </span>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="absolute right-0 top-0">
+                  <DropdownMenuForMessage message={message} />
                 </div>
               </div>
             ))}

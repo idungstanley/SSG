@@ -118,7 +118,7 @@ export function ChatHead({ columns, tableHeight, collapseTasks, background }: He
                 </>
               </div>
             </div>
-            <FiPlusCircle color="orange" className="w-4 h-4 mr-2 font-black AddColumnDropdownButton" />
+            <FiPlusCircle color="orange" className="w-4 h-4 font-black AddColumnDropdownButton" />
             {headerId === columns[0].id && (
               <SortModal
                 handleClose={handleClose}

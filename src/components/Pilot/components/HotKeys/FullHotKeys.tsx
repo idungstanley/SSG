@@ -76,8 +76,8 @@ export default function FullHotkeysList({ tabs, showModal, setShowModal }: Hotke
   return (
     <>
       {activeHotkeyIds.length !== 0 ? (
-        <div className="flex items-center border-b bg-alsoit-gray-125">
-          <div className="pr-2" style={{ paddingLeft: '5px' }}>
+        <div className="flex items-center p-1 border-b bg-alsoit-gray-125">
+          <div className="pl-1 pr-2">
             <SlideToggle activeSlide={activeSlide} fullCount={slidesCount} setActiveSlide={setActiveSlide} />
           </div>
           <div className="flex flex-row w-full col-span-1 hot-keys-wrapper">

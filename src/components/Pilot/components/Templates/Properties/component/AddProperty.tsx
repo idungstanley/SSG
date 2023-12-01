@@ -28,6 +28,7 @@ export default function AddProperty() {
       </div>
       <div className="p-2 pl-4">
         <NewColumn />
+        <p className="flex items-center p-1 my-1 rounded text-alsoit-gray-300">Host in template center</p>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
             <PermissionIcon />
@@ -40,7 +41,7 @@ export default function AddProperty() {
                 <ClosePalette fill="white" />
               </span>
             </ToolTip>
-            <ToolTip title="Update Hub">
+            <ToolTip title="Add Property">
               <span className="cursor-pointer" onClick={() => ({})}>
                 <SavePalette />
               </span>

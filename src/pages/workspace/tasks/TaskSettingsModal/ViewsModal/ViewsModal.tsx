@@ -26,6 +26,7 @@ import DropdownTitle from '../../../../../components/DropDowns/DropdownTitle';
 import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtitle';
 import ArrowRightPilot from '../../../../../assets/icons/ArrowRightPilot';
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
+import { ACTIVE_BUTTON, DEFAULT_BUTTON } from '../../../../../utils/Constants/ButtonInteractions';
 
 export default function ViewsModal({
   isActive,
@@ -57,6 +58,8 @@ export default function ViewsModal({
   const [dropdownEl, setDropdownEl] = useState<null | HTMLElement>(null);
   const [createNewViewEl, setCreateNewViewEl] = useState<null | HTMLDivElement>(null);
   const [threeDotsEl, setThreeDotsEl] = useState<null | SVGElement>(null);
+
+  const activeStyle = isActive ? ACTIVE_BUTTON.color : DEFAULT_BUTTON.color;
 
   const viewSettings = [
     {
@@ -164,7 +167,9 @@ export default function ViewsModal({
         <HeadMenu>
           <HeadMenu.Button>
             <Button active={true}>
-              <Icons src={view} />
+              <div className="mt-1 ml-1">
+                <Icons src={view} />
+              </div>
               <span className="ml-1 mr-2 text-xs">View</span>
               <span>
                 <ArrowRightPilot active={false} />
@@ -175,7 +180,7 @@ export default function ViewsModal({
               </span>
               <span className=" text-xs">{isActive}</span>
               <span className="px-1">
-                <ArrowOpenDown color="black" />
+                <ArrowOpenDown color={activeStyle} />
               </span>
             </Button>
           </HeadMenu.Button>
