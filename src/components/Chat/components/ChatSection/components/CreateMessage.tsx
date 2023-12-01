@@ -4,7 +4,11 @@ import { useSendMessageToChat } from '../../../../../features/chat/chatService';
 import ChatEmoticons from '../../../../../assets/icons/ChatEmoticons';
 import ChatFile from '../../../../../assets/icons/ChatFile';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
+import {
+  setChatAttachmentsFiles,
+  setSelectedMessage,
+  setShowFileAttachModal
+} from '../../../../../features/chat/chatSlice';
 import { IMentionUser, IMessage, IReplyOn } from '../../../../../features/chat/chat.interfaces';
 import ChatRemoveReply from '../../../../../assets/icons/ChatRemoveReply';
 
@@ -39,7 +43,7 @@ interface CreateMessageProps {
 export default function CreateMessage({ chatId }: CreateMessageProps) {
   const dispatch = useAppDispatch();
 
-  const { selectedMessage } = useAppSelector((state) => state.chat);
+  const { selectedMessage, chatAttachmentsFiles } = useAppSelector((state) => state.chat);
 
   const [error, setError] = useState<string>('');
 
@@ -63,7 +67,8 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         onSendMessage({
           message: messageWithUserIds,
           chatId,
-          selectedMessage: selectedMessage as IMessage | null
+          selectedMessage: selectedMessage as IMessage | null,
+          files: []
         });
 
         messageRef.current.value = '';
@@ -72,10 +77,31 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         dispatch(setSelectedMessage(null));
       }
     }
+    if (!message?.length && chatAttachmentsFiles.length) {
+      onSendMessage({
+        message: '',
+        chatId,
+        selectedMessage: selectedMessage as IMessage | null,
+        files: chatAttachmentsFiles.length ? chatAttachmentsFiles.map((fileData) => fileData.preview as string) : []
+      });
+    }
+    dispatch(setChatAttachmentsFiles([]));
   };
+
+  console.log('Files', chatAttachmentsFiles);
 
   return (
     <>
+      {chatAttachmentsFiles.length ? (
+        <div className="flex flex-wrap">
+          {chatAttachmentsFiles.map((file) => (
+            <div key={file.id} className="w-[25%]">
+              <img src={file.preview} alt="file" />
+            </div>
+          ))}
+          <div onClick={() => dispatch(setChatAttachmentsFiles([]))}>X</div>
+        </div>
+      ) : null}
       {selectedMessage ? (
         <div className="flex justify-between px-4 pt-4 pb-2 bg-alsoit-gray-50">
           <div
@@ -112,6 +138,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         <div
           className="flex items-center justify-center h-6 bg-white rounded-md cursor-pointer"
           style={{ minWidth: '24px' }}
+          onClick={() => dispatch(setShowFileAttachModal(true))}
         >
           <ChatFile />
         </div>
