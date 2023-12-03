@@ -15,11 +15,12 @@ import {
 import SubtabDrag from '../../../../pages/workspace/pilot/components/SubtabDnd';
 import { useAppSelector } from '../../../../app/hooks';
 import CalendarIcon from '../../../../assets/icons/CalendarIcon';
-import StatusMgIcon from '../../../../assets/icons/StatusMgIcon';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import { TbShield } from 'react-icons/tb';
 import PlusIcon from '../../../../assets/icons/PlusIcon';
 import PropertyIcons from '../../../../assets/icons/PropertyIcons';
+import NavEntityIcon from '../../../../assets/icons/NavEntityIcon';
+import ChecklistIcon from '../../../../assets/icons/ChecklistIcon';
 
 export const HubManagerOptions = [
   {
@@ -56,6 +57,12 @@ export const HubManagerOptions = [
     id: pilotTabs.PERMISSIONS,
     name: 'Permissions and Sharing',
     icon: <TbShield className="w-4 h-4" />,
+    isVisible: false
+  },
+  {
+    id: pilotTabs.NAV_ENTITIES,
+    name: 'Nav Entities',
+    icon: <NavEntityIcon />,
     isVisible: true
   },
   {
@@ -67,7 +74,7 @@ export const HubManagerOptions = [
   {
     id: pilotTabs.STATUS_MANAGEMENT,
     name: 'Statuses',
-    icon: <StatusMgIcon />,
+    icon: <ChecklistIcon />,
     isVisible: true
   }
 ];
