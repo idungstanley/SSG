@@ -98,8 +98,8 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     }, 500);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = () => {
+    setAnchorEl(containerRef.current);
   };
 
   const handleEditEmail = () => {
@@ -160,14 +160,14 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focusedIndex, anchorEl]);
+  }, [focusedIndex]);
   return (
-    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4">
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4 relative">
       {!editMode ? (
         <div className="w-full h-full group/parent" onClick={() => setEditMode(true)}>
           <span
             className={cl(
-              'h-full flex items-center  cursor-pointer w-full',
+              'h-full flex items-center relative cursor-pointer w-full',
               currentValue !== '-' ? 'justify-between' : 'justify-center'
             )}
           >
@@ -196,12 +196,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
             )}
 
             {currentValue !== '-' && (
-              <button
-                className="flex items-center justify-end opacity-0 group-hover/parent:opacity-100 w-5 h-5 absolute bg-white right-0"
-                onClick={(e) => handleClick(e)}
+              <div
+                className="flex items-center justify-end opacity-0 group-hover/parent:opacity-100 w-5 h-5 relative bg-white right-0"
+                onClick={handleClick}
               >
                 <ThreeDotIcon />
-              </button>
+              </div>
             )}
           </span>
         </div>
