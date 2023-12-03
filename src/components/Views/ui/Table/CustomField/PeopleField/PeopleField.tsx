@@ -75,8 +75,8 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty, 
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
   return (
-    <div ref={containerRef} tabIndex={0} className="w-full h-full">
-      <button className="w-full flex justify-center" onClick={(e) => setAnchorEl(e.currentTarget)}>
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex items-center">
+      <button className="w-full flex justify-center items-center" onClick={(e) => setAnchorEl(e.currentTarget)}>
         {assignedMembers?.length ? (
           <GroupAssignee data={assignedMembers as ITeamMembersAndGroup[]} teams={false} />
         ) : (
