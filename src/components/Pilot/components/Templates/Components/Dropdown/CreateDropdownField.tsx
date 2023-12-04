@@ -100,43 +100,45 @@ function CreateDropdownField() {
 
   return (
     <>
-      <div className="space-y-3">
+      <div>
         <label className="block mb-1 font-medium uppercase text-alsoit-gray-100 text-alsoit-text-xi">
           LABEL OPTION
         </label>
-        {formInputs.map((i, index) => (
-          <div className="relative group" key={i.id}>
-            <div className="flex items-center h-8 bg-white rounded">
-              {i.color && (
-                <span
-                  className="absolute top-0 bottom-0"
-                  style={{ backgroundColor: i.color, borderRadius: '6px 0 0 6px', width: '5px' }}
-                ></span>
-              )}
-              <input
-                min={1}
-                required
-                type="text"
-                placeholder="Please input text option"
-                name={`input_${index + 1}`}
-                value={i.value}
-                onChange={(event) => handleInputChange(event, i.id)}
-                className="block w-2/3 py-1 placeholder-gray-300 border-0 rounded shadow-sm ring-0 grow ring-inset focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
-              />
-              <div className="flex items-center gap-1 mr-2 opacity-0 group-hover:opacity-100">
-                <button className="flex items-center cursor-pointer" onClick={(e) => handleClick(e, i.id)}>
-                  <Picker />
-                </button>
-                <button onClick={() => handleRemoveOption(i.id)}>
-                  <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
-                </button>
+        <div className="space-y-2">
+          {formInputs.map((i, index) => (
+            <div className="relative group" key={i.id}>
+              <div className="flex items-center h-8 bg-white rounded">
+                {i.color && (
+                  <span
+                    className="absolute top-0 bottom-0"
+                    style={{ backgroundColor: i.color, borderRadius: '6px 0 0 6px', width: '5px' }}
+                  ></span>
+                )}
+                <input
+                  min={1}
+                  required
+                  type="text"
+                  placeholder="Please input text option"
+                  name={`input_${index + 1}`}
+                  value={i.value}
+                  onChange={(event) => handleInputChange(event, i.id)}
+                  className="block w-2/3 py-1 placeholder-gray-300 border-0 rounded shadow-sm ring-0 grow ring-inset focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
+                />
+                <div className="flex items-center gap-1 mr-2 opacity-0 group-hover:opacity-100">
+                  <button className="flex items-center cursor-pointer" onClick={(e) => handleClick(e, i.id)}>
+                    <Picker />
+                  </button>
+                  <button onClick={() => handleRemoveOption(i.id)}>
+                    <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
+                  </button>
+                </div>
               </div>
+              <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
+                <ColorPalette handleClick={handleColor} activeColor={i.color ? i.color : undefined} />
+              </AlsoitMenuDropdown>
             </div>
-            <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-              <ColorPalette handleClick={handleColor} activeColor={i.color ? i.color : undefined} />
-            </AlsoitMenuDropdown>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       {/* add new option */}
       <div className="flex items-center gap-4 mt-2">

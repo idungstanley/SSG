@@ -287,6 +287,7 @@ interface TaskState {
   fileUploadProps: fileUploadPropsType;
   taskInputValue?: string;
   rootTaskIds?: string[];
+  customFiledsColumns: IField[];
 }
 
 const initialState: TaskState = {
@@ -455,7 +456,8 @@ const initialState: TaskState = {
     listId: undefined,
     openModal: false
   },
-  taskInputValue: ''
+  taskInputValue: '',
+  customFiledsColumns: []
 };
 
 export const taskSlice = createSlice({
@@ -575,6 +577,9 @@ export const taskSlice = createSlice({
     },
     getTaskColumns(state, action: PayloadAction<listColumnProps[]>) {
       state.taskColumns = action.payload;
+    },
+    setCustomFiledsColumns(state, action: PayloadAction<IField[]>) {
+      state.customFiledsColumns = action.payload;
     },
     hideTaskColumns(state, action) {
       return {
@@ -979,6 +984,7 @@ export const {
   setOpenFileUploadModal,
   setTaskInputValue,
   setRootTaskIds,
-  setNewTaskStatus
+  setNewTaskStatus,
+  setCustomFiledsColumns
 } = taskSlice.actions;
 export default taskSlice.reducer;

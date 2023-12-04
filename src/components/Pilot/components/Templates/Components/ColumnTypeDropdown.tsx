@@ -8,11 +8,15 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { InlineBorderLabel } from '../../../../Dropdown/MenuDropdown';
 import ChatSearch from '../../../../../assets/icons/ChatSearch';
 import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
-import { columnTypes, columnTypesProps } from './CustomPropertyList';
-import { FaCaretRight } from 'react-icons/fa';
+import CustomPropertyList, { columnTypesProps } from './CustomPropertyList';
+// import { FaCaretRight } from 'react-icons/fa';
+import NamedIconPair from './NamedIconPair';
+import SubtractWrapper from '../../../../Dropdown/SubtractWrapper';
 
 export default function ColumnTypeDropdown() {
   const dispatch = useAppDispatch();
+
+  const { columnTypes } = CustomPropertyList();
 
   const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
   const { updateCords } = useAppSelector((state) => state.task);
@@ -35,6 +39,7 @@ export default function ColumnTypeDropdown() {
 
   const closeModal = () => {
     setIsOpen(null);
+    setActiveDropdownOption('');
   };
 
   const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -71,28 +76,29 @@ export default function ColumnTypeDropdown() {
           style={{ borderRadius: '6px' }}
         >
           {selectedChildProperty?.name && (
-            <>
-              <div className="flex items-center gap-1" style={{ maxWidth: '30%' }}>
-                <div>{selectedPropertyType?.icon}</div>
-                <div className="w-full font-semibold truncate text-alsoit-gray-300">{selectedPropertyType?.title}</div>
-              </div>
-
-              <span className="flex items-center w-4 h-4">
-                <FaCaretRight />
-              </span>
-            </>
+            <NamedIconPair
+              iconColor="text-alsoit-gray-100"
+              color="text-alsoit-gray-300"
+              isLeadingIcon={true}
+              parentName={selectedPropertyType?.title as string}
+              parentIcon={selectedPropertyType?.icon as JSX.Element}
+              childIcon={selectedChildProperty?.icon as JSX.Element}
+              childName={selectedChildProperty?.name}
+            />
           )}
-          <div
-            className="flex items-center gap-1"
-            style={{ maxWidth: selectedChildProperty?.name ? '40%' : undefined }}
-          >
-            <div>{selectedChildProperty?.icon}</div>
-            <p className="w-full font-semibold truncate text-alsoit-gray-300">
-              {Capitalize(newCustomPropertyDetails.type)}
-            </p>
-          </div>
-          <span className="flex items-center w-4 h-4">
-            <ArrowDown className="w-3 h-3" color="#919191" />
+          {!selectedChildProperty?.name && (
+            <div
+              className="flex items-center gap-1"
+              style={{ maxWidth: selectedChildProperty?.name ? '40%' : undefined }}
+            >
+              <div>{selectedChildProperty?.icon}</div>
+              <p className="w-full font-semibold truncate text-alsoit-gray-100">
+                {Capitalize(newCustomPropertyDetails.type)}
+              </p>
+            </div>
+          )}
+          <span className={`flex items-center w-4 h-4 ${isOpen ? 'origin-center rotate-180' : ''}`}>
+            <ArrowDown className="w-3 h-3" color={isOpen ? '#BF01FE' : '#919191'} />
           </span>
         </button>
       </div>
@@ -101,44 +107,33 @@ export default function ColumnTypeDropdown() {
           label="SELECT PROPERTY"
           topElement={<p className="flex justify-center w-full pt-3 font-bold text-alsoit-text-sm">CUSTOM PROPERTY</p>}
         />
-        <div className="mx-2">
+        <div className="mx-2 h-7">
           <div className="flex items-center w-full bg-white rounded-md grow chatSearch">
-            <span className="chatSearch_icon">
+            <span className="mx-1 chatSearch_icon">
               <ChatSearch color="#919191" />
             </span>
             <input
               className="ring-0 focus:ring-0 focus:outline-0"
               type="text"
               value={searchValue}
-              placeholder="Search Property"
+              placeholder="Search"
               onChange={(e) => handleSearch(e)}
             />
           </div>
         </div>
-        <div className="flex flex-col items-start w-48 py-1 pl-3 mt-1 text-left rounded-md shadow-lg outline-none h-fit focus:outline-none">
+        <div className="flex flex-col items-start w-48 py-1 pl-2 mt-1 text-left rounded-md shadow-lg outline-none h-fit focus:outline-none">
           <VerticalScroll>
-            <div className="w-full mt-2 overflow-visible" style={{ maxHeight: '300px', maxWidth: '174px' }}>
+            <div className="w-full mt-1 overflow-visible" style={{ maxHeight: '300px', maxWidth: '174px' }}>
               {filteredCollections.map((item) => {
-                return (
+                return item.active ? (
                   <>
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between w-full h-8 rounded cursor-pointer hover:bg-alsoit-gray-50"
-                    >
-                      <div className="w-full px-2 pl-1">
-                        <button
-                          className="flex items-center justify-between w-full h-full"
-                          onClick={() => handleActiveDropdownOption(item.title)}
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className="flex items-center w-5 h-5 mx-1 text-lg">{item.icon}</span>
-                            <p className="font-semibold truncate text-alsoit-gray-300-lg text-alsoit-text-lg">
-                              {item.title}
-                            </p>
-                          </div>
-                        </button>
-                      </div>
-                    </div>
+                    <SubtractWrapper
+                      icon={item.icon}
+                      key={item.title}
+                      isActive={activeDropdownOption === item.title}
+                      handleClick={handleActiveDropdownOption}
+                      label={item.title}
+                    />
                     {activeDropdownOption === item.title && (
                       <>
                         {item.children.map((child) => (
@@ -164,7 +159,7 @@ export default function ColumnTypeDropdown() {
                       </>
                     )}
                   </>
-                );
+                ) : null;
               })}
             </div>
           </VerticalScroll>

@@ -72,15 +72,27 @@ export const useDeleteChat = () => {
   });
 };
 
-const sendMessageToChat = (data: { chatId: string | null; message: string; selectedMessage: IMessage | null }) => {
-  const { chatId, message, selectedMessage } = data;
+const sendMessageToChat = (data: {
+  chatId: string | null;
+  message: string;
+  selectedMessage: IMessage | null;
+  files?: (Blob | File)[];
+}) => {
+  const { chatId, message, selectedMessage, files } = data;
+
+  const formData = new FormData();
+  if (files) {
+    files.forEach((file, index) => {
+      formData.append(`files[${index}]`, file);
+    });
+  }
+  formData.append('message', message);
+  formData.append('reply_on_id', selectedMessage ? selectedMessage?.id : '');
+
   const request = requestNew({
     url: `chats/${chatId}/message`,
     method: 'POST',
-    data: {
-      message: message,
-      reply_on_id: selectedMessage ? selectedMessage?.id : ''
-    }
+    data: formData
   });
   return request;
 };
