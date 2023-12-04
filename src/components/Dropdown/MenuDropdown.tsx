@@ -433,7 +433,7 @@ export default function MenuDropdown({ isExtendedBar, cords, walletLevel, item, 
             {showMenuDropdownType?.toUpperCase()} PROPERTIES
           </div>
           <VerticalScroll>
-            <div className="relative h-96">
+            <div className="relative h-[360px]">
               <InlineBorderLabel label="DEFAULT SETTINGS" />
               <GroupMenuOptions items={itemsList} />
               <InlineBorderLabel label="ADVANCE SETTINGS" />

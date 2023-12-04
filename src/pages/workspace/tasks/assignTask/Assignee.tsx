@@ -13,6 +13,7 @@ import AssigneeItem from './AssigneeItem';
 import AlsoitMenuDropdown from '../../../../components/DropDowns';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import UserAvatar from './UserAvatar';
+import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 
 export default function Assignee({
   itemId,
@@ -160,61 +161,66 @@ export default function Assignee({
         </>
       )}
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
-        <div className="overflow-scroll" style={{ maxHeight: '400px' }}>
-          <section className="relative sticky z-10 flex items-center bg-white top-1">
-            <AiOutlineSearch className="absolute w-5 h-5 right-3" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none focus:ring-0"
-              onKeyDown={handleKeyDown}
-              onChange={(e) => searchItem(e.target.value)}
-            />
-          </section>
-          <div className="sticky z-10 flex items-center justify-between w-full px-4 my-2 bg-white top-12">
-            <p
-              className={cl('flex justify-center w-1/2 cursor-pointer', !teams ? 'border-b-2 border-fuchsia-600' : '')}
-              onClick={() => setTeams(false)}
-            >
-              Users
-            </p>
-            <p
-              className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
-              onClick={() => setTeams(true)}
-            >
-              Teams
-            </p>
+        <VerticalScroll>
+          <div style={{ maxHeight: '400px' }}>
+            <section className="relative sticky z-10 flex items-center bg-white top-1">
+              <AiOutlineSearch className="absolute w-5 h-5 right-3" />
+              <input
+                type="text"
+                placeholder="Search..."
+                className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none focus:ring-0"
+                onKeyDown={handleKeyDown}
+                onChange={(e) => searchItem(e.target.value)}
+              />
+            </section>
+            <div className="sticky z-10 flex items-center justify-between w-full px-4 my-2 bg-white top-12">
+              <p
+                className={cl(
+                  'flex justify-center w-1/2 cursor-pointer',
+                  !teams ? 'border-b-2 border-fuchsia-600' : ''
+                )}
+                onClick={() => setTeams(false)}
+              >
+                Users
+              </p>
+              <p
+                className={cl('flex justify-center w-1/2 cursor-pointer', teams ? 'border-b-2 border-fuchsia-600' : '')}
+                onClick={() => setTeams(true)}
+              >
+                Teams
+              </p>
+            </div>
+            {searchInput.length > 1
+              ? filteredMembers?.map((item) => {
+                  return (
+                    <AssigneeItem
+                      key={item.id}
+                      item={item}
+                      option={option}
+                      entity_id={itemId}
+                      teams={teams}
+                      handleClose={handleClose}
+                      isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                      isWatchers={isWatchers}
+                    />
+                  );
+                })
+              : teamMembers?.map((item) => {
+                  return (
+                    <AssigneeItem
+                      key={item.id}
+                      item={item}
+                      option={option}
+                      entity_id={itemId}
+                      teams={teams}
+                      handleClose={handleClose}
+                      isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
+                      isWatchers={isWatchers}
+                    />
+                  );
+                })}
           </div>
-          {searchInput.length > 1
-            ? filteredMembers?.map((item) => {
-                return (
-                  <AssigneeItem
-                    key={item.id}
-                    item={item}
-                    option={option}
-                    entity_id={itemId}
-                    teams={teams}
-                    handleClose={handleClose}
-                    isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
-                    isWatchers={isWatchers}
-                  />
-                );
-              })
-            : teamMembers?.map((item) => {
-                return (
-                  <AssigneeItem
-                    key={item.id}
-                    item={item}
-                    option={option}
-                    entity_id={itemId}
-                    teams={teams}
-                    handleClose={handleClose}
-                    isAssigned={assignedUser?.includes(item.id) || checklistAssignedUserId?.includes(item.id)}
-                    isWatchers={isWatchers}
-                  />
-                );
-              })}
-        </div>
+        </VerticalScroll>
       </AlsoitMenuDropdown>
     </div>
   );
