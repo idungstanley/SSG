@@ -1,6 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
-import { changeDateMonth, getCalendarRows } from '../../utils/calendar';
+import { changeDateMonth, getCalendarRows, getWeekNumbersForMonth } from '../../utils/calendar';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setActivityFilterDate, setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
@@ -133,6 +133,17 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
   const filterFloat = () => (
     <div className="absolute -top-2 right-0 w-3 h-3">
       <FilterListIcon />
+    </div>
+  );
+
+  const sideWeekNumber = () => (
+    <div className="flex flex-col space-y-3.5">
+      <span className="font-semibold px-1 pt-2 rounded-md uppercase text-alsoit-text-md">Week</span>
+      {getWeekNumbersForMonth(dayjs().month(), dayjs().year()).map((week, index) => (
+        <div key={index} className="px-4 py-1 text-alsoit-text-xi text-alsoit-gray-200 font-semibold flex items-end">
+          {week.slice(0, 1)}
+        </div>
+      ))}
     </div>
   );
 
@@ -275,62 +286,65 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
           )}
         </div>
         {type !== 'pop-out' && (
-          <div>
-            <div
-              className={
-                fullCalendar && !miniMode
-                  ? 'w-full flex justify-center space-x-7'
-                  : 'w-full flex justify-center space-x-4'
-              }
-            >
-              {rows[0].map(({ value }, i) => (
-                <div key={i} className="px-1.5 bg-alsoit-gray-50 rounded-md p-1">
-                  {value.format('dd')}
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col w-full mx-auto">
-              {rows.map((cells, rowIndex) => (
-                <div
-                  key={rowIndex}
-                  className={
-                    fullCalendar && !miniMode
-                      ? 'flex justify-center space-x-6 my-1'
-                      : 'flex justify-center space-x-3 my-1'
-                  }
-                >
-                  {cells.map(({ text, value }, i) => (
-                    <div
-                      key={`${text}-${i}`}
-                      className={`w-5 h-5 flex justify-center items-center rounded-md p-4 text-alsoit-text-lg font-semibold cursor-pointer relative ${
-                        isStartDate(value)
-                          ? 'bg-blue-600 text-white'
-                          : isEndDate(value) && range
-                          ? 'bg-blue-600 text-white'
-                          : isDateInRange(value) && range
-                          ? 'bg-blue-600 text-white'
-                          : hoveredDate && value.isSame(hoveredDate, 'day') && !taskTime?.to
-                          ? 'bg-blue-200'
-                          : ''
-                      } ${value.month() !== today.month() ? 'text-alsoit-gray-75' : 'text-alsoit-gray-200'} ${
-                        today.date() === value.date() &&
-                        today.month() === value.month() &&
-                        'bg-alsoit-purple-300 text-white'
-                      }`}
-                      onClick={() => handleClick(value)}
-                      onMouseEnter={() => handleHoverDate(value)}
-                      onMouseLeave={() => setHoveredDate(null)}
-                    >
-                      {text}
-                      {value == activityFilterDate?.start
-                        ? filterFloat()
-                        : value == activityFilterDate?.end
-                        ? filterFloat()
-                        : null}
-                    </div>
-                  ))}
-                </div>
-              ))}
+          <div className="flex space-x-1">
+            {sideWeekNumber()}
+            <div>
+              <div
+                className={
+                  fullCalendar && !miniMode
+                    ? 'w-full flex justify-center space-x-7'
+                    : 'w-full flex justify-center space-x-4'
+                }
+              >
+                {rows[0].map(({ value }, i) => (
+                  <div key={i} className="px-1.5 bg-alsoit-gray-50 rounded-md p-1">
+                    {value.format('dd')}
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col w-full mx-auto">
+                {rows.map((cells, rowIndex) => (
+                  <div
+                    key={rowIndex}
+                    className={
+                      fullCalendar && !miniMode
+                        ? 'flex justify-center space-x-6 my-1'
+                        : 'flex justify-center space-x-3 my-1'
+                    }
+                  >
+                    {cells.map(({ text, value }, i) => (
+                      <div
+                        key={`${text}-${i}`}
+                        className={`w-5 h-5 flex justify-center items-center rounded-md p-4 text-alsoit-text-lg font-semibold cursor-pointer relative ${
+                          isStartDate(value)
+                            ? 'bg-blue-600 text-white'
+                            : isEndDate(value) && range
+                            ? 'bg-blue-600 text-white'
+                            : isDateInRange(value) && range
+                            ? 'bg-blue-600 text-white'
+                            : hoveredDate && value.isSame(hoveredDate, 'day') && !taskTime?.to
+                            ? 'bg-blue-200'
+                            : ''
+                        } ${value.month() !== today.month() ? 'text-alsoit-gray-75' : 'text-alsoit-gray-200'} ${
+                          today.date() === value.date() &&
+                          today.month() === value.month() &&
+                          'bg-alsoit-purple-300 text-white'
+                        }`}
+                        onClick={() => handleClick(value)}
+                        onMouseEnter={() => handleHoverDate(value)}
+                        onMouseLeave={() => setHoveredDate(null)}
+                      >
+                        {text}
+                        {value == activityFilterDate?.start
+                          ? filterFloat()
+                          : value == activityFilterDate?.end
+                          ? filterFloat()
+                          : null}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
