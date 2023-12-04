@@ -49,8 +49,8 @@ function Profile() {
   };
 
   return (
-    <div className="w-full bg-white m-2 rounded-lg">
-      <div className="overflow-y-auto  p-4" style={{ maxHeight: '98vh' }}>
+    <div className="w-full m-2 bg-white rounded-lg">
+      <div className="p-4 overflow-y-auto" style={{ maxHeight: '98vh' }}>
         <h1 className="font-bold" style={{ fontSize: '15px' }}>
           PERSONAL PROFILE
         </h1>
@@ -69,7 +69,7 @@ function Profile() {
                   bottomContent={
                     <div className="p-2">
                       <div
-                        className="cursor-pointer w-full flex justify-center text-blue-600 border border-blue-500 p-1 rounded hover:bg-blue-600 hover:text-white"
+                        className="flex justify-center w-full p-1 text-blue-600 border border-blue-500 rounded cursor-pointer hover:bg-blue-600 hover:text-white"
                         onClick={() => {
                           dispatch(setShowAvatarUpload(true));
                           dispatch(setPaletteDropDown({ show: false, paletteId: null }));
@@ -79,7 +79,7 @@ function Profile() {
                       </div>
                       {userData?.avatar_path && (
                         <div
-                          className="cursor-pointer w-full flex justify-center text-red-600 border border-red-500 p-1 rounded hover:bg-red-600 hover:text-white my-1"
+                          className="flex justify-center w-full p-1 my-1 text-red-600 border border-red-500 rounded cursor-pointer hover:bg-red-600 hover:text-white"
                           onClick={() => deleteAvatarMutation.mutateAsync()}
                         >
                           <button className="text-xs">Remove Avatar</button>
@@ -93,7 +93,7 @@ function Profile() {
           </div>
 
           <section>
-            <h1 className="font-semibold my-2" style={{ fontSize: '15px' }}>
+            <h1 className="my-2 font-semibold" style={{ fontSize: '15px' }}>
               EDIT PROFILE
             </h1>
             <div className="my">
@@ -102,7 +102,7 @@ function Profile() {
               </h5>
               <input
                 type="text"
-                className="w-full rounded h-10"
+                className="w-full h-10 rounded"
                 style={{ fontSize: '15px' }}
                 value={name}
                 onChange={(e) => {
@@ -116,7 +116,7 @@ function Profile() {
               </h5>
               <input
                 type="text"
-                className="w-full rounded h-10"
+                className="w-full h-10 rounded"
                 style={{ fontSize: '15px' }}
                 value={email}
                 onChange={(e) => dispatch(setUserInfo({ email: e.target.value }))}
@@ -128,7 +128,7 @@ function Profile() {
               </h5>
               <input
                 type="password"
-                className="w-full rounded h-10"
+                className="w-full h-10 rounded"
                 style={{ fontSize: '15px' }}
                 defaultValue="https://www.alsoit.io"
                 onFocus={() => {
@@ -139,7 +139,7 @@ function Profile() {
           </section>
           <section>
             <div className="my">
-              <h1 className="font-semibold my-2" style={{ fontSize: '15px' }}>
+              <h1 className="my-2 font-semibold" style={{ fontSize: '15px' }}>
                 LANGUAGE & REGION SETTINGS
               </h1>
             </div>
@@ -148,7 +148,7 @@ function Profile() {
                 <h5 className="font-semibold" style={{ fontSize: '15px' }}>
                   Language
                 </h5>
-                <select name="language" style={{ fontSize: '15px' }} className="h-10 text-xs rounded my w-full">
+                <select name="language" style={{ fontSize: '15px' }} className="w-full h-10 text-xs rounded my">
                   <option value="en">English</option>
                 </select>
               </div>
@@ -159,14 +159,14 @@ function Profile() {
                 <Region />
               </div>
             </div>
-            <div className="my-3 flex justify-between ">
+            <div className="flex justify-between my-3 ">
               <div style={{ width: '48%' }}>
                 <h5 className="font-semibold" style={{ fontSize: '15px' }}>
                   Start of the week
                 </h5>
                 <select
                   name="Day"
-                  className="h-10 rounded my w-full"
+                  className="w-full h-10 rounded my"
                   value={start_week}
                   onChange={(e) => dispatch(setUserInfo({ start_week: e.target.value }))}
                   style={{ fontSize: '15px' }}
@@ -181,7 +181,7 @@ function Profile() {
                 </h5>
                 <select
                   name="Time-format"
-                  className="h-10 rounded my w-full"
+                  className="w-full h-10 rounded my"
                   value={time_format}
                   onChange={(e) => dispatch(setUserInfo({ time_format: e.target.value }))}
                   style={{ fontSize: '15px' }}
@@ -191,14 +191,14 @@ function Profile() {
                 </select>
               </div>
             </div>
-            <div className="my-3 flex justify-between ">
+            <div className="flex justify-between my-3 ">
               <div style={{ width: '48%' }}>
                 <h5 className="font-semibold" style={{ fontSize: '15px' }}>
                   Date Format
                 </h5>
                 <select
                   name="Date-format"
-                  className="h-10 rounded my w-full"
+                  className="w-full h-10 rounded my"
                   value={date_format}
                   onChange={(e) => dispatch(setUserInfo({ date_format: e.target.value }))}
                   style={{ fontSize: '15px' }}
@@ -209,9 +209,9 @@ function Profile() {
                 </select>
               </div>
             </div>
-            <div className="w-full flex justify-center">
+            <div className="flex justify-center w-full">
               <button
-                className="flex items-center justify-center font-bold h-10 px-3 rounded my-8 border-2 text-alsoit-danger border-alsoit-danger w-52"
+                className="flex items-center justify-center h-10 px-3 my-8 font-bold border-2 rounded text-alsoit-danger border-alsoit-danger w-52"
                 style={{ fontSize: '15px' }}
               >
                 Delete Account

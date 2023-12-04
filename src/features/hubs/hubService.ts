@@ -21,6 +21,7 @@ import { ICheckListRes } from '../task/interface.tasks';
 import { hubMoveManager } from '../../managers/Hub';
 import { setFilteredResults } from '../search/searchSlice';
 import { setDragOverItem, setDraggableItem } from '../list/listSlice';
+import { setCustomFiledsColumns } from '../task/taskSlice';
 
 interface IResponseHub {
   data: {
@@ -259,6 +260,7 @@ export const UseGetHubDetails = (query: {
       onSuccess: (data) => {
         if (query.activeItemType === 'hub' || query.activeItemType === 'subhub') {
           dispatch(setSpaceStatuses(data.data.hub.task_statuses));
+          dispatch(setCustomFiledsColumns(data.data.hub.custom_field_columns));
         }
         const listViews = data.data.hub.task_views;
         dispatch(setSpaceViews(listViews));

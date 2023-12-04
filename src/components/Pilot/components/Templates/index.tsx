@@ -8,7 +8,7 @@ import ChatFilter from '../../../../assets/icons/ChatFilter';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import AddProperty from './Properties/component/AddProperty';
 import CardWrapper from '../CardWrapper';
-import { columnTypes, columnTypesProps } from './Components/CustomPropertyList';
+import CustomPropertyList, { columnTypesProps } from './Components/CustomPropertyList';
 import NamedIconPair from './Components/NamedIconPair';
 import NewColumn from './Components/NewColumn';
 import PermissionIcon from '../../../../assets/icons/chatIcons/PermissionIcon';
@@ -74,6 +74,7 @@ function Templates() {
 
   const [isArchived, setArchived] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
+  const { columnTypes } = CustomPropertyList('white');
   const [filteredCollections, setFilteredCollections] = useState<columnTypesProps[]>(columnTypes);
   const [addProperties, setAddProperties] = useState<boolean>(false);
 
@@ -93,7 +94,7 @@ function Templates() {
     <div className="flex-col w-full h-full gap-3 p-2 pl-3 space-y-2 overflow-scroll">
       <span className="flex items-center gap-12">
         <Button
-          height="h-8 text-white"
+          height="h-8 text-white w-32"
           icon={<IoIosAddCircleOutline className="text-base text-white" />}
           label="ADD PROPERTY"
           labelSize="text-xs"
@@ -145,6 +146,9 @@ function Templates() {
             type="properties"
             titleElement={
               <NamedIconPair
+                type="card"
+                isLeadingIcon={true}
+                fadeOutColour={collection.active}
                 parentName={collection?.title}
                 parentIcon={collection?.icon}
                 childIcon={collection.children[0]?.icon as JSX.Element}

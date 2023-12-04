@@ -12,6 +12,7 @@ import { findCurrentHub } from '../../managers/Hub';
 import { walletMoveManager } from '../../managers/Wallet';
 import { setFilteredResults } from '../search/searchSlice';
 import { setDragOverItem, setDraggableItem } from '../list/listSlice';
+import { setCustomFiledsColumns } from '../task/taskSlice';
 
 interface IResponseWallet {
   data: {
@@ -143,8 +144,10 @@ export const UseGetWalletDetails = (query: { activeItemId?: string | null; activ
       enabled: query.activeItemType === 'wallet' && !!query.activeItemId,
       onSuccess: (data) => {
         const walletTaskStatus = data.data.wallet.task_statuses;
+        const walletCustomStatus = data.data.wallet.custom_field_columns;
         if (query.activeItemType === EntityType.wallet) {
           dispatch(setSpaceStatuses(walletTaskStatus));
+          dispatch(setCustomFiledsColumns(walletCustomStatus));
         }
         const listViews = data.data.wallet.task_views;
         dispatch(setSpaceViews(listViews));
