@@ -55,7 +55,7 @@ export default function DetailsIndex() {
 
   return (
     <>
-      <section className="mt-3">{showDetailsType()}</section>
+      <section className="pt-1 bg-white">{showDetailsType()}</section>
     </>
   );
 }

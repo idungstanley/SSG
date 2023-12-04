@@ -13,6 +13,7 @@ import AvatarWithImage from '../../../avatar/AvatarWithImage';
 import { Menu } from '@mui/material';
 // import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 import ArrowOpenDown from '../../../../assets/icons/ArrowOpenDown';
+import { ACTIVE_BUTTON, DEFAULT_BUTTON } from '../../../../utils/Constants/ButtonInteractions';
 
 const unassigned = {
   color: '#626262',
@@ -111,6 +112,8 @@ export default function FilterByAssigneeModal() {
     }
   };
 
+  const activeStyle = isAssignee ? ACTIVE_BUTTON.color : DEFAULT_BUTTON.color;
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
@@ -126,9 +129,8 @@ export default function FilterByAssigneeModal() {
             <AssigneeIcon active={isAssignee && !meMode} width={20} />
             <span>Assignee</span>
             <span className="px-1">
-              <ArrowOpenDown color="black" />
+              <ArrowOpenDown color={activeStyle} />
             </span>
-            {/* <ArrowDrop color={isAssignee && !meMode ? '#BF01FE' : '#424242'} /> */}
           </HeadMenu.Button>
         </HeadMenu>
       </div>

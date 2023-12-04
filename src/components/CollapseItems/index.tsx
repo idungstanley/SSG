@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
-import CollapseIcon from '../Views/ui/collapseIcon/CollapseIcon';
 import { cl } from '../../utils';
 import ToolTip from '../Tooltip/Tooltip';
+import CollapseIcon from '../Views/ui/collapseIcon/CollapseIcon';
 
 interface collapseAllProps {
   children?: ReactNode;
@@ -10,26 +10,39 @@ interface collapseAllProps {
   headerText?: string;
   headerTrailing?: ReactNode;
   menuButton?: ReactNode;
+  headerIcon?: ReactNode;
 }
 
-function CollapseItems({ children, header, headerTrailing, menuButton, headerText, headerBg }: collapseAllProps) {
+function CollapseItems({
+  children,
+  header,
+  headerTrailing,
+  menuButton,
+  headerText,
+  headerBg,
+  headerIcon
+}: collapseAllProps) {
   const [open, setOpen] = useState(true);
   return (
     <div className="w-full my-1">
       <div className="w-full flex items-center justify-between text-alsoit-text-xi">
         <div
           className={cl(
-            ' w-2/5 h-8 flex items-center justify-cente gap-1 rounded-br-lg group',
+            'w-2/5 h-8 flex items-center justify-cente gap-1 rounded-br-lg group',
             `${headerBg ?? 'bg-alsoit-gray-50'}`
           )}
           onClick={() => setOpen(!open)}
         >
-          <span className="w-6 ml-2 flex justify-center">
-            <ToolTip title={`${open ? 'Close' : 'Open'} ${header}`} placement="top">
-              <span className={cl('cursor-pointer', !open && '-rotate-90 transform')}>
-                <CollapseIcon active={false} iconColor="rgb(244 244 244)" color="#424242" />
-              </span>
-            </ToolTip>
+          <span className="w-6 ml-1 flex justify-center">
+            {headerIcon ? (
+              <div>{headerIcon}</div>
+            ) : (
+              <ToolTip title={`${open ? 'Close' : 'Open'} ${header}`} placement="top">
+                <span className={cl('cursor-pointer', !open && '-rotate-90 transform')}>
+                  <CollapseIcon active={false} iconColor="rgb(244 244 244)" color="#424242" />
+                </span>
+              </ToolTip>
+            )}
           </span>
           {/* <CollapseAllIcon />s */}
           <ToolTip title={header} placement="top">

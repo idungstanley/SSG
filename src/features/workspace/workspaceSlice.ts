@@ -90,6 +90,7 @@ interface workspaceState {
   nestedTimeEntityId: string | null;
   activeView: IView | null;
   entityForPermissions?: IList | IWallet | IHub;
+  isOpenTootipContent: boolean;
 }
 
 const initialState: workspaceState = {
@@ -160,7 +161,8 @@ const initialState: workspaceState = {
   activeHotkeyIds: hotkeyIdsFromLS,
   nestedTimeEntityId: null,
   activeView: null,
-  entityForPermissions: undefined
+  entityForPermissions: undefined,
+  isOpenTootipContent: false
 };
 
 export const wsSlice = createSlice({
@@ -400,6 +402,9 @@ export const wsSlice = createSlice({
     },
     setEntityForPermissions(state, action: PayloadAction<IList | IWallet | IHub | undefined>) {
       state.entityForPermissions = action.payload;
+    },
+    setOpenTootipContent(state, action: PayloadAction<boolean>) {
+      state.isOpenTootipContent = action.payload;
     }
   }
 });
@@ -471,7 +476,8 @@ export const {
   setActiveView,
   setEntityForPermissions,
   setActiveSubLogsTabId,
-  setEditingPilotDetailsTitle
+  setEditingPilotDetailsTitle,
+  setOpenTootipContent
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

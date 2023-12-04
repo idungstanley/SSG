@@ -151,6 +151,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     email: (
@@ -159,6 +161,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="email"
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     longtext: (
@@ -166,6 +170,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     number: (
@@ -173,6 +179,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     money: (
@@ -181,6 +189,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     date: <DateField />,
@@ -190,6 +200,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     website: (
@@ -198,6 +210,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="website"
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     phone: (
@@ -234,6 +248,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     rating: (
@@ -253,6 +269,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields as ICustomField[]}
         taskCustomFieldsColumns={task.custom_field_columns}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     people: (
@@ -261,6 +279,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     files: (
@@ -269,6 +289,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         listId={task.list_id}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     location: (
@@ -276,6 +298,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     )
   };

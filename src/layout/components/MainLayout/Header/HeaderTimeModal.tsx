@@ -39,17 +39,26 @@ export default function HeaderTimeModal() {
         <div
           className={cl(
             clock_type === 'd' ? 'flex justify-center flex-col w-full' : 'flex justify-center flex-col w-full mx-auto',
-            'w-2/4'
+            'w-2/4 mt-2'
           )}
         >
           {clock_type === 'd' ? (
-            <span style={{ fontSize: '20px' }} className="w-full flex justify-center">
+            <span
+              style={{ fontSize: '20px', lineHeight: '24px' }}
+              className="w-full flex justify-center tracking-widest font-medium"
+            >
               {time}
             </span>
           ) : (
             <AnalogClock time={clock} setTime={setClock} zone={zone} />
           )}
-          <span className={cl('flex justify-center', clock_type === 'd' ? 'text-left' : 'text-center')}>
+          <span
+            className={cl(
+              'flex justify-center text-alsoit-text-lg tracking-widest',
+              clock_type === 'd' ? 'text-left' : 'text-center'
+            )}
+            style={{ lineHeight: '5.6px' }}
+          >
             {dayjs().format('dddd, D MMMM')}
           </span>
         </div>

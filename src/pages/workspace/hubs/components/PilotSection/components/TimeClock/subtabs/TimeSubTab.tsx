@@ -73,8 +73,8 @@ export default function TimeSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid grid-cols-2 px-1"
-            style={{ borderBottom: `3px solid ${activeSubTimeClockTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid grid-cols-2 px-1 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubTimeClockTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {timeClockOptions.map((item) => (
               <SubtabDrag

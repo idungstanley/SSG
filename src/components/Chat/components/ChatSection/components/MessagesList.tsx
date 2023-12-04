@@ -12,6 +12,9 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { CiMail } from 'react-icons/ci';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import { getInitials } from '../../../../../app/helpers';
+import MessageSuccess from '../../../../../assets/icons/chatIcons/MessageSuccess';
+import FileIcons from '../../../../Views/ui/Table/CustomField/Files/FileIcon';
+import DownloadIcon from '../../../../../assets/icons/DownloadIcon';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -43,13 +46,13 @@ export default function MessagesList({ messages }: MessagesListProps) {
 
   return (
     <>
-      <div className="p-2 bg-white border rounded-xl">
+      <div className="py-2 bg-white rounded-[5px]">
         <VerticalScroll>
-          <div ref={ref} className="flex flex-col w-full" style={{ height: '60vh' }}>
+          <div ref={ref} className="flex flex-col w-full" style={{ height: '50vh' }}>
             {sortedByTimeMessages.map((message) => (
               <div
                 className={cl(
-                  'flex items-start gap-3 px-2 py-1',
+                  'relative flex items-start gap-1 pl-4 pr-5 py-1 group hover:bg-[#D9D9D9]',
                   isCurrentUser(message.team_member.user.id) ? 'justify-end' : 'justify-start'
                 )}
                 key={message.id}
@@ -60,17 +63,49 @@ export default function MessagesList({ messages }: MessagesListProps) {
                   backgroundColour={message.team_member.user.color}
                 />
 
-                <div className="w-3/4" style={{ background: '#F4F4F4' }}>
-                  <div className="flex flex-col justify-start gap-1 p-2 border group rounded-xl">
+                <div
+                  className={`max-w-[75%] min-w-[150px] rounded-[5px] ${
+                    isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
+                  }`}
+                >
+                  <div className="flex flex-col justify-start gap-1 p-2">
                     {/* top */}
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       {!isCurrentUser(message.team_member.user.id) ? (
-                        <>
-                          <p>{message.team_member.user.name}</p>
-                          <DropdownMenuForMessage message={message} />
-                        </>
+                        <p style={{ color: message.team_member.user.color }}>{message.team_member.user.name}</p>
                       ) : null}
                     </div>
+
+                    {message?.attachments.length ? (
+                      <>
+                        {message.attachments.map((file) => (
+                          <div
+                            key={file.id}
+                            className="w-full p-1 pr-[7px] shadow-sm bg-alsoit-purple-50 sm:text-sm rounded-[5px]"
+                          >
+                            <div className="flex justify-between items-center max-h-[100px] text-sm text-alsoit-gray-300">
+                              <div className="flex items-center">
+                                <FileIcons
+                                  fileExtension={file.physical_file.file_format.extension}
+                                  filePath={file.path}
+                                  fileName={file.physical_file.name}
+                                  height="h-8"
+                                  width="w-8"
+                                />
+                                <p className="ml-2">{file.physical_file.display_name}</p>
+                              </div>
+                              <div
+                                className={`ml-2 p-[3px] ${
+                                  isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
+                                } rounded-[5px]`}
+                              >
+                                <DownloadIcon width={16} height={16} />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    ) : null}
 
                     {message?.reply_on ? (
                       <div className="relative w-full p-1 overflow-hidden shadow-sm bg-alsoit-purple-50 sm:text-sm">
@@ -86,7 +121,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
                     ) : null}
 
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-end">
                       {/* message */}
                       <div className="flex items-center">
                         <p className="text-alsoit-purple-300">
@@ -102,11 +137,20 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
 
                       {/* bottom */}
-                      <div className="flex items-end pl-3">
-                        <p className="text-xs text-gray-500">{moment(message.created_at).format('HH:mm')}</p>
+                      <div className="flex items-center pl-3">
+                        <span className="pl-[2px] text-[10px] text-gray-500">
+                          {moment(message.created_at).format('HH:mm')}
+                        </span>
+                        <span>
+                          <MessageSuccess />
+                        </span>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="absolute right-0 top-0">
+                  <DropdownMenuForMessage message={message} />
                 </div>
               </div>
             ))}
@@ -123,7 +167,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                   initials={getInitials((activeUserPopup?.name as string) || '')}
                   height="h-24"
                   width="w-24"
-                  textSize="30px"
+                  textSize="15px"
                 />
               </div>
             </div>
