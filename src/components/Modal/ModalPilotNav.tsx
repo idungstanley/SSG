@@ -98,15 +98,10 @@ export default function ModalPilotNav({
 
   document.addEventListener('mousedown', (event) => {
     const clickedElement = event.target as HTMLElement;
+    console.log(pilotModal && !pilotModal.contains(clickedElement));
 
-    if (
-      pilotModal &&
-      !pilotModal.contains(clickedElement) &&
-      !clickedElement.classList.contains('modal-item') &&
-      !clickedElement.classList.contains('pilot-modal-wrapper') &&
-      !clickedElement.classList.contains('modal-search')
-    ) {
-      //modalItemClick(null);
+    if (pilotModal && !pilotModal.contains(clickedElement)) {
+      modalItemClick(null);
     }
   });
 
@@ -162,10 +157,10 @@ export default function ModalPilotNav({
           <input
             className="rounded w-full font-normal pl-5"
             style={{
-              border: '1px solid #B2B2B2',
+              border: '.5px solid rgba(178, 178, 178, .5)',
               height: '28px',
               color: '#919191',
-              fontSize: '12px',
+              fontSize: '11px',
               paddingTop: '2px',
               paddingBottom: '5px',
               paddingLeft: '22px',
@@ -183,9 +178,9 @@ export default function ModalPilotNav({
           )}
         </div>
       </div>
-      <div className="overflow-hidden pl-3" style={{ maxHeight: '230px' }}>
+      <div className="overflow-hidden pl-3" style={{ maxHeight: '250px' }}>
         <VerticalScroll>
-          <div ref={ref} style={{ maxHeight: '230px' }}>
+          <div ref={ref} style={{ maxHeight: '250px' }}>
             {filteredNavTree.map(
               (item) =>
                 item.nesting >= currentNestedLevel[0].nesting && (
@@ -196,7 +191,7 @@ export default function ModalPilotNav({
                     } `}
                     onClick={() => modalItemClick(item.url)}
                     style={{
-                      maxWidth: '164px'
+                      maxWidth: '180px'
                     }}
                   >
                     <div
