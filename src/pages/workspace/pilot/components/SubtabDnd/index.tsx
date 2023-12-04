@@ -71,7 +71,7 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
           <div
             key={id}
             onClick={() => handleClick(id)}
-            className={`relative w-full h-full flex justify-center flex-grow p-1 font-medium cursor-pointer group text-primary-700 hover:text-alsoit-purple-300 transition duration-300 ${
+            className={`relative w-full h-full flex justify-center flex-grow p-1 font-medium cursor-pointer group text-alsoit-gray-300 hover:text-alsoit-purple-300 transition duration-300 ${
               id === activeSub && 'bg-alsoit-purple-50 rounded-t-md text-alsoit-purple-300'
             }`}
             style={{
