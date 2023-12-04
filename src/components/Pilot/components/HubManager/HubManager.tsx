@@ -11,6 +11,7 @@ import StatusManagement from '../../../status/StatusManagement';
 import { pilotTabs } from '../../../../app/constants/pilotTabs';
 import { CreateTask } from '../../../../pages/workspace/pilot/components/createEntity/createTask/CreateTask';
 import Permissions from '../PermissionSharing';
+import Templates from '../Templates';
 
 const HubsOptions = [
   { id: pilotTabs.CREATE_HUB, element: <CreateHub /> },
@@ -18,8 +19,10 @@ const HubsOptions = [
   { id: pilotTabs.CREATE_LIST, element: <CreateList /> },
   { id: pilotTabs.CREATE_TASK, element: <CreateTask /> },
   { id: pilotTabs.CALENDAR_SETTINGS, element: <CustomSuggestion /> },
-  { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> },
-  { id: pilotTabs.PERMISSIONS, element: <Permissions /> }
+  { id: pilotTabs.PROPERTIES, element: <Templates /> },
+  { id: pilotTabs.PERMISSIONS, element: <Permissions /> },
+  { id: pilotTabs.NAV_ENTITIES, element: <></> },
+  { id: pilotTabs.STATUS_MANAGEMENT, element: <StatusManagement /> }
 ];
 
 export default function HubManager() {

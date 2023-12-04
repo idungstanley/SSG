@@ -24,11 +24,16 @@ function ListNav({ viewsList, changeViews, viewsSubtasks, changeViewsInsights, v
       <nav className="flex items-center justify-between overflow-hidden bg-white">
         <section className="flex items-center justify-start">
           <div className="flex items-center">
-            <ListViews viewsList={viewsList as string} />
-            {changeViews ? <ListShow changeViews={changeViews as string} /> : null}
-            {changeViewsInsights ? <ListShowGraphs /> : null}
-            {viewsSubtasks ? <ListSubtasks subtasksTitle={viewsSubtasks as string} /> : null}
-            {viewsGraphs ? <ListGraphs graphsTitle={viewsGraphs as string} /> : null}
+            <div className="flex items-center mr-12">
+              <ListViews viewsList={viewsList as string} />
+              {changeViews ? <ListShow changeViews={changeViews as string} /> : null}
+              {viewsSubtasks ? <ListSubtasks subtasksTitle={viewsSubtasks as string} /> : null}
+            </div>
+
+            <div className="flex items-center ml-12">
+              {changeViewsInsights ? <ListShowGraphs /> : null}
+              {viewsGraphs ? <ListGraphs graphsTitle={viewsGraphs as string} /> : null}
+            </div>
           </div>
         </section>
       </nav>

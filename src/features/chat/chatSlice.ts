@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { itemType } from '../../types';
 import { IMessage } from './chat.interfaces';
+import { UploadedUppyFile } from '@uppy/core';
 
 interface ISelectedItem {
   id: string;
@@ -14,6 +15,8 @@ interface ChatState {
   selectedItem: ISelectedItem | null;
   activeChat: string;
   selectedMessage: IMessage | null;
+  showFileAttachModal: boolean;
+  chatAttachmentsFiles: UploadedUppyFile<Record<string, unknown>, Record<string, unknown>>[];
 }
 
 const initialState: ChatState = {
@@ -22,7 +25,9 @@ const initialState: ChatState = {
   showCreateChatSideOver: false,
   selectedItem: null,
   activeChat: '',
-  selectedMessage: null
+  selectedMessage: null,
+  showFileAttachModal: false,
+  chatAttachmentsFiles: []
 };
 
 export const chatSlice = createSlice({
@@ -47,6 +52,15 @@ export const chatSlice = createSlice({
     },
     setSelectedMessage: (state, action: PayloadAction<IMessage | null>) => {
       state.selectedMessage = action.payload;
+    },
+    setShowFileAttachModal(state, action: PayloadAction<boolean>) {
+      state.showFileAttachModal = action.payload;
+    },
+    setChatAttachmentsFiles(
+      state,
+      action: PayloadAction<UploadedUppyFile<Record<string, unknown>, Record<string, unknown>>[]>
+    ) {
+      state.chatAttachmentsFiles = action.payload;
     }
   }
 });
@@ -57,7 +71,9 @@ export const {
   setShowCreateChatSideOver,
   setSelectedItem,
   setActiveChat,
-  setSelectedMessage
+  setSelectedMessage,
+  setShowFileAttachModal,
+  setChatAttachmentsFiles
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

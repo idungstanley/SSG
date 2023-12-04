@@ -111,11 +111,12 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
   useEffect(() => {
     if (tableElement && selectionArr) {
       const selectedTaskRow = tableElement.current?.querySelector(`tbody tr[data-select="${activeItemId}"]`);
+
       if (selectedTaskRow) {
         selectedTaskRow.scrollIntoView({ block: 'nearest' });
       }
     }
-  }, [keyBoardSelectedIndex]);
+  }, [keyBoardSelectedIndex, activeItemId]);
 
   const checkSelectedRow = (id: string) => {
     if (selectionArr && keyBoardSelectedIndex) {

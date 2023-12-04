@@ -9,7 +9,9 @@ import Icons from '../../../Icons/Icons';
 import GroupBy from '../../../../assets/icons/layers.svg';
 import { Menu } from '@mui/material';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
-import ArrowDrop from '../../../../assets/icons/ArrowDrop';
+import ArrowOpenDown from '../../../../assets/icons/ArrowOpenDown';
+import ArrowRightPilot from '../../../../assets/icons/ArrowRightPilot';
+import { ACTIVE_BUTTON } from '../../../../utils/Constants/ButtonInteractions';
 
 type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority' | 'none'>;
 type Option = Record<Key, { icon: JSX.Element }>;
@@ -49,12 +51,19 @@ export function Sort({ isSplitSubtasks }: ISortProps) {
             <Button active={isSplitSubtasks ? false : true} withoutBg={isSplitSubtasks}>
               <Icons src={GroupBy} />
               {!isSplitSubtasks ? (
-                <span className="flex items-center">
-                  <p className="block truncate">
-                    Group by: <span className="capitalize">{sortType}</span>
+                <div className="flex items-center text-xs">
+                  <p className="flex items-center whitespace-nowrap">
+                    <span>Group by</span>
+                    <span className="px-1">
+                      <ArrowRightPilot active={false} />
+                    </span>
+                    <span className="capitalize">{sortType}</span>
                   </p>
-                  <ArrowDrop color="#BF01FE" />
-                </span>
+
+                  <span className="px-1">
+                    <ArrowOpenDown color={ACTIVE_BUTTON.color} />
+                  </span>
+                </div>
               ) : null}
             </Button>
           </HeadMenu.Button>

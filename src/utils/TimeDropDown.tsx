@@ -67,7 +67,7 @@ function ReusableSelect({ value, onclick, options, style }: ReusableSelectProps)
         </div>
       )}
       {dropped && (
-        <div className={`relative flex flex-col space-y-2 w-60 ${style}`} tabIndex={0} ref={modalRef}>
+        <div className={`relative flex flex-col space-y-2 w-60 z-50 ${style}`} tabIndex={0} ref={modalRef}>
           <ul
             className="absolute top-2 max-h-72 w-11/12 overflow-y-scroll flex flex-col space-y-2 p-4 bg-white shadow-2xl rounded-md"
             ref={listRef}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu } from '@mui/material';
 import { Parser as FormulaParser } from 'hot-formula-parser';
 import { IField } from '../../../../../../features/list/list.interfaces';
@@ -7,6 +7,8 @@ import { useUpdateDropdownField, useUpdateEntityCustomFieldValue } from '../../.
 import AdditionalFormulasField from './AdditionalFormulasField';
 import { findSelectedItemsInFormula } from './findSelectedItemsInFormula';
 import SimpleFormulasField from './SimpleFormulasField';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 const BASE_ACTIONS = ['SUM', 'MINUS', 'MULTIPLY', 'DIVIDE'];
 const ALLOWED_TYPES = ['number', 'formula'];
@@ -19,6 +21,8 @@ interface IFormulaFieldProps {
   parentId: string;
   taskId: string;
   fieldId: string;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
 function FormulaField({
@@ -28,13 +32,19 @@ function FormulaField({
   taskCustomFieldsColumns,
   parentId,
   taskId,
-  fieldId
+  fieldId,
+  activeColumn,
+  task
 }: IFormulaFieldProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentFieldColumns, setCurrentFieldColumns] = useState<IField[]>([]);
   const [result, setResult] = useState('-');
   const [isShowAdditionalFormulas, setShowAdditionalFormulas] = useState<boolean>(false);
   const [prevFormula, setPrevFormula] = useState<string>('');
+
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const newCurrentFieldColumns: IField[] = [];
@@ -142,8 +152,25 @@ function FormulaField({
     }
   }, [result]);
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setAnchorEl(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center">
       <h1 className="text-alsoit-text-lg font-semibold max-w-full break-words cursor-pointer" onClick={handleClick}>
         {result}
       </h1>

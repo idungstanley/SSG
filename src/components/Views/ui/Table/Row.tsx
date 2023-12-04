@@ -10,7 +10,6 @@ import { ManageTagsDropdown } from '../../../Tag/ui/ManageTagsDropdown/ui/Manage
 import { AddSubTask } from '../AddTask/AddSubTask';
 import TaskTag from '../../../Tag/ui/TaskTag';
 import Effect from '../../../../assets/icons/Effect';
-import Enhance from '../../../badges/Enhance';
 import {
   THREE_SUBTASKS_LEVELS,
   TWO_SUBTASKS_LEVELS,
@@ -26,6 +25,7 @@ import Copy from '../../../../assets/icons/Copy';
 import { findExpandedLevels } from '../../../../pages/workspace/lists/components/renderlist/listDetails/listSubtask/ListSubtasks';
 import NewSubTaskTemplate from './newTaskTemplate/NewSubTaskTemplate';
 import Badges from '../../../badges';
+import TaskSettingsDropDown from './TaskSettingsDropdown';
 
 export const MAX_SUBTASKS_LEVEL = 10;
 
@@ -233,7 +233,7 @@ export function Row({
           {/* actions */}
           <ToolTip title={isCopied === 0 ? 'Copy Task Name' : 'Copied'}>
             <button
-              className={`relative opacity-0 group-hover:opacity-100 ${
+              className={`relative mr-0.5 h-full opacity-0 group-hover:opacity-100 ${
                 saveSettingOnline?.CompactView ? 'bottom-1' : 'bottom-2'
               }`}
               onClick={handleCopyTexts}
@@ -278,15 +278,7 @@ export function Row({
                 </button>
               </ToolTip>
             )}
-            <ToolTip title="Enhance View">
-              <button
-                className="p-1 bg-white rounded-md  opacity-0 group-opacity-100"
-                onClick={(e) => e.stopPropagation()}
-                style={{ backgroundColor: 'orange' }}
-              >
-                <Enhance className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3 font-white'} />
-              </button>
-            </ToolTip>
+            <TaskSettingsDropDown />
           </div>
         </StickyCol>
 
