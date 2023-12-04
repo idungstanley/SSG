@@ -148,6 +148,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowDown' && focusedIndex === null) setFocusedIndex(0);
       if (event.key === 'ArrowUp' && focusedIndex !== null && focusedIndex > 0) {
         setFocusedIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
       } else if (event.key === 'ArrowDown' && focusedIndex !== null && focusedIndex < fieldOptions.length - 1) {
@@ -229,7 +230,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
         header={fieldType === 'website' ? 'Website Options' : 'Email Options'}
         subHeader={fieldType === 'website' ? 'select options for websites' : 'select option for Emails'}
       >
-        <div className="flex flex-col space-y-2 pt-1.5 pb-0.5" style={{ width: '150px' }}>
+        <div className="flex flex-col space-y-2 pt-1.5 pl-1 pb-0.5" style={{ width: '150px' }}>
           {fieldOptions.map((option, index) => (
             <button
               key={index}
