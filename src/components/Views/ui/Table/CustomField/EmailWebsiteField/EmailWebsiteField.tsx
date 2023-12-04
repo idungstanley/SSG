@@ -5,11 +5,11 @@ import { cl } from '../../../../../../utils';
 import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
 import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
-import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { Task } from '../../../../../../features/task/interface.tasks';
 import DropdownWithHeader from '../../../../../Pilot/components/TimeClock/components/DropdownWithHeader';
 import TrashIcon from '../../../../../../assets/icons/TrashIcon';
+import { EmailWebsiteDropDown } from './EmailWebsiteOptionsDropDown';
 
 interface EmailFieldProps {
   taskCustomFields?: ICustomField;
@@ -33,7 +33,6 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
   const [editMode, setEditMode] = useState(false);
   const [isValidValue, setIsValidValue] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
-  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -146,22 +145,6 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     return () => containerRef.current?.removeEventListener('keydown', handleKeyBoardDown);
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown' && focusedIndex === null) setFocusedIndex(0);
-      if (event.key === 'ArrowUp' && focusedIndex !== null && focusedIndex > 0) {
-        setFocusedIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
-      } else if (event.key === 'ArrowDown' && focusedIndex !== null && focusedIndex < fieldOptions.length - 1) {
-        setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : prevIndex + 1));
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [focusedIndex]);
   return (
     <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4 relative">
       {!editMode ? (
@@ -224,27 +207,16 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
           />
         </div>
       )}
-      <DropdownWithHeader
-        anchor={anchorEl}
-        setAnchor={setAnchorEl}
-        header={fieldType === 'website' ? 'Website Options' : 'Email Options'}
-        subHeader={fieldType === 'website' ? 'select options for websites' : 'select option for Emails'}
-      >
-        <div className="flex flex-col space-y-2 pt-1.5 pl-1 pb-0.5" style={{ width: '150px' }}>
-          {fieldOptions.map((option, index) => (
-            <button
-              key={index}
-              className={`flex w-full gap-2 items-center px-1 py-2 hover:bg-alsoit-gray-50 rounded ${
-                focusedIndex === index ? 'bg-alsoit-gray-50' : ''
-              }`}
-              onClick={option.callBack}
-            >
-              {option.icon}
-              <h1> {`${option.title} ${Capitalize(fieldType)}`}</h1>
-            </button>
-          ))}
-        </div>
-      </DropdownWithHeader>
+      {anchorEl !== null && (
+        <DropdownWithHeader
+          anchor={anchorEl}
+          setAnchor={setAnchorEl}
+          header={fieldType === 'website' ? 'Website Options' : 'Email Options'}
+          subHeader={fieldType === 'website' ? 'select options for websites' : 'select option for Emails'}
+        >
+          <EmailWebsiteDropDown fieldOptions={fieldOptions} fieldType={fieldType} taskId={task?.id as string} />
+        </DropdownWithHeader>
+      )}
     </div>
   );
 }

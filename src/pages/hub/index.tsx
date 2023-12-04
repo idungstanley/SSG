@@ -53,6 +53,7 @@ export default function HubPage() {
     keyBoardSelectedIndex,
     taskColumnIndex,
     taskColumns,
+    taskRowFocus,
     KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
   const formatSettings = useformatSettings();
@@ -106,23 +107,18 @@ export default function HubPage() {
   const combinedArr = Object.values(lists).flatMap((lists) => lists);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp') {
-      if (keyBoardSelectedIndex !== null) {
-        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+    if (taskRowFocus) {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        const newIndex =
+          e.key === 'ArrowUp'
+            ? Math.max(0, keyBoardSelectedIndex !== null ? keyBoardSelectedIndex - 1 : 0)
+            : Math.min(combinedArr.length - 1, keyBoardSelectedIndex !== null ? keyBoardSelectedIndex + 1 : 0);
+
         dispatch(setKeyBoardSelectedIndex(newIndex));
-      } else {
-        dispatch(setKeyBoardSelectedIndex(0));
+      } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+        const newIndex = Math.max(0, taskColumnIndex - 1);
+        dispatch(setTaskColumnIndex(newIndex));
       }
-    } else if (e.key === 'ArrowDown') {
-      if (keyBoardSelectedIndex !== null) {
-        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
-        dispatch(setKeyBoardSelectedIndex(newIndex));
-      } else {
-        dispatch(setKeyBoardSelectedIndex(0));
-      }
-    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
-      const newIndex = Math.max(0, taskColumnIndex - 1);
-      dispatch(setTaskColumnIndex(newIndex));
     }
 
     if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
@@ -139,21 +135,14 @@ export default function HubPage() {
           type: 'task'
         })
       );
+
       navigate(
         `/${currentWorkspaceId}/tasks/l/${KeyBoardSelectedTaskData.list_id}/t/${KeyBoardSelectedTaskData.id}/v/${activeView?.id}`,
         {
           replace: true
         }
       );
-      // navigate(
-      //   generateViewsUrl(
-      //     KeyBoardSelectedTaskData.id,
-      //     activeView?.id as string,
-      //     hub?.data.hub,
-      //     EntityType.task
-      //   ) as string,
-      //   { replace: true }
-      // );
+
       dispatch(
         setActiveItem({
           activeItemId: KeyBoardSelectedTaskData.id,
@@ -163,6 +152,7 @@ export default function HubPage() {
       );
     }
   };
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
