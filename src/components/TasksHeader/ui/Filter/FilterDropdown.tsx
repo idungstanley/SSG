@@ -7,8 +7,8 @@ import Icons from '../../../Icons/Icons';
 import Filter from '../../../../assets/icons/filter_alt.svg';
 import { setSelectedTaskParentId } from '../../../../features/task/taskSlice';
 import { useAppDispatch } from '../../../../app/hooks';
-import ArrowDrop from '../../../../assets/icons/ArrowDrop';
 import { Menu } from '@mui/material';
+import ArrowOpenDown from '../../../../assets/icons/ArrowOpenDown';
 
 interface IFilterDropdownProps {
   isSplitSubtasks?: boolean;
@@ -35,9 +35,11 @@ export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownPro
             >
               <Icons src={Filter} />
               {!isSplitSubtasks ? (
-                <span className="flex items-center">
+                <span className="flex items-center text-xs">
                   Filter
-                  <ArrowDrop color="#424242" />
+                  <span className="px-1">
+                    <ArrowOpenDown color="black" />
+                  </span>
                 </span>
               ) : null}
             </Button>
@@ -46,7 +48,7 @@ export function FilterDropdown({ isSplitSubtasks, parentId }: IFilterDropdownPro
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div style={{ minWidth: '600px' }} className="relative p-2">
+        <div key="filterDropdown" style={{ minWidth: '600px' }} className="relative p-2">
           {/* title */}
           <h1 className="text-lg font-bold text-black">Filters</h1>
           <FilterList />

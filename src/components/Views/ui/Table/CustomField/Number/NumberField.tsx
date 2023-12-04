@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import Copy from '../../../../../../assets/icons/Copy';
 import { cl } from '../../../../../../utils';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface DropdownFieldWrapperProps {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
 function formatNumberWithCommas(number: number | string) {
@@ -17,13 +21,17 @@ function formatNumberWithCommas(number: number | string) {
   return parts.join('.');
 }
 
-function NumberField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapperProps) {
+function NumberField({ taskCustomFields, taskId, fieldId, activeColumn, task }: DropdownFieldWrapperProps) {
   const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
 
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (taskCustomFields) {
@@ -68,8 +76,17 @@ function NumberField({ taskCustomFields, taskId, fieldId }: DropdownFieldWrapper
     }
   };
 
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+        setEditMode(true);
+      }
+    }
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center">
       {!editMode ? (
         <div
           className="w-full h-full hover:border-2 hover:borer-alsoit-gray-300 group/parent p-1"

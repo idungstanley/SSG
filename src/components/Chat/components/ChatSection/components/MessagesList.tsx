@@ -12,6 +12,7 @@ import AlsoitMenuDropdown from '../../../../DropDowns';
 import { CiMail } from 'react-icons/ci';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import { getInitials } from '../../../../../app/helpers';
+import MessageSuccess from '../../../../../assets/icons/chatIcons/MessageSuccess';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -43,13 +44,13 @@ export default function MessagesList({ messages }: MessagesListProps) {
 
   return (
     <>
-      <div className="p-2 bg-white border rounded-xl">
+      <div className="py-2 bg-white rounded-[5px]">
         <VerticalScroll>
           <div ref={ref} className="flex flex-col w-full" style={{ height: '60vh' }}>
             {sortedByTimeMessages.map((message) => (
               <div
                 className={cl(
-                  'flex items-start gap-3 px-2 py-1',
+                  'relative flex items-start gap-1 pl-4 pr-5 py-1 group hover:bg-[#D9D9D9]',
                   isCurrentUser(message.team_member.user.id) ? 'justify-end' : 'justify-start'
                 )}
                 key={message.id}
@@ -60,22 +61,23 @@ export default function MessagesList({ messages }: MessagesListProps) {
                   backgroundColour={message.team_member.user.color}
                 />
 
-                <div className="w-3/4" style={{ background: '#F4F4F4' }}>
-                  <div className="flex group flex-col justify-start gap-1 p-2 rounded-xl border">
+                <div
+                  className={`max-w-[75%] min-w-[150px] rounded-[5px] ${
+                    isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
+                  }`}
+                >
+                  <div className="flex flex-col justify-start gap-1 p-2">
                     {/* top */}
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       {!isCurrentUser(message.team_member.user.id) ? (
-                        <>
-                          <p>{message.team_member.user.name}</p>
-                          <DropdownMenuForMessage message={message} />
-                        </>
+                        <p style={{ color: message.team_member.user.color }}>{message.team_member.user.name}</p>
                       ) : null}
                     </div>
 
                     {message?.reply_on ? (
-                      <div className="relative w-full p-1 bg-alsoit-purple-50 shadow-sm sm:text-sm overflow-hidden">
-                        <div className="absolute h-full bg-alsoit-purple-300 left-0 top-0" style={{ width: '2px' }} />
-                        <div className="ml-2 text-alsoit-purple-300 text-sm">
+                      <div className="relative w-full p-1 overflow-hidden shadow-sm bg-alsoit-purple-50 sm:text-sm">
+                        <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
+                        <div className="ml-2 text-sm text-alsoit-purple-300">
                           {message.reply_on.team_member.user.name}
                         </div>
                         <div className="ml-2 text-alsoit-gray-75">
@@ -86,7 +88,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
                     ) : null}
 
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-end">
                       {/* message */}
                       <div className="flex items-center">
                         <p className="text-alsoit-purple-300">
@@ -102,11 +104,20 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
 
                       {/* bottom */}
-                      <div className="flex items-end pl-3">
-                        <p className="text-xs text-gray-500">{moment(message.created_at).format('HH:mm')}</p>
+                      <div className="flex items-center pl-3">
+                        <span className="pl-[2px] text-[10px] text-gray-500">
+                          {moment(message.created_at).format('HH:mm')}
+                        </span>
+                        <span>
+                          <MessageSuccess />
+                        </span>
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="absolute right-0 top-0">
+                  <DropdownMenuForMessage message={message} />
                 </div>
               </div>
             ))}
@@ -128,8 +139,8 @@ export default function MessagesList({ messages }: MessagesListProps) {
               </div>
             </div>
 
-            <div className="top-4 right-0">
-              <span className="text-sm text-black border rounded bg-gray-200 flex justify-end p-1">Online</span>
+            <div className="right-0 top-4">
+              <span className="flex justify-end p-1 text-sm text-black bg-gray-200 border rounded">Online</span>
             </div>
           </section>
 
@@ -137,18 +148,18 @@ export default function MessagesList({ messages }: MessagesListProps) {
             <span className="text-3xl subpixel-antialiased text-black text-decoration-thickness:1px;">
               {activeUserPopup?.name}
             </span>
-            <div className="space-x-2 flex items-center">
+            <div className="flex items-center space-x-2">
               <CiMail className="w-4 h-4 mx-0.5 text-black" />
-              <span className="text-black text-sm subpixel-antialiased">{activeUserPopup?.email}</span>
+              <span className="text-sm subpixel-antialiased text-black">{activeUserPopup?.email}</span>
             </div>
-            <div className="space-x-2 flex items-center">
+            <div className="flex items-center space-x-2">
               <ClockIcon className="w-4 h-4 mx-0.5 text-black" />
-              <span className="text-black text-sm subpixel-antialiased">
+              <span className="text-sm subpixel-antialiased text-black">
                 {moment.utc(new Date()).format('MMMM Do YYYY, h:mm:ss a')}
               </span>
             </div>
-            <div className="w-full flex justify-center">
-              <button className="w-full text-black hover:bg-gray-200 border rounded py-2">View profile</button>
+            <div className="flex justify-center w-full">
+              <button className="w-full py-2 text-black border rounded hover:bg-gray-200">View profile</button>
             </div>
           </div>
         </div>

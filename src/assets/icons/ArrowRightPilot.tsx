@@ -6,8 +6,8 @@ export default function ArrowRightPilot({ active }: ArrowRightPilotInterface) {
   return (
     <svg
       className={`transition duration-300 ${active ? 'rotate-90' : ''}`}
-      width="3.35"
-      height="5.11"
+      width="4"
+      height="6"
       viewBox="0 0 4 6"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

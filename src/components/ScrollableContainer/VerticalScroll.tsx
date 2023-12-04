@@ -6,11 +6,12 @@ import { useAppSelector } from '../../app/hooks';
 interface CustomScrollableContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   bgColor?: string;
+  place?: string;
 }
 const DEFAULT_THUMB_HEIGHT = 20;
 const ARROWS_WRAPPER_HEIGHT = 27;
 
-export function VerticalScroll({ children, bgColor, ...props }: CustomScrollableContainerProps) {
+export function VerticalScroll({ children, bgColor, place, ...props }: CustomScrollableContainerProps) {
   // const dispatch = useAppDispatch();
 
   // update size is pilot is visible / invisible
@@ -210,14 +211,19 @@ export function VerticalScroll({ children, bgColor, ...props }: CustomScrollable
   };
 
   return (
-    <div className={`relative flex w-full overflow-hidden ${bgColor} ${isThumbVisible ? 'pr-1' : ''}`}>
+    <div
+      className={`relative flex w-full overflow-hidden ${bgColor} ${isThumbVisible ? 'pr-1' : ''}`}
+      style={{
+        paddingRight: place == 'pilot-hotkeys' ? '3px' : '0'
+      }}
+    >
       <div className={`scrollbar-hide grow ${isThumbVisible ? 'mr-1' : ''} `} ref={contentRef} {...props}>
         {children}
       </div>
       {isThumbVisible && (
-        <div className="flex flex-col items-center w-4 mt-2 group">
+        <div className={`flex flex-col items-center ${place == 'pilot-hotkeys' ? 'w-2 ml-1' : 'w-4'} mt-2 group`}>
           <div />
-          <div className="flex flex-col items-center h-full mb-4">
+          <div className={`flex flex-col items-center h-full ${place == 'pilot-hotkeys' ? 'mb-0' : 'mb-4'}`}>
             {renderScrollArrows()}
             <div className="relative flex items-center flex-grow w-2">
               <div

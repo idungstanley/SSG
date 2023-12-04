@@ -42,6 +42,7 @@ export type SortOption = {
 };
 
 interface customPropertyInfo {
+  id: string;
   name: string;
   type: string;
   color: string | null;
@@ -434,6 +435,7 @@ const initialState: TaskState = {
   customSuggestionField: [],
   newTaskData: undefined,
   newCustomPropertyDetails: {
+    id: '',
     name: '',
     type: 'Select Property Type',
     color: null,
@@ -465,7 +467,7 @@ export const taskSlice = createSlice({
       state.subtasks = action.payload;
     },
     setTaskRootIds(state, action: PayloadAction<Record<string, string[]>>) {
-      state.taskRootIds = action.payload;
+      state.taskRootIds = action.payload || [];
     },
     setRootTaskIds(state, action: PayloadAction<string[] | undefined>) {
       state.rootTaskIds = action.payload;

@@ -9,8 +9,8 @@ import {
   setToggleAllSubtaskSplit
 } from '../../../../../../../features/task/taskSlice';
 import ArrowDownFilled from '../../../../../../../assets/icons/ArrowDownFilled';
-import ArrowDrop from '../../../../../../../assets/icons/ArrowDrop';
 import { Menu } from '@mui/material';
+import ArrowOpenDown from '../../../../../../../assets/icons/ArrowOpenDown';
 
 export const COLLAPSE_ALL_TWO = 'collapse_all_two';
 export const COLLAPSE_ALL_THREE = 'collapse_all_three';
@@ -81,6 +81,8 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
   const { toggleAllSubtask, splitSubTaskState } = useAppSelector((state) => state.task);
 
+  const toggleStyle = toggleAllSubtask ? '#BF01FE' : '#424242';
+
   const [listView] = useState<boolean>(true);
   const [collapseDropdownId, setCollapseDropdownId] = useState<IOption>(dropdownItems[0]);
   const [expandDropdownId, setExpandDropdownId] = useState<IOption>(dropdownItems[0]);
@@ -134,7 +136,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
   ];
 
   const [activeViewId, setActiveViewId] = useState<string>(viewSettings[0].id);
-  const [activeLabel, setActiveLabel] = useState<string>(viewSettings[0].label);
+  // const [activeLabel, setActiveLabel] = useState<string>(viewSettings[0].label);
   const [activeViewSetting, setActiveViewSetting] = useState<IViewSetting>();
 
   return (
@@ -146,18 +148,18 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
         <HeadMenu>
           <HeadMenu.Button>
             <Button active={toggleAllSubtask}>
-              <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
-              <span className="whitespace-nowrap">
-                {subtasksTitle}: {activeLabel}
+              <SubtaskIcon color={toggleStyle} />
+              <span className="whitespace-nowrap text-xs">{subtasksTitle}</span>
+              <span className="px-1">
+                <ArrowOpenDown color={toggleStyle} />
               </span>
-              <ArrowDrop color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
             </Button>
           </HeadMenu.Button>
         </HeadMenu>
       </div>
 
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
-        <div className="w-48">
+        <div className="w-48" key="viewSettings">
           {viewSettings.map((view) => (
             <Fragment key={view.id}>
               {view.isShow ? (
@@ -170,7 +172,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
                       : 'flex items-center text-sm text-gray-600 text-left w-full'
                   }`}
                   onClick={() => {
-                    setActiveLabel(view.label);
+                    // setActiveLabel(view.label);
                     setActiveViewId(view.id);
                   }}
                 >
@@ -216,7 +218,7 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
         open={!!dropdownLevelsEl && !!activeViewSetting}
         onClose={() => setDropdownLevelsEl(null)}
       >
-        <div className="w-20">
+        <div className="w-20" key="ListSubtaks">
           {dropdownItems.map((option) => (
             <div key={option.id} className="flex items-center w-full text-sm text-left text-gray-600 hover:bg-gray-300">
               <button

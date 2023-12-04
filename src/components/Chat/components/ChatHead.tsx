@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { MdOutlineDragIndicator } from 'react-icons/md';
 import { ExtendedListColumnProps } from '../../../pages/workspace/tasks/component/views/ListColumns';
-import { IListColor } from '../../Views/ui/List/List';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { generateSortField } from '../../../utils/TaskHeader/GenerateSortField';
 import RoundedArrowUpDown from '../../../pages/workspace/tasks/component/views/listLevel/component/RoundedArrowUpDown';
@@ -16,10 +15,10 @@ interface HeadProps {
   collapseTasks: boolean;
   headerStatusColor?: string;
   listName?: string;
-  listColor?: IListColor;
+  background?: string;
 }
 
-export function ChatHead({ columns, tableHeight, collapseTasks, listColor }: HeadProps) {
+export function ChatHead({ columns, tableHeight, collapseTasks, background }: HeadProps) {
   const dispatch = useAppDispatch();
 
   const { sortArr, sortAbleArr } = useAppSelector((state) => state.task);
@@ -82,10 +81,7 @@ export function ChatHead({ columns, tableHeight, collapseTasks, listColor }: Hea
         <tr className="relative contents group">
           {/* first sticky col */}
           <th
-            style={{
-              zIndex: 2,
-              backgroundColor: listColor?.outerColour as string
-            }}
+            style={{ zIndex: 2, background: background ? background : '' }}
             className="sticky left-0 flex items-center -mb-2 font-extrabold"
           >
             <div className="flex justify-center items-center w-full py-2 truncate dBlock group opacity-90 ml-0.5">
@@ -122,7 +118,7 @@ export function ChatHead({ columns, tableHeight, collapseTasks, listColor }: Hea
                 </>
               </div>
             </div>
-            <FiPlusCircle className="w-4 h-4 mr-2 font-black AddColumnDropdownButton" />
+            <FiPlusCircle color="orange" className="w-4 h-4 font-black AddColumnDropdownButton" />
             {headerId === columns[0].id && (
               <SortModal
                 handleClose={handleClose}

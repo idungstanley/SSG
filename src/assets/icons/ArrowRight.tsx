@@ -10,7 +10,7 @@ interface Props {
   };
 }
 
-export default function ArrowRight({ active, color, dimensions }: Props) {
+export default function ArrowRight({ active, dimensions, color }: Props) {
   return (
     <svg
       width={dimensions?.width ?? '6'}

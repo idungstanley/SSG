@@ -16,6 +16,7 @@ import { setUpdateCords } from '../../../../features/hubs/hubSlice';
 import { useScroll } from '../../../../hooks/useScroll';
 import { VerticalScroll } from '../../../../components/ScrollableContainer/VerticalScroll';
 import { useQueryClient } from '@tanstack/react-query';
+import selectWidth from '../../../../utils/selectWidth';
 
 const MAX_SIDEBAR_WIDTH = dimensions.navigationBar.max;
 const MIN_SIDEBAR_WIDTH = dimensions.navigationBar.min;
@@ -83,7 +84,7 @@ export default function Sidebar() {
       {/* sidebar */}
       <section
         style={{
-          width: showSidebar ? sidebarWidthFromLS || userSettingsData?.sidebarWidth : sidebarWidthRD
+          width: showSidebar ? selectWidth(size, sidebarWidthFromLS) || userSettingsData?.sidebarWidth : sidebarWidthRD
         }}
         ref={blockRef}
         className={`relative flex flex-col border-r ${isDrag ? 'border-gray-500' : 'border-gray-300'}`}

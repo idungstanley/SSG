@@ -112,7 +112,7 @@ function GroupAssignee({
             }}
             onMouseLeave={() => handleHoverIntervalMouseOut()}
           >
-            <div className=" flex items-center justify-center -ml-2.5 rounded-full relative group/parent">
+            <div className=" flex items-center justify-center -ml-1.5 rounded-full relative group/parent">
               <ToolTip title={newData.name}>
                 <div className="relative cursor-pointer">
                   <UserAvatar
