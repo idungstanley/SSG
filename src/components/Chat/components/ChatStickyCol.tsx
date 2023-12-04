@@ -1,11 +1,9 @@
 import { ReactNode, TdHTMLAttributes, useRef, useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import RoundedCheckbox from '../../Checkbox/RoundedCheckbox';
-import { cl } from '../../../utils';
 import { Capitalize } from '../../../utils/NoCapWords/Capitalize';
 import { IChatFromList } from '../../../features/chat/chat.interfaces';
 import { setActiveChat } from '../../../features/chat/chatSlice';
-import { DEFAULT_COL_BG } from '../../Views/config';
 import { getInitials } from '../../../app/helpers';
 import AvatarWithInitials from '../../avatar/AvatarWithInitials';
 
@@ -19,7 +17,6 @@ export function ChatStickyCol({ children, chat }: ColProps) {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const badgeRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -40,20 +37,16 @@ export function ChatStickyCol({ children, chat }: ColProps) {
       <div
         ref={contentRef}
         onClick={() => dispatch(setActiveChat(chat.id))}
-        className={cl(DEFAULT_COL_BG, 'relative w-full flex border-b border-r border-gray-300 items-center h-full')}
+        className="relative w-full flex border-b border-r border-gray-300 items-center h-full bg-white group-hover:bg-alsoit-gray-125"
       >
         <div ref={divRef} className="flex flex-col items-start justify-start flex-grow max-w-full pl-2 space-y-1">
-          <div className="flex items-center w-full text-left">
+          <div className="flex justify-between items-center w-full text-left">
             <div className="flex items-center font-semibold alsoit-gray-300 text-alsoit-text-lg max-w-full">
               {/* avatar */}
               <AvatarWithInitials initials={getInitials(chat.name)} />
               <div className="ml-1">{Capitalize(chat.name)}</div>
             </div>
-            <div
-              ref={badgeRef}
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center justify-between flex-grow pl-2"
-            >
+            <div onClick={(e) => e.stopPropagation()} className="flex items-center justify-between pl-2">
               {children}
             </div>
           </div>

@@ -29,14 +29,21 @@ import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
 import CreateTagsField from './Dropdown/CreateTags';
 import Input from '../../../../input/Input';
 import { CiCircleInfo } from 'react-icons/ci';
+import { setPaletteDropDown } from '../../../../../features/account/accountSlice';
+import PaletteManager from '../../../../ColorPalette';
+import { useAbsolute } from '../../../../../hooks/useAbsolute';
 
 function NewColumn() {
   const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [activeBtn, setActiveBtn] = useState('1');
-  const { newCustomPropertyDetails, editCustomProperty } = useAppSelector((state) => state.task);
+  const { newCustomPropertyDetails, editCustomProperty, updateCords } = useAppSelector((state) => state.task);
+  const { paletteDropdown } = useAppSelector((state) => state.account);
 
-  const handleColor = (color: string | ListColourProps | null) => {
+  const { show, paletteId } = paletteDropdown;
+  const { cords, relativeRef } = useAbsolute(updateCords, 266);
+
+  const handleColor = (color?: string | ListColourProps | null) => {
     dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, color: color as string }));
   };
 
@@ -77,17 +84,17 @@ function NewColumn() {
         <EditDropdown />
       ) : (
         <div className="w-full">
-          <div className="flex items-center justify-between w-full gap-2 my-4">
+          <div className="flex items-center justify-between w-full gap-2 my-2 mb-3">
             <div className="w-2/4">
-              <p className="mb-1 text-alsoit-text-xi text-alsoit-gray-100">TYPE</p>
+              <p className="mb-1 ml-1 text-alsoit-text-xi text-alsoit-gray-1001">TYPE</p>
               <ColumnTypeDropdown />
             </div>
             <div className="w-2/4">
               <div className="flex items-center w-full rounded-md" style={{ borderRadius: '6px' }}>
                 <div className="relative flex grow">
                   <Input
-                    labelClasses="text-alsoit-text-xi text-alsoit-gray-100"
-                    placeholder="Hub Name"
+                    labelClasses="text-alsoit-text-xi text-alsoit-gray-100 ml-1"
+                    placeholder="Name Property"
                     height="h-8"
                     label="TITLE"
                     name="name"
@@ -102,14 +109,19 @@ function NewColumn() {
                       newCustomPropertyDetails.style?.is_italic === '1' && 'italic',
                       newCustomPropertyDetails.style?.is_underlined === '1' && 'underline underline-offset-2'
                     )}
+                    styles={{ color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424' }}
                   />
-                  <button className="absolute flex items-center cursor-pointer right-7 top-7" onClick={handleClick}>
+                  <button
+                    className="absolute flex items-center cursor-pointer right-7 top-7"
+                    onClick={() => dispatch(setPaletteDropDown({ show: true, paletteId: 'property' }))}
+                  >
                     <Picker />
                   </button>
                   <button className="absolute flex items-center cursor-pointer right-2 top-7" onClick={handleClick}>
                     <CiCircleInfo />
                   </button>
                 </div>
+
                 <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
                   <div style={{ width: '276px' }} className="w-full p-4 rounded-2xl">
                     <div className="flex justify-between bg-gray-200 rounded-2xl">
@@ -156,6 +168,15 @@ function NewColumn() {
                 </AlsoitMenuDropdown>
               </div>
             </div>
+          </div>
+          <div className="flex justify-center w-full" ref={relativeRef}>
+            {paletteId === 'property' && show && (
+              <PaletteManager
+                cords={{ top: cords.top - 30, left: cords.left + 130 }}
+                setPaletteColor={handleColor}
+                title="Property"
+              />
+            )}
           </div>
           {newCustomPropertyDetails.type.toLowerCase() in properties
             ? properties[newCustomPropertyDetails.type.toLowerCase()]

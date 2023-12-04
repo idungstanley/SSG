@@ -19,6 +19,7 @@ import useTaskShortCut from '../../../utils/taskShortCut/useTaskShortCut';
 import { getOneTaskServices } from '../../../features/task/taskService';
 import { setActiveTabId } from '../../../features/workspace/workspaceSlice';
 import { pilotTabs } from '../../../app/constants/pilotTabs';
+import AttachChatFileModal from '../../../components/Chat/components/ChatSection/components/AttachChatFileModal';
 
 function MainLayout() {
   const location = useLocation();
@@ -102,6 +103,7 @@ function MainLayout() {
                 endpoint={'attachments'}
                 invalidateQuery={['attachments'] as InvalidateQueryFilters<unknown>}
               />
+              <AttachChatFileModal />
               {fileUploadProps.fieldId && <UploadToFile />}
             </div>
           </div>

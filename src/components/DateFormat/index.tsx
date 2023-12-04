@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import moment, { MomentInput } from 'moment';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import CalenderIcon from '../../assets/icons/CalenderIcon';
@@ -20,19 +20,31 @@ interface dateFormatProps {
   type?: 'start_date' | 'end_date' | 'created_at' | 'updated_at';
   isDueDate?: boolean;
   icon?: React.ReactNode;
+  activeColumn?: boolean[];
 }
 
-export default function DateFormat({ date, task, font = 'text-sm', type, isDueDate = false, icon }: dateFormatProps) {
+export default function DateFormat({
+  date,
+  task,
+  font = 'text-sm',
+  type,
+  isDueDate = false,
+  icon,
+  activeColumn
+}: dateFormatProps) {
   const dispatch = useAppDispatch();
 
   const { date_format } = useAppSelector((state) => state.userSetting);
   const { selectedDate } = useAppSelector((state) => state.workspace);
-  const { selectedListIds, selectedTaskParentId, selectedTasksArray } = useAppSelector((state) => state.task);
+  const { selectedListIds, selectedTaskParentId, selectedTasksArray, KeyBoardSelectedTaskData, taskColumnIndex } =
+    useAppSelector((state) => state.task);
 
   const [showDataPicker, setShowDatePicker] = useState<boolean>(false);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [resetDate, setResetDate] = useState<boolean>(false);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useMultipleUpdateTasksDate({
     ids: selectedTasksArray,
@@ -73,9 +85,31 @@ export default function DateFormat({ date, task, font = 'text-sm', type, isDueDa
     setTaskId(task?.id as string);
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setShowDatePicker(!!containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div onClick={(e) => handleClick(e)}>
-      <span className={`text-sm font-bold text-gray-400 ${font}`} style={{ fontSize: font }}>
+    <div
+      onClick={(e) => handleClick(e)}
+      tabIndex={0}
+      ref={containerRef}
+      className="w-full h-full flex items-center justify-center focus:ring-0"
+    >
+      <span className={`text-sm font-medium text-gray-400 ${font}`} style={{ fontSize: font }}>
         {showDataPicker && (
           <DatePicker
             styles="flex justify-center"

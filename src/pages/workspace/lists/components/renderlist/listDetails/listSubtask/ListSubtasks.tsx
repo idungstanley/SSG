@@ -81,6 +81,8 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
 
   const { toggleAllSubtask, splitSubTaskState } = useAppSelector((state) => state.task);
 
+  const toggleStyle = toggleAllSubtask ? '#BF01FE' : '#424242';
+
   const [listView] = useState<boolean>(true);
   const [collapseDropdownId, setCollapseDropdownId] = useState<IOption>(dropdownItems[0]);
   const [expandDropdownId, setExpandDropdownId] = useState<IOption>(dropdownItems[0]);
@@ -146,10 +148,10 @@ export default function ListSubtasks({ subtasksTitle }: { subtasksTitle: string 
         <HeadMenu>
           <HeadMenu.Button>
             <Button active={toggleAllSubtask}>
-              <SubtaskIcon color={toggleAllSubtask ? '#BF01FE' : '#424242'} />
+              <SubtaskIcon color={toggleStyle} />
               <span className="whitespace-nowrap text-xs">{subtasksTitle}</span>
               <span className="px-1">
-                <ArrowOpenDown color="black" />
+                <ArrowOpenDown color={toggleStyle} />
               </span>
             </Button>
           </HeadMenu.Button>

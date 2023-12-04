@@ -24,7 +24,7 @@ function FileIcons({ fileExtension, filePath, fileName, width, height }: fileIco
     case 'jpeg':
     case 'png':
     case 'gif':
-      icon = <img className={iconStyle} src={filePath} alt="" />;
+      icon = <img className="w-[50px] max-h-[50px]" src={filePath} alt="" />;
       break;
     case 'doc':
     case 'docx':

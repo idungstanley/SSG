@@ -20,7 +20,7 @@ function AvatarWithInitials({
   width = 'w-7',
   backgroundColour = '#4D98F2',
   roundedStyle = 'circular',
-  textSize = '10px',
+  textSize = '8px',
   badge
 }: AvatarWithInitialsProps) {
   const { CompactView } = useAppSelector((state) => state.task);
@@ -31,9 +31,11 @@ function AvatarWithInitials({
         className={`inline-flex items-center justify-center z-5 ${height} ${width} ${
           roundedStyle === 'circular' && 'rounded-full'
         } ${roundedStyle === 'rounded' && 'rounded'}`}
-        style={{ backgroundColor: backgroundColour }}
+        style={{
+          backgroundColor: backgroundColour
+        }}
       >
-        <span className="font-bold leading-none " style={{ fontSize: textSize, color: textColor }}>
+        <span className="font-bold leading-none" style={{ fontSize: textSize, color: textColor }}>
           {initials}
         </span>
       </span>
@@ -42,7 +44,7 @@ function AvatarWithInitials({
           src={nonWatcherBadge}
           alt=""
           className="absolute w-2 h-2 z-5"
-          style={CompactView ? { left: '18px' } : { left: '25px', bottom: '1px' }}
+          style={CompactView ? { left: '16px', top: '12px' } : { left: '25px', bottom: '1px' }}
         />
       )}
     </div>

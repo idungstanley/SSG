@@ -97,6 +97,7 @@ interface workspaceState {
   activeView: IView | null;
   entityForPermissions?: IList | IWallet | IHub;
   popoutItems: popoutItems;
+  isOpenTootipContent: boolean;
 }
 
 const initialState: workspaceState = {
@@ -172,7 +173,8 @@ const initialState: workspaceState = {
     calendar: true,
     createNew: true,
     schedule: true
-  }
+  },
+  isOpenTootipContent: false
 };
 
 export const wsSlice = createSlice({
@@ -421,6 +423,9 @@ export const wsSlice = createSlice({
     },
     setSchedule(state) {
       state.popoutItems = { ...state.popoutItems, schedule: !state.popoutItems.schedule };
+    },
+    setOpenTootipContent(state, action: PayloadAction<boolean>) {
+      state.isOpenTootipContent = action.payload;
     }
   }
 });
@@ -495,7 +500,8 @@ export const {
   setActiveView,
   setEntityForPermissions,
   setActiveSubLogsTabId,
-  setEditingPilotDetailsTitle
+  setEditingPilotDetailsTitle,
+  setOpenTootipContent
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

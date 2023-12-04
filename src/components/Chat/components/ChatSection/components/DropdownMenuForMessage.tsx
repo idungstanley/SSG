@@ -8,6 +8,13 @@ import { IMessage } from '../../../../../features/chat/chat.interfaces';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import DropdownTitle from '../../../../DropDowns/DropdownTitle';
 import DropdownSubtitle from '../../../../DropDowns/DropdownSubtitle';
+import ChatStar from '../../../../../assets/icons/ChatStar';
+import ChatForward from '../../../../../assets/icons/ChatForward';
+import ChatReact from '../../../../../assets/icons/ChatReact';
+import ChatBookmark from '../../../../../assets/icons/ChatBookmark';
+import ChatEdit from '../../../../../assets/icons/ChatEdit';
+import ChatReport from '../../../../../assets/icons/ChatReport';
+import ChatDelete from '../../../../../assets/icons/ChatDelete';
 
 interface IDropdownMenuForMessageProps {
   message: IMessage;
@@ -26,6 +33,54 @@ export default function DropdownMenuForMessage({ message }: IDropdownMenuForMess
         dispatch(setSelectedMessage(message));
         setAnchorEl(null);
       }
+    },
+    {
+      title: 'Reply privately',
+      icon: <ChatReply color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'React',
+      icon: <ChatReact color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'Forward',
+      icon: <ChatForward color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'Star',
+      icon: <ChatStar color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'Bookmark',
+      icon: <ChatBookmark color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'Edit',
+      icon: <ChatEdit color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'Report',
+      icon: <ChatReport color="orange" />,
+      unusing: true,
+      onClick: () => null
+    },
+    {
+      title: 'Delete',
+      icon: <ChatDelete color="orange" />,
+      unusing: true,
+      onClick: () => null
     }
   ];
 
@@ -39,17 +94,17 @@ export default function DropdownMenuForMessage({ message }: IDropdownMenuForMess
         </HeadMenu>
       </div>
       <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
-        <div className="p-1" style={{ minWidth: '147px' }}>
+        <div className="p-2" style={{ minWidth: '200px' }}>
           <DropdownTitle content="DROPDOWN" />
           <DropdownSubtitle content="DROPDOWN OPTIONS" />
           {options.map((option) => (
             <div
               key={option.title}
               onClick={option.onClick}
-              className="flex items-center px-2 py-1 hover:bg-alsoit-gray-50 text-sm text-gray-600 text-left space-x-2 w-full rounded-md cursor-pointer"
+              className="flex items-center px-2 py-1 hover:bg-alsoit-gray-50 text-[13px] text-gray-600 text-left w-full rounded-md cursor-pointer"
             >
-              <span className="mr-2">{option.icon}</span>
-              {option.title}
+              <span className="mr-1">{option.icon}</span>
+              <span className={`${option.unusing && 'text-[orange]'}`}>{option.title}</span>
             </div>
           ))}
         </div>
