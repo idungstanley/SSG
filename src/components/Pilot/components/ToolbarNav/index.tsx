@@ -8,6 +8,7 @@ import { initialPlaces } from '../../../../layout/components/MainLayout/Sidebar/
 import PilotNavIcon from '../../../../assets/icons/PilotNavIcon';
 import ToolTip from '../../../Tooltip/Tooltip';
 import AlsoitMenuDropdown from '../../../DropDowns';
+import ActiveEntityAvatar from '../../../avatar/ActiveEntityAvatar';
 
 interface ToolbarNavInterface {
   id: string | null;
