@@ -21,6 +21,12 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as string[];
 
+interface popoutItems {
+  calendar: boolean;
+  createNew: boolean;
+  schedule: boolean;
+}
+
 interface workspaceState {
   workspace: string[];
   currentItemId: string | null;
@@ -90,6 +96,7 @@ interface workspaceState {
   nestedTimeEntityId: string | null;
   activeView: IView | null;
   entityForPermissions?: IList | IWallet | IHub;
+  popoutItems: popoutItems;
 }
 
 const initialState: workspaceState = {
@@ -160,7 +167,12 @@ const initialState: workspaceState = {
   activeHotkeyIds: hotkeyIdsFromLS,
   nestedTimeEntityId: null,
   activeView: null,
-  entityForPermissions: undefined
+  entityForPermissions: undefined,
+  popoutItems: {
+    calendar: true,
+    createNew: true,
+    schedule: true
+  }
 };
 
 export const wsSlice = createSlice({
@@ -400,11 +412,23 @@ export const wsSlice = createSlice({
     },
     setEntityForPermissions(state, action: PayloadAction<IList | IWallet | IHub | undefined>) {
       state.entityForPermissions = action.payload;
+    },
+    setCalendar(state) {
+      state.popoutItems = { ...state.popoutItems, calendar: !state.popoutItems.calendar };
+    },
+    setCreateNew(state) {
+      state.popoutItems = { ...state.popoutItems, createNew: !state.popoutItems.createNew };
+    },
+    setSchedule(state) {
+      state.popoutItems = { ...state.popoutItems, schedule: !state.popoutItems.schedule };
     }
   }
 });
 
 export const {
+  setSchedule,
+  setCreateNew,
+  setCalendar,
   createWorkspace,
   checkIfWs,
   setCurrentItem,

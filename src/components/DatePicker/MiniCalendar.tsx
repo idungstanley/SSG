@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import { changeDateMonth, getCalendarRows } from '../../utils/calendar';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setActivityFilterDate, setSelectedDate } from '../../features/workspace/workspaceSlice';
+import { setActivityFilterDate, setCalendar, setSelectedDate } from '../../features/workspace/workspaceSlice';
 import { setHistoryMemory, setTaskSelectedDate } from '../../features/task/taskSlice';
 import CircleArrowLeft from '../../assets/icons/CircleArrowLeft';
 import CircleArrowRight from '../../assets/icons/CircleArrowRight';
@@ -34,7 +34,7 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
   const [hoveredDate, setHoveredDate] = useState<dayjs.Dayjs | null>(null);
 
   const { HistoryFilterMemory, selectedDate: taskTime } = useAppSelector((state) => state.task);
-  const { selectedDate, activityFilterDate } = useAppSelector((state) => state.workspace);
+  const { selectedDate, activityFilterDate, popoutItems } = useAppSelector((state) => state.workspace);
   const { start_week } = useAppSelector((state) => state.userSetting);
 
   const handleClick = (date: dayjs.Dayjs) => {
@@ -154,6 +154,8 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
           )}
           {type === 'pop-out' && (
             <CollapseItems
+              open={popoutItems.calendar}
+              handleToggle={() => dispatch(setCalendar())}
               headerBg="bg-alsoit-gray-75"
               header="calendar"
               headerText="text-white"
@@ -215,11 +217,11 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
                               key={`${text}-${i}`}
                               className={`w-8 h-8 flex justify-center items-center text-alsoit-text-md font-semibold cursor-pointer relative  ${
                                 isStartDate(value)
-                                  ? 'bg-blue-600 text-white hover:bg-blue-600'
+                                  ? 'bg-alsoit-success-75 text-white hover:bg-blue-600'
                                   : isEndDate(value) && range
-                                  ? 'bg-blue-600 text-white hover:bg-blue-600'
+                                  ? 'bg-alsoit-success-75 text-white hover:bg-blue-600'
                                   : isDateInRange(value) && range
-                                  ? 'bg-blue-600 text-white hover:bg-blue-600'
+                                  ? 'bg-alsoit-success-75 text-white hover:bg-blue-600'
                                   : hoveredDate && value.isSame(hoveredDate, 'day') && !taskTime?.to
                                   ? 'bg-blue-200 hover:bg-alsoit-gray-50'
                                   : ''
