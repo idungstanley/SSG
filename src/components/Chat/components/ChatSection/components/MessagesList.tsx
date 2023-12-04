@@ -74,6 +74,22 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       ) : null}
                     </div>
 
+                    {message?.attachments.length ? (
+                      <>
+                        {message.attachments.map((file) => (
+                          <div key={file.id} className="w-full p-1 shadow-sm bg-alsoit-purple-50 sm:text-sm">
+                            <div className="flex items-center justify-center max-h-[100px] ml-2 text-sm text-alsoit-purple-300">
+                              <img
+                                className="h-full max-h-[100px]"
+                                src={file.path}
+                                alt={file.physical_file.display_name}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    ) : null}
+
                     {message?.reply_on ? (
                       <div className="relative w-full p-1 overflow-hidden shadow-sm bg-alsoit-purple-50 sm:text-sm">
                         <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />

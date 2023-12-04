@@ -12,23 +12,9 @@ export default function AttachChatFileModal() {
   const { showFileAttachModal } = useAppSelector((state) => state.chat);
 
   // init
-  const uppy = new Uppy({ autoProceed: false });
-
-  uppy.on('file-added', (file) => {
-    console.log('file-added', file);
-  });
-
-  // uppy.on('upload', (data) => {
-  //   // data object consists of `id` with upload ID and `fileIDs` array
-  //   // with file IDs in current upload
-  //   // data: { id, fileIDs }
-  //   // const { id, files } = data;
-  //   console.log('upload', data);
-  // });
+  const uppy = new Uppy();
 
   uppy.on('complete', (result) => {
-    console.log('successful files:', typeof result.successful);
-    console.log('failed files:', result.failed);
     dispatch(setChatAttachmentsFiles(result.successful));
     dispatch(setShowFileAttachModal(false));
   });

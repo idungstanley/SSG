@@ -67,8 +67,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         onSendMessage({
           message: messageWithUserIds,
           chatId,
-          selectedMessage: selectedMessage as IMessage | null,
-          files: []
+          selectedMessage: selectedMessage as IMessage | null
         });
 
         messageRef.current.value = '';
@@ -82,7 +81,7 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         message: '',
         chatId,
         selectedMessage: selectedMessage as IMessage | null,
-        files: chatAttachmentsFiles.length ? chatAttachmentsFiles.map((fileData) => fileData.preview as string) : []
+        files: chatAttachmentsFiles.length ? chatAttachmentsFiles.map((file) => file.data) : []
       });
     }
     dispatch(setChatAttachmentsFiles([]));

@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import requestNew from '../../app/requestNew';
 import { itemType } from '../../types';
 import { IChatsRes, IChatFromList, IChatRes, IChat, IMessage } from './chat.interfaces';
-import { UploadResult, UploadedUppyFile } from '@uppy/core';
 
 export const useGetChats = (data: { type?: itemType; id?: string | null }) =>
   useQuery<IChatsRes, unknown, IChatFromList[]>(
@@ -77,19 +76,23 @@ const sendMessageToChat = (data: {
   chatId: string | null;
   message: string;
   selectedMessage: IMessage | null;
-  // files: UploadedUppyFile<Record<string, unknown>, Record<string, unknown>>[];
-  // files: Blob[] | File[];
-  files: string[];
+  files?: (Blob | File)[];
 }) => {
   const { chatId, message, selectedMessage, files } = data;
+
+  const formData = new FormData();
+  if (files) {
+    files.forEach((file, index) => {
+      formData.append(`files[${index}]`, file);
+    });
+  }
+  formData.append('message', message);
+  formData.append('reply_on_id', selectedMessage ? selectedMessage?.id : '');
+
   const request = requestNew({
     url: `chats/${chatId}/message`,
     method: 'POST',
-    data: {
-      message: message,
-      reply_on_id: selectedMessage ? selectedMessage?.id : '',
-      files
-    }
+    data: formData
   });
   return request;
 };
