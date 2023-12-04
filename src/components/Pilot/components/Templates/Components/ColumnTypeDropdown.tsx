@@ -129,6 +129,7 @@ export default function ColumnTypeDropdown() {
                   <>
                     <SubtractWrapper
                       icon={item.icon}
+                      key={item.title}
                       isActive={activeDropdownOption === item.title}
                       handleClick={handleActiveDropdownOption}
                       label={item.title}

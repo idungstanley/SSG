@@ -26,7 +26,6 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
   const [modalNavTree, setModalNavTree] = useState<ToolbarNavInterface[]>([]);
   const activeItems = document.querySelectorAll('.nav-item-parent .nav-item');
   const activePlace = initialPlaces.filter((place) => place.id == activePlaceId);
-
   const activeNavItemElement = document.querySelectorAll('.active-nav-item');
 
   const activeNavItem = Array.from(activeNavItemElement)
