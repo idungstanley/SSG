@@ -33,7 +33,7 @@ function AvatarWithInitials({
         } ${roundedStyle === 'rounded' && 'rounded'}`}
         style={{ backgroundColor: backgroundColour }}
       >
-        <span className="font-bold leading-none " style={{ fontSize: textSize, color: textColor }}>
+        <span className="font-bold leading-none" style={{ fontSize: textSize, color: textColor }}>
           {initials}
         </span>
       </span>

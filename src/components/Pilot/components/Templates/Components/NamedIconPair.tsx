@@ -12,6 +12,8 @@ interface NamedIconPairProps {
   isLeadingIcon?: boolean;
   fadeOutColour?: boolean;
   color?: string;
+  textColor?: string;
+  iconColor?: string;
   type?: NamedIconPairType;
 }
 
@@ -23,6 +25,8 @@ export default function NamedIconPair({
   childName,
   fadeOutColour,
   type = 'property',
+  textColor,
+  iconColor,
   color = 'text-white'
 }: NamedIconPairProps) {
   return (
@@ -35,33 +39,32 @@ export default function NamedIconPair({
     >
       {/* First Section */}
       <div className="flex items-center w-full gap-1">
-        <div className="flex items-center justify-center w-5 h-5 cursor-pointer">{parentIcon}</div>
+        <div className={`flex items-center justify-center w-5 h-5 cursor-pointer ${textColor}`}>{parentIcon}</div>
         <ToolTip title={parentName}>
           <div
             className={`relative flex items-center overflow-hidden  ${
               type === 'card' && (fadeOutColour ? 'green fade-out' : 'orange fade-out')
             }`}
           >
-            <div className="overflow-hidden font-semibold">{parentName}</div>
+            <div className={`overflow-hidden font-semibold ${textColor}`}>{parentName}</div>
           </div>
         </ToolTip>
       </div>
       <div className="flex items-center gap-1">
         {/* Arrow Icon */}
-        <span className="flex items-center w-4 h-4">
+        <span className={`flex items-center w-4 h-4 ${iconColor}`}>
           <FaCaretRight />
         </span>
-
         {/* Second Section */}
         <div className="flex items-center w-full gap-1">
-          <div className="flex items-center justify-center w-5 h-5 cursor-pointer">{childIcon}</div>
+          <div className={`flex items-center justify-center w-5 h-5 cursor-pointer ${textColor}`}>{childIcon}</div>
           <ToolTip title={childName}>
             <div
               className={`relative flex items-center overflow-hidden  ${
                 type === 'card' && (fadeOutColour ? 'green fade-out' : 'orange fade-out')
               }`}
             >
-              <p className="overflow-hidden font-semibold whitespace-nowrap">{childName}</p>
+              <p className={`overflow-hidden font-semibold whitespace-nowrap ${textColor}`}>{childName}</p>
             </div>
           </ToolTip>
         </div>
