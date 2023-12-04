@@ -94,7 +94,7 @@ export default function DropdownMenuForMessage({ message }: IDropdownMenuForMess
         </HeadMenu>
       </div>
       <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
-        <div className="p-1" style={{ minWidth: '200px' }}>
+        <div className="p-2" style={{ minWidth: '200px' }}>
           <DropdownTitle content="DROPDOWN" />
           <DropdownSubtitle content="DROPDOWN OPTIONS" />
           {options.map((option) => (
