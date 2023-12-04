@@ -71,7 +71,7 @@ export default function EfficiencySubTabs() {
         <section>
           <div
             className="grid px-1 grid-cols-2"
-            style={{ borderBottom: `3px solid ${activeSubComingTabId ? '#ebd1fc' : 'transparent'}` }}
+            style={{ borderBottom: `2px solid ${activeSubComingTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {ticketsOptions.map((item) => (
               <SubtabDrag

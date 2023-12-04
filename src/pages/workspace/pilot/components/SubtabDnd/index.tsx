@@ -13,6 +13,7 @@ import { pilotTabs } from '../../../../../app/constants/pilotTabs';
 import BlurEffect from '../../../../../components/BlurEffect';
 import ActivePilotSubTabRight from '../../../../../assets/icons/ActivePilotSubTabRight';
 import ActivePilotSubTabLeft from '../../../../../assets/icons/ActivePilotSubTabLeft';
+import React from 'react';
 
 interface TabProps {
   id: string;
@@ -70,17 +71,27 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
           <div
             key={id}
             onClick={() => handleClick(id)}
-            className={`relative w-full h-full flex justify-center flex-grow p-1 font-medium cursor-pointer group hover:text-primary-700  ${
-              id === activeSub && 'bg-primary-200 rounded-t-md text-primary-700'
+            className={`relative w-full h-full flex justify-center flex-grow p-1 font-medium cursor-pointer group text-alsoit-gray-300 hover:text-alsoit-purple-300 transition duration-300 ${
+              id === activeSub && 'bg-alsoit-purple-50 rounded-t-md text-alsoit-purple-300'
             }`}
+            style={{
+              paddingTop: '7px'
+            }}
           >
             <span
               className={`${!showPilot && 'text-xs'} ${
                 id === activeSub && !showPilot && 'bg-green-500 p-2 rounded'
               } flex items-center justify-center gap-1 w-full overflow-hidden`}
             >
-              <span className="pl-1 focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
-                {icon ? icon : <img src={source} alt="Hub Icon" className="w-2 h-2" />}
+              <span className="pl-0.5 focus:cursor-move" ref={setNodeRef} {...attributes} {...listeners}>
+                {icon ? (
+                  React.cloneElement(icon, {
+                    active: id === activeSub,
+                    color: id === activeSub ? '#BF01FE' : '#424242'
+                  })
+                ) : (
+                  <img src={source} alt="Hub Icon" className="w-2 h-2" />
+                )}
               </span>
               {item && <p className="whitespace-nowrap">{item.name}</p>}
             </span>
@@ -92,23 +103,26 @@ export default function SubtabDrag({ id, item, items, icon, showPilot, activeSub
               width="20px"
               height="28px"
               backgroundImage={`linear-gradient(to right, transparent 0%, ${
-                id === activeSub ? '#ebd1fc 80%' : '#f3f4f6 80%'
+                id === activeSub ? '#F9E6FF 80%' : '#f3f4f6 80%'
               })`}
               style={{ borderTopRightRadius: '6px' }}
             />
             {id === activeSub ? (
               <>
                 <div className="absolute bottom-0 z-10" style={{ left: '-6px' }}>
-                  <ActivePilotSubTabLeft color="#ebd1fc" />
+                  <ActivePilotSubTabLeft color="#F9E6FF" />
                 </div>
                 <div className="absolute bottom-0 z-10" style={{ right: '-6px' }}>
-                  <ActivePilotSubTabRight color="#ebd1fc" />
+                  <ActivePilotSubTabRight color="#F9E6FF" />
                 </div>
               </>
             ) : null}
           </div>
           {id !== activeSub && id !== leftItem?.id && id !== items[items.length - 1].id ? (
-            <span className="absolute right-0 bg-gray-300" style={{ width: '1px', height: '15px' }} />
+            <span
+              className="absolute right-0"
+              style={{ width: '0.6px', height: '15px', backgroundColor: 'rgba(178, 178, 178, .3)' }}
+            />
           ) : null}
         </section>
       ) : null}

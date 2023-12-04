@@ -72,8 +72,8 @@ export default function AutomationsSubTabs() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid grid-cols-2 px-1"
-            style={{ borderBottom: `3px solid ${activeSubComingTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid grid-cols-2 px-1 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubComingTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {automationsOptions.map((item) => (
               <SubtabDrag

@@ -122,8 +122,8 @@ export default function HubManagerSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid grid-cols-3 px-1"
-            style={{ borderBottom: `3px solid ${activeSubHubManagerTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid grid-cols-3 px-1 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubHubManagerTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {HubManagerOptions.map((item) => (
               <SubtabDrag
