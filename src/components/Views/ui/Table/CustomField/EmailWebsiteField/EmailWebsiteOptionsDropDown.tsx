@@ -49,6 +49,7 @@ export function EmailWebsiteDropDown({ fieldOptions, fieldType, taskId }: Props)
   useEffect(() => {
     if (focusedIndex) {
       fieldOptions[focusedIndex].callBack();
+      dispatch(setTaskRowFocus(!taskRowFocus));
     }
   }, [mountGuard]);
 

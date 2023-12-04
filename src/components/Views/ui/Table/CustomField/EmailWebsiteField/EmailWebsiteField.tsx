@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ICustomField } from '../../../../../../features/task/taskSlice';
+import { ICustomField, setTaskRowFocus } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
 import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
 import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { Task } from '../../../../../../features/task/interface.tasks';
 import DropdownWithHeader from '../../../../../Pilot/components/TimeClock/components/DropdownWithHeader';
 import TrashIcon from '../../../../../../assets/icons/TrashIcon';
@@ -25,6 +25,8 @@ const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websitePattern = /^(?:(https?:\/\/|www\.)[\w.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})|[\w.-]+\.[a-zA-Z]{2,})$/;
 
 function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activeColumn, task }: EmailFieldProps) {
+  const dispatch = useAppDispatch();
+
   const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -59,8 +61,10 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
         fieldId
       });
       setAnchorEl(null);
+      dispatch(setTaskRowFocus(true));
     } else if (!isValidEntry(currentValue)) {
       setCurrentValue('-');
+      dispatch(setTaskRowFocus(true));
     }
   };
 
@@ -86,6 +90,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     });
     setAnchorEl(null);
     setCurrentValue('-');
+    dispatch(setTaskRowFocus(true));
   };
 
   const handleCopyTexts = async () => {
@@ -94,6 +99,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     setTimeout(() => {
       setAnchorEl(null);
       setIsCopied(0);
+      dispatch(setTaskRowFocus(true));
     }, 500);
   };
 
