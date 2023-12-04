@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import AssigneeDropdown from '../../../../../Assigness';
@@ -7,12 +7,16 @@ import { ITeamMembersAndGroup } from '../../../../../../features/settings/teamMe
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { useGetTeamMembers } from '../../../../../../features/settings/teamMembers/teamMemberService';
 import GroupAssignee from '../../../../../../pages/workspace/tasks/assignTask/GroupAssignee';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface PeopleField {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
   entityCustomProperty?: IField;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
 interface array2 {
@@ -24,8 +28,10 @@ const getActiveOptions = (teamMembers: ITeamMembersAndGroup[] | undefined, taskV
   return teamMembers?.filter((obj1) => taskValues?.find((obj2) => obj2.value === obj1.id));
 };
 
-function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: PeopleField) {
-  const [anchorEl, setAncholEl] = useState<null | HTMLElement>(null);
+function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty, activeColumn, task }: PeopleField) {
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const taskActiveValues = taskCustomFields?.values;
   const { data: teamMembers } = useGetTeamMembers({ page: 0, query: '' });
@@ -34,6 +40,8 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty }
   const allowGroups: boolean = entityCustomProperty?.properties?.include_groups as boolean;
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClick = (member: ITeamMembersAndGroup, type: string) => {
     const existValues = taskActiveValues
@@ -49,9 +57,26 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty }
     });
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setAnchorEl(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full">
-      <button className="w-full flex justify-center" onClick={(e) => setAncholEl(e.currentTarget)}>
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex items-center">
+      <button className="w-full flex justify-center items-center" onClick={(e) => setAnchorEl(e.currentTarget)}>
         {assignedMembers?.length ? (
           <GroupAssignee data={assignedMembers as ITeamMembersAndGroup[]} teams={false} />
         ) : (
@@ -65,7 +90,7 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty }
         )}
       </button>
 
-      <AssigneeDropdown anchor={anchorEl} setAnchor={setAncholEl} handleClick={handleClick} allowGroups={allowGroups} />
+      <AssigneeDropdown anchor={anchorEl} setAnchor={setAnchorEl} handleClick={handleClick} allowGroups={allowGroups} />
     </div>
   );
 }
