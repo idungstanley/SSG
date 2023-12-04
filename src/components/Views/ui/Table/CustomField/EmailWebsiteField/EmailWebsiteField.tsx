@@ -234,8 +234,8 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
           {fieldOptions.map((option, index) => (
             <button
               key={index}
-              className={`flex w-full gap-2 items-center px-1 py-2 hover:bg-alsoit-purple-50 rounded ${
-                focusedIndex === index ? 'bg-alsoit-purple-50' : ''
+              className={`flex w-full gap-2 items-center px-1 py-2 hover:bg-alsoit-gray-50 rounded ${
+                focusedIndex === index ? 'bg-alsoit-gray-50' : ''
               }`}
               onClick={option.callBack}
             >
