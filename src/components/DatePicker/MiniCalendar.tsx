@@ -292,13 +292,13 @@ export default function MiniDatePicker({ range, miniMode, fullCalendar, dateFilt
               <div
                 className={
                   fullCalendar && !miniMode
-                    ? 'w-full flex justify-center space-x-7'
-                    : 'w-full flex justify-center space-x-4'
+                    ? 'w-full flex justify-center space-x-5'
+                    : 'w-full flex justify-center space-x-2'
                 }
               >
                 {rows[0].map(({ value }, i) => (
                   <div key={i} className="px-1.5 bg-alsoit-gray-50 rounded-md p-1">
-                    {value.format('dd')}
+                    {value.format('ddd')}
                   </div>
                 ))}
               </div>
