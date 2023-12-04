@@ -6,7 +6,7 @@ import { useChatScroll } from '../../hooks';
 import SearchIcon from '../../assets/icons/SearchIcon';
 import { useState } from 'react';
 import { getInitials } from '../../app/helpers';
-import { FaFolderOpen } from 'react-icons/fa';
+import { FaFolder, FaFolderOpen } from 'react-icons/fa';
 import DropDownArrow from '../../assets/icons/DropDownArrow';
 
 interface ToolbarNavInterface {
@@ -34,6 +34,7 @@ export default function ModalPilotNav({
 }: ModalPilotNavProps) {
   const ref = useChatScroll(modalNavTree);
   const [searchQuery, setSearchQuery] = useState('');
+  const [openedNavItems, setOpenedNavItems] = useState<string[]>([]);
 
   const removeElementsAfterKey = (arr: ToolbarNavInterface[], key: string | null): ToolbarNavInterface[] => {
     const index = key ? arr.findIndex((item) => item.id === key) : -1;
@@ -94,58 +95,44 @@ export default function ModalPilotNav({
     paddingLeftThird = 'pl-0';
   }
 
-  const pilotModal = document.getElementById('pilot_nav_modal');
-
-  document.addEventListener('mousedown', (event) => {
-    const clickedElement = event.target as HTMLElement;
-    console.log(pilotModal && !pilotModal.contains(clickedElement));
-
-    if (pilotModal && !pilotModal.contains(clickedElement)) {
-      modalItemClick(null);
-    }
-  });
-
   const hasChildren = (itemId: string | null) => {
     return filteredNavTree.filter((item) => item.parent == itemId).length > 0;
   };
 
+  const ToggleOpenedNavItems = (itemId: string, parentId: string) => {
+    console.log(parentId);
+    if (openedNavItems.filter((item) => item == itemId).length > 0) {
+      setOpenedNavItems(openedNavItems.filter((item) => item !== itemId));
+    } else {
+      setOpenedNavItems([...openedNavItems, itemId]);
+    }
+  };
+
   return (
     <div
-      id="pilot_nav_modal"
-      className="bg-white fixed pb-3 pilot-modal-wrapper"
+      className="mb-1.5"
       style={{
         width: '200px',
         height: '100%',
         maxHeight: '372px',
-        minHeight: '100px',
-        top: '40px',
-        zIndex: '51',
-        borderRadius: '5px',
-        boxShadow: '0px 0px 5px 0px #00000040'
+        minHeight: '100px'
       }}
     >
-      <div className="mb-2 mt-2 text-center font-semibold relative">
-        <span
-          className="absolute right-0 hover:rotate-90 transition duration-500"
-          style={{ top: '0', right: '5px', zIndex: '51' }}
-          onClick={() => modalItemClick(null)}
-        >
-          <Close active={false} width="15" height="15" />
-        </span>
-        <div className="flex w-full justify-center relative px-5">
+      <div className="mb-1.5 mt-2 text-center font-semibold relative">
+        <div className="flex w-full justify-center relative px-5 mb-1">
           <p className="uppercase" style={{ color: '#424242', fontSize: '8px' }}>
             ENTITY LOCATION
           </p>
         </div>
         <div className="flex w-full justify-center relative">
-          <span className="absolute w-full z-0" style={{ top: '8px' }}>
+          <span className="absolute w-full z-0" style={{ top: '6px' }}>
             <hr />
           </span>
           <p className="px-2 z-10 uppercase" style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2' }}>
             CHOOSE ENTITY
           </p>
         </div>
-        <div className="relative modal-search px-2.5 mt-1">
+        <div className="relative modal-search px-2.5 mt-2">
           <SearchIcon
             active={false}
             color="#919191"
@@ -183,88 +170,125 @@ export default function ModalPilotNav({
           <div ref={ref} style={{ maxHeight: '250px' }}>
             {filteredNavTree.map(
               (item) =>
-                item.nesting >= currentNestedLevel[0].nesting && (
+                item.nesting >= currentNestedLevel[0].nesting &&
+                (openedNavItems.filter((i) => i == item.parent).length > 0 || !item.parent) && (
                   <div
                     key={item.id}
-                    className={`text-alsoit-gray-300 hover:bg-alsoit-gray-125 transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-2 ${
-                      activeNavItem == item.id ? 'font-semibold' : 'font-medium'
-                    } `}
-                    onClick={() => modalItemClick(item.url)}
+                    className={`text-alsoit-gray-300  transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-1.5 
+                    ${activeNavItem == item.id ? 'font-semibold' : 'font-medium'}  ${
+                      openedNavItems.filter((i) => i == item.id).length > 0
+                        ? 'bg-alsoit-purple-50'
+                        : 'hover:bg-alsoit-gray-125'
+                    } 
+
+                    `}
                     style={{
                       maxWidth: '180px'
                     }}
                   >
                     <div
-                      className={`flex items-center ${item.nesting == 1 ? paddingLeftFirst : ''} ${
+                      className={`flex items-center cursor-pointer ${item.nesting == 1 ? paddingLeftFirst : ''} ${
                         item.nesting == 2 ? paddingLeftSecond : ''
-                      } ${item.nesting == 3 ? paddingLeftThird : ''}`}
+                      } ${item.nesting == 3 ? paddingLeftThird : ''}
+                      `}
+                      onClick={() => ToggleOpenedNavItems(item.id as string, item.parent as string)}
                     >
                       {item.entity == 'hub' ? (
-                        <div className="relative flex items-center">
+                        <div className="relative flex items-center relative justify-center">
                           <div
-                            className="inline-flex items-center justify-center z-5 false rounded relative"
+                            className={`inline-flex items-center justify-center z-5 h-4 w-4 false rounded transition duration-500 ${
+                              openedNavItems.filter((i) => i == item.id).length > 0
+                                ? 'grayscale opacity-50'
+                                : 'group-hover:opacity-50 group-hover:grayscale'
+                            }`}
                             style={{ backgroundColor: item.color ? item.color : 'blue', width: '15px', height: '15px' }}
                           >
-                            {hasChildren(item.id) && (
-                              <>
-                                <span
-                                  className="absolute w-full h-full opacity-0 transition duration-500 group-hover:opacity-100"
-                                  style={{ background: 'rgba(255,255,255,.5)' }}
-                                ></span>
-                                <span className="absolute transition duration-500 opacity-0 group-hover:opacity-100">
-                                  <DropDownArrow />
-                                </span>
-                              </>
-                            )}
                             <span className="inline-flex items-center justify-center z-5 h-full w-full false rounded">
                               <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
                                 {getInitials(item.name)}
                               </span>
                             </span>
                           </div>
+                          {hasChildren(item.id) && (
+                            <>
+                              <span
+                                className={`absolute transition duration-500 ${
+                                  openedNavItems.filter((i) => i == item.id).length > 0
+                                    ? 'rotate-90 opacity-100'
+                                    : 'opacity-0 group-hover:opacity-100'
+                                }`}
+                              >
+                                <DropDownArrow />
+                              </span>
+                            </>
+                          )}
                         </div>
                       ) : item.entity == 'subhub' ? (
-                        <div className="relative flex items-center">
+                        <div className="relative flex items-center relative justify-center">
                           <div
-                            className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded relative"
+                            className={`inline-flex items-center justify-center z-5 h-4 w-4 false rounded transition duration-500 ${
+                              openedNavItems.filter((i) => i == item.id).length > 0
+                                ? 'grayscale opacity-50'
+                                : 'group-hover:opacity-50 group-hover:grayscale'
+                            }`}
                             style={{ backgroundColor: item.color ? item.color : 'orange' }}
                           >
-                            {hasChildren(item.id) && (
-                              <>
-                                <span
-                                  className="absolute w-full h-full opacity-0 transition duration-500 group-hover:opacity-100"
-                                  style={{ background: 'rgba(255,255,255,.5)' }}
-                                ></span>
-                                <span className="absolute transition duration-500 opacity-0 group-hover:opacity-100">
-                                  <DropDownArrow />
-                                </span>
-                              </>
-                            )}
                             <span className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded">
                               <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
                                 {getInitials(item.name)}
                               </span>
                             </span>
                           </div>
-                        </div>
-                      ) : item.entity == 'wallet' ? (
-                        <div className="relative">
                           {hasChildren(item.id) && (
                             <>
                               <span
-                                className="absolute w-full h-full opacity-0 transition duration-500 group-hover:opacity-100"
-                                style={{ background: 'rgba(255,255,255,.5)' }}
-                              ></span>
-                              <span className="absolute transition duration-500 opacity-0 group-hover:opacity-100">
+                                className={`absolute transition duration-500 ${
+                                  openedNavItems.filter((i) => i == item.id).length > 0
+                                    ? 'rotate-90 opacity-100'
+                                    : 'opacity-0 group-hover:opacity-100'
+                                }`}
+                              >
                                 <DropDownArrow />
                               </span>
                             </>
                           )}
-                          <FaFolderOpen
-                            className="w-5 h-6"
-                            style={{ width: '18px', height: '15px' }}
-                            color={item.color ? item.color : 'black'}
-                          />
+                        </div>
+                      ) : item.entity == 'wallet' ? (
+                        <div className="relative flex items-center relative justify-center">
+                          <div
+                            className={`inline-flex items-center justify-center z-5 h-4 w-4 false rounded transition duration-500 ${
+                              openedNavItems.filter((i) => i == item.id).length > 0
+                                ? 'grayscale opacity-25'
+                                : 'group-hover:opacity-25 group-hover:grayscale'
+                            }`}
+                          >
+                            {openedNavItems.filter((i) => i == item.id).length > 0 ? (
+                              <FaFolderOpen
+                                className="w-5 h-6"
+                                style={{ width: '18px', height: '15px' }}
+                                color={item.color ? item.color : 'black'}
+                              />
+                            ) : (
+                              <FaFolder
+                                className="w-5 h-6"
+                                style={{ width: '18px', height: '15px' }}
+                                color={item.color ? item.color : 'black'}
+                              />
+                            )}
+                          </div>
+                          {hasChildren(item.id) && (
+                            <>
+                              <span
+                                className={`absolute transition duration-500 ${
+                                  openedNavItems.filter((i) => i == item.id).length > 0
+                                    ? 'rotate-90 opacity-100'
+                                    : 'opacity-0 group-hover:opacity-100'
+                                }`}
+                              >
+                                <DropDownArrow />
+                              </span>
+                            </>
+                          )}
                         </div>
                       ) : (
                         <div>
@@ -276,7 +300,11 @@ export default function ModalPilotNav({
                         </div>
                       )}
                     </div>
-                    <span className="modal-item" style={{ fontSize: '13px', paddingLeft: '5px' }}>
+                    <span
+                      className="modal-item cursor-pointer whitespace-nowrap w-full"
+                      style={{ fontSize: '13px', paddingLeft: '5px' }}
+                      onClick={() => modalItemClick(item.url)}
+                    >
                       {item.name}
                     </span>
                     {((item.nesting == 0 && item.name.length > 20) ||
@@ -285,12 +313,16 @@ export default function ModalPilotNav({
                       (item.nesting == 3 && item.name.length > 5)) && (
                       <BlurEffect
                         top="0"
-                        right="-5px"
+                        right="0"
                         bottom="0"
                         left="auto"
                         width="25px"
-                        height="24px"
-                        backgroundImage="linear-gradient(to right, transparent , white)"
+                        height="27.5px"
+                        backgroundImage={
+                          openedNavItems.filter((i) => i == item.id).length > 0
+                            ? 'linear-gradient(to right, transparent , #F9E6FF)'
+                            : 'linear-gradient(to right, transparent , #fff)'
+                        }
                       />
                     )}
                   </div>
