@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Autocomplete from 'react-google-autocomplete';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import Copy from '../../../../../../assets/icons/Copy';
 import { cl } from '../../../../../../utils';
+import { useAppSelector } from '../../../../../../app/hooks';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface LocationProps {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
-function LocationField({ taskCustomFields, taskId, fieldId }: LocationProps) {
+function LocationField({ taskCustomFields, taskId, fieldId, activeColumn, task }: LocationProps) {
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
   const [location, setLocation] = useState<string | undefined>(taskCustomFields?.values[0].value);
   const [isCopied, setIsCopied] = useState<number>(0);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
 
@@ -40,8 +48,16 @@ function LocationField({ taskCustomFields, taskId, fieldId }: LocationProps) {
     }
   };
 
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+    }
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="w-full flex justify-center group/parent">
+    <div ref={containerRef} tabIndex={0} className="w-full flex justify-center group/parent">
       <Autocomplete
         style={{ width: '90%', backgroundColor: 'transparent' }}
         apiKey={process.env.REACT_APP_GOOGLE_APIKEY}
