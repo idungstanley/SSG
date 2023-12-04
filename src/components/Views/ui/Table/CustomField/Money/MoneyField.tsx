@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { IField } from '../../../../../../features/list/list.interfaces';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { formatNumberWithCommas } from '../../../../../../utils/FormatNumbers';
+import { Task } from '../../../../../../features/task/interface.tasks';
+import { useAppSelector } from '../../../../../../app/hooks';
 
 interface MoneyField {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
   entityCustomProperty?: IField;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
-function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }: MoneyField) {
+function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty, activeColumn, task }: MoneyField) {
+  const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
   const avtiveCurrency = entityCustomProperty?.properties?.symbol;
   const [activeValue, setActiveValue] = useState('');
   const [currentValue, setCurrentValue] = useState<string>(activeValue);
   const [editMode, setEditMode] = useState(false);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (taskCustomFields) {
@@ -58,8 +65,17 @@ function MoneyField({ taskCustomFields, taskId, fieldId, entityCustomProperty }:
     }
   };
 
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+        setEditMode(true);
+      }
+    }
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div ref={containerRef} tabIndex={0} className="flex items-center justify-center w-full h-full">
       {!editMode ? (
         <div
           className="w-full h-full p-1 border-2 border-transparent hover:border-alsoit-gray-50 group/parent"

@@ -27,7 +27,7 @@ export default function Commnunication() {
       <div>
         <SectionArea label="Connect" icon={<SignalIcon className="w-4 h-4" />} />
       </div>
-      <section className="flex flex-col pl-px overflow-y-scroll h-fit mb-11">
+      <section className="flex flex-col overflow-y-scroll h-fit mb-11">
         {showPilot && <CommunicationSubTab />}
         <div>{selectedSubSection ? selectedSubSection.element : null}</div>
       </section>

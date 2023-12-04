@@ -111,16 +111,29 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     ) : (
       <></>
     ),
-    created_at: <DateFormat date={value as string} font="text-sm" type="created_at" />,
-    updated_at: <DateFormat date={value as string} font="text-sm" type="updated_at" />,
-    start_date: <DateFormat date={value as string} font="text-sm" task={task} type="start_date" />,
-    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" isDueDate={true} />,
+    created_at: <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="created_at" />,
+    updated_at: <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="updated_at" />,
+    start_date: (
+      <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" task={task} type="start_date" />
+    ),
+    end_date: (
+      <DateFormat
+        date={value as string}
+        activeColumn={columnIndex}
+        font="text-sm"
+        task={task}
+        type="end_date"
+        isDueDate={true}
+      />
+    ),
     dropdown: (
       <DropdownFieldWrapper
         taskId={task.id}
         fieldId={fieldId}
         taskCustomFields={task.custom_fields}
         entityCustomProperty={task.custom_field_columns}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     labels: (
@@ -128,6 +141,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         taskId={task.id}
+        task={task}
+        activeColumn={columnIndex}
       />
     ),
     tags: <TagsWrapper tags={task.tags} />,
@@ -136,6 +151,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     email: (
@@ -144,6 +161,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="email"
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     longtext: (
@@ -151,6 +170,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     number: (
@@ -158,6 +179,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     money: (
@@ -166,6 +189,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     date: <DateField />,
@@ -183,6 +208,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="website"
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     phone: (

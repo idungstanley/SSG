@@ -467,7 +467,7 @@ export const taskSlice = createSlice({
       state.subtasks = action.payload;
     },
     setTaskRootIds(state, action: PayloadAction<Record<string, string[]>>) {
-      state.taskRootIds = action.payload;
+      state.taskRootIds = action.payload || [];
     },
     setRootTaskIds(state, action: PayloadAction<string[] | undefined>) {
       state.rootTaskIds = action.payload;

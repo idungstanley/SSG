@@ -11,6 +11,7 @@ import { Menu } from '@mui/material';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import ArrowOpenDown from '../../../../assets/icons/ArrowOpenDown';
 import ArrowRightPilot from '../../../../assets/icons/ArrowRightPilot';
+import { ACTIVE_BUTTON } from '../../../../utils/Constants/ButtonInteractions';
 
 type Key = Extract<TaskKey, 'status' | 'assignees' | 'priority' | 'none'>;
 type Option = Record<Key, { icon: JSX.Element }>;
@@ -60,7 +61,7 @@ export function Sort({ isSplitSubtasks }: ISortProps) {
                   </p>
 
                   <span className="px-1">
-                    <ArrowOpenDown color="black" />
+                    <ArrowOpenDown color={ACTIVE_BUTTON.color} />
                   </span>
                 </div>
               ) : null}

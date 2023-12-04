@@ -120,7 +120,7 @@ export default function ChatsList() {
       <div className="h-full gap-1 p-2 px-4">
         <div
           style={{ background: isActiveCollection ? '#E6FAE9' : '#FEF6E6', overflow: 'hidden' }}
-          className="rounded-md group"
+          className={`rounded-md ${isCollapse && 'group'}`}
         >
           {/* header */}
           <div className="flex items-center justify-between">
@@ -159,7 +159,7 @@ export default function ChatsList() {
                   style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
                 >
                   Read By Me
-                  <span className="flex items-center pl-1">
+                  <span className="flex items-center pl-1 pr-1">
                     <label className="switch small" onClick={(event) => event.stopPropagation()}>
                       <input className="inputShow" type="checkbox" checked={false} />
                       <div className="slider" />
@@ -182,12 +182,18 @@ export default function ChatsList() {
                 <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
                   <ShowIcon color="orange" width="21" height="21" />
                 </div>
-                <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
-                  <ChatMe />
-                </div>
-                <div className="flex justify-center bg-white items-center h-6 w-12 rounded-md">
-                  <ChatAssign />
-                  <ArrowDrop color="orange" />
+                <div className="flex justify-center items-center h-6 rounded-md">
+                  <div className="relative flex mr-px bg-white justify-center bg-white items-center h-6 w-6 rounded-tl-md rounded-bl-md">
+                    <ChatMe />
+                    <div
+                      className="absolute top-[2px] -right-[0.5px] rounded-sm bg-alsoit-gray-100"
+                      style={{ width: '0.5px', height: 'calc(100% - 4px)' }}
+                    />
+                  </div>
+                  <div className="flex justify-center bg-white items-center h-6 pl-1 rounded-tr-md rounded-br-md">
+                    <ChatAssign />
+                    <ArrowDrop color="orange" />
+                  </div>
                 </div>
                 <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md mr-2">
                   <ChatSearch />
@@ -220,14 +226,14 @@ export default function ChatsList() {
                   Shared
                 </div>
                 <div
-                  className="flex justify-center items-center bg-white"
-                  style={{ minWidth: '16px', height: '16px', fontSize: '8px', borderRadius: '3px' }}
+                  className="flex justify-center items-center bg-white rounded-[3px]"
+                  style={{ minWidth: '16px', height: '16px' }}
                 >
                   <NotificationIcon width="9" height="11" color="orange" />
                 </div>
                 <div
-                  className="flex justify-center items-center bg-white"
-                  style={{ minWidth: '16px', height: '16px', fontSize: '8px', borderRadius: '3px' }}
+                  className="flex justify-center items-center bg-white rounded-[3px]"
+                  style={{ minWidth: '16px', height: '16px' }}
                 >
                   <EmailIcon width="10" height="10" color="orange" />
                 </div>
