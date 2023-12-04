@@ -70,8 +70,8 @@ export default function TiesSubTabs() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-2"
-            style={{ borderBottom: `3px solid ${activeSubComingTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid px-1 grid-cols-2 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubComingTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {ticketsOptions.map((item) => (
               <SubtabDrag

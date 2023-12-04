@@ -10,8 +10,8 @@ interface SectionAreaProps {
 export default function SectionArea({ icon, label, children }: SectionAreaProps) {
   return (
     <div
-      className="flex flex-col justify-start w-full gap-2 px-2 py-2 mb-px border-y bg-alsoit-gray-125 border-alsoit-gray-75"
-      style={{ height: '50px', padding: '11px 5px 5px 6px' }}
+      className="flex flex-col justify-start w-full gap-2 px-2 py-2 border-y bg-alsoit-gray-125 border-alsoit-gray-75"
+      style={{ height: '50px', padding: '11px 5px 5px 6px', borderBottom: '0.25px solid rgba(178, 178, 178, 0.25)' }}
     >
       <div className="pl-2.5 flex space-x-2 items-center justify-between">
         <div className="flex">

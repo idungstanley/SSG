@@ -19,7 +19,7 @@ interface ToolbarNavInterface {
   entity: string;
 }
 
-export default function ToolbarNav() {
+export default function ToolbarNav({ option, colors }: { option?: string; colors?: string }) {
   const navigate = useNavigate();
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
   const { activeItemName, activePlaceId } = useAppSelector((state) => state.workspace);
@@ -164,9 +164,16 @@ export default function ToolbarNav() {
 
   return (
     <>
-      <div className="flex items-center w-5 h-5 overflow-hidden mr-1" style={{ margin: '1px 0 0 4px' }}>
-        {activePlaceId == 'tasks' ? <PilotNavIcon /> : activePlace[0].icon}
-      </div>
+      {option !== 'onList' && (
+        <div className="flex items-center w-5 h-5 overflow-hidden mr-1" style={{ margin: '1px 0 0 4px' }}>
+          {activePlaceId == 'tasks' ? <PilotNavIcon /> : activePlace[0].icon}
+        </div>
+      )}
+      {option == 'onList' && (
+        <div className="flex items-center overflow-hidden mr-1" style={{ marginLeft: '15px' }}>
+          <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
+        </div>
+      )}
       {toolbarNavTree.map((item) => (
         <div
           key={item.name}
@@ -177,7 +184,7 @@ export default function ToolbarNav() {
         >
           <ToolTip placement="right" title={item.name}>
             <p
-              className={`transition duration-500 rounded pilot-nav-child ${
+              className={`transition truncate max-w-34 duration-500 rounded pilot-nav-child ${colors} ${
                 lastItem != item ? 'cursor-pointer hover:bg-alsoit-gray-125' : ''
               }`}
               style={{ fontSize: '13px', paddingLeft: '2.5px', paddingRight: '2.5px', letterSpacing: '0.2px' }}
@@ -189,7 +196,7 @@ export default function ToolbarNav() {
           {lastItem !== item && (
             <span
               className="relative overflow-visible cursor-pointer rounded pilot-nav-arrow"
-              style={{ padding: '13px 5px 13px 2.5px' }}
+              style={{ padding: option !== 'onList' ? '13px 5px 13px 2.5px' : '0px 5px 0px 2.5px' }}
               onClick={(e) => arrowClick(item.name, e as React.MouseEvent<HTMLDivElement, MouseEvent>)}
             >
               <ArrowRightPilot active={modalOpened == item.name} />

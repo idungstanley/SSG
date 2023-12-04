@@ -1,26 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ICustomField, setOpenFileUploadModal } from '../../../../../../features/task/taskSlice';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import AlsoitMenuDropdown from '../../../../../DropDowns';
 import AddTo from '../../../../../Pilot/components/details/properties/attachments/AddTo';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import FileIcons from './FileIcon';
+import { Task } from '../../../../../../features/task/interface.tasks';
 
 interface filesProps {
   taskCustomFields?: ICustomField;
   taskId: string;
   fieldId: string;
   listId: string;
+  activeColumn?: boolean[];
+  task?: Task;
 }
 
-function FilesField({ taskCustomFields, taskId, fieldId, listId }: filesProps) {
+function FilesField({ taskCustomFields, taskId, fieldId, listId, activeColumn, task }: filesProps) {
   const taskFiles = taskCustomFields?.values ?? [];
+
   const dispatch = useAppDispatch();
+
   const [open, setOpen] = useState<null | HTMLElement>(null);
-  const { fileUploadProps } = useAppSelector((state) => state.task);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const { fileUploadProps, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setOpen(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
   return (
-    <div>
+    <div ref={containerRef} tabIndex={0}>
       <div className="flex flex-wrap items-center gap-2">
         {taskFiles.map((file) => {
           return (

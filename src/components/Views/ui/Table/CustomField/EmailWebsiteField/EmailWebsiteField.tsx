@@ -3,13 +3,13 @@ import { ICustomField } from '../../../../../../features/task/taskSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
 import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
-import AlsoitMenuDropdown from '../../../../../DropDowns';
 import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
-import { RiDeleteBinLine } from 'react-icons/ri';
 import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { Task } from '../../../../../../features/task/interface.tasks';
+import DropdownWithHeader from '../../../../../Pilot/components/TimeClock/components/DropdownWithHeader';
+import TrashIcon from '../../../../../../assets/icons/TrashIcon';
 
 interface EmailFieldProps {
   taskCustomFields?: ICustomField;
@@ -33,6 +33,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
   const [editMode, setEditMode] = useState(false);
   const [isValidValue, setIsValidValue] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -97,12 +98,8 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     }, 500);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClick = () => {
+    setAnchorEl(containerRef.current);
   };
 
   const handleEditEmail = () => {
@@ -123,6 +120,20 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     }
   };
 
+  const fieldOptions = [
+    { title: isCopied === 0 ? 'Copy' : 'Copied', callBack: handleCopyTexts, icon: <CopyIcon className="w-5 h-5" /> },
+    {
+      title: 'Edit',
+      callBack: handleEditEmail,
+      icon: <EditIcon active={false} dimensions={{ height: 20, width: 20 }} />
+    },
+    {
+      title: 'Remove',
+      callBack: handleDeleteEmail,
+      icon: <TrashIcon active={false} className="w-5 h-5" />
+    }
+  ];
+
   useEffect(() => {
     if (containerRef.current && activeColumn) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
@@ -135,13 +146,28 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     return () => containerRef.current?.removeEventListener('keydown', handleKeyBoardDown);
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp' && focusedIndex !== null && focusedIndex > 0) {
+        setFocusedIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
+      } else if (event.key === 'ArrowDown' && focusedIndex !== null && focusedIndex < fieldOptions.length - 1) {
+        setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : prevIndex + 1));
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [focusedIndex]);
   return (
-    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4">
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4 relative">
       {!editMode ? (
         <div className="w-full h-full group/parent" onClick={() => setEditMode(true)}>
           <span
             className={cl(
-              'h-full flex items-center  cursor-pointer w-full',
+              'h-full flex items-center relative cursor-pointer w-full',
               currentValue !== '-' ? 'justify-between' : 'justify-center'
             )}
           >
@@ -170,12 +196,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
             )}
 
             {currentValue !== '-' && (
-              <button
-                className="flex items-center justify-end opacity-0 group-hover/parent:opacity-100 w-5 h-5 absolute bg-white right-0"
-                onClick={(e) => handleClick(e)}
+              <div
+                className="flex items-center justify-end opacity-0 group-hover/parent:opacity-100 w-5 h-5 relative bg-white right-0"
+                onClick={handleClick}
               >
                 <ThreeDotIcon />
-              </button>
+              </div>
             )}
           </span>
         </div>
@@ -197,30 +223,27 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
           />
         </div>
       )}
-      <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-        <div className="block" style={{ width: '150px' }}>
-          <button
-            className="flex w-full gap-2 items-center p-1 hover:bg-alsoit-purple-50 rounded"
-            onClick={handleCopyTexts}
-          >
-            <CopyIcon className="w-5 h-5" />
-            <h1> {isCopied === 0 ? `Copy ${Capitalize(fieldType)}` : 'Copied'}</h1>
-          </button>
-          <button
-            className="flex w-full  gap-2 items-center  p-1 hover:bg-alsoit-purple-50 rounded"
-            onClick={handleEditEmail}
-          >
-            <EditIcon active={false} />
-            {`Edit ${Capitalize(fieldType)}`}
-          </button>
-          <button
-            className="flex w-full gap-2 items-center text-alsoit-danger p-1 hover:bg-alsoit-purple-50 rounded"
-            onClick={handleDeleteEmail}
-          >
-            <RiDeleteBinLine className="w-4 h-4" /> {`Remove ${Capitalize(fieldType)}`}
-          </button>
+      <DropdownWithHeader
+        anchor={anchorEl}
+        setAnchor={setAnchorEl}
+        header={fieldType === 'website' ? 'Website Options' : 'Email Options'}
+        subHeader={fieldType === 'website' ? 'select options for websites' : 'select option for Emails'}
+      >
+        <div className="flex flex-col space-y-2 pt-1.5 pb-0.5" style={{ width: '150px' }}>
+          {fieldOptions.map((option, index) => (
+            <button
+              key={index}
+              className={`flex w-full gap-2 items-center px-1 py-2 hover:bg-alsoit-purple-50 rounded ${
+                focusedIndex === index ? 'bg-alsoit-purple-50' : ''
+              }`}
+              onClick={option.callBack}
+            >
+              {option.icon}
+              <h1> {`${option.title} ${Capitalize(fieldType)}`}</h1>
+            </button>
+          ))}
         </div>
-      </AlsoitMenuDropdown>
+      </DropdownWithHeader>
     </div>
   );
 }
