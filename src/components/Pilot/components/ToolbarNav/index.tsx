@@ -166,19 +166,19 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
   return (
     <>
       {option !== 'onList' && (
-        <div className="flex items-center w-5 h-5 overflow-hidden mr-1" style={{ margin: '1px 0 0 4px' }}>
-          {activePlaceId == 'tasks' ? <PilotNavIcon /> : activePlace[0].icon}
+        <div className="flex items-center w-5 h-5 mr-1 overflow-hidden" style={{ margin: '1px 0 0 4px' }}>
+          {activePlaceId == 'tasks' ? <PilotNavIcon /> : activePlace[0]?.icon}
         </div>
       )}
       {option == 'onList' && (
-        <div className="flex items-center overflow-hidden mr-1" style={{ marginLeft: '15px' }}>
+        <div className="flex items-center mr-1 overflow-hidden" style={{ marginLeft: '15px' }}>
           <ActiveEntityAvatar width="w-4" height="h-4" size="8px" />
         </div>
       )}
       {toolbarNavTree.map((item) => (
         <div
           key={item.name}
-          className="flex text-xs font-medium truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded transition duration-500 pilot-nav-parent"
+          className="flex items-center overflow-visible text-xs font-medium truncate transition duration-500 rounded text-alsoit-gray-300 whitespace-nowrap pilot-nav-parent"
           style={{
             paddingLeft: '3px'
           }}
@@ -196,7 +196,7 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
           </ToolTip>
           {lastItem !== item && (
             <span
-              className="relative overflow-visible cursor-pointer rounded pilot-nav-arrow"
+              className="relative overflow-visible rounded cursor-pointer pilot-nav-arrow"
               style={{ padding: option !== 'onList' ? '13px 5px 13px 2.5px' : '0px 5px 0px 2.5px' }}
               onClick={(e) => arrowClick(item.name, e as React.MouseEvent<HTMLDivElement, MouseEvent>)}
             >
@@ -217,7 +217,7 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
       ))}
       {!toolbarNavTree.length && (
         <div
-          className="capitalize text-xs font-semibold truncate items-center text-alsoit-gray-300 overflow-visible whitespace-nowrap rounded py-1 hover:bg-alsoit-gray-125 transition duration-500"
+          className="items-center py-1 overflow-visible text-xs font-semibold capitalize truncate transition duration-500 rounded text-alsoit-gray-300 whitespace-nowrap hover:bg-alsoit-gray-125"
           style={{ paddingLeft: '5px', paddingRight: '5px' }}
         >
           {activeItemName}

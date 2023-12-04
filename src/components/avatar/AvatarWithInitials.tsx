@@ -40,7 +40,7 @@ function AvatarWithInitials({
           width: modeWidth
         }}
       >
-        <span className="font-bold leading-none " style={{ fontSize: textSize, color: textColor }}>
+        <span className="font-bold leading-none" style={{ fontSize: textSize, color: textColor }}>
           {initials}
         </span>
       </span>

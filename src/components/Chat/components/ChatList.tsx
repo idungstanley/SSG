@@ -26,6 +26,7 @@ import TrashIcon from '../../../assets/icons/chatIcons/TrashIcon';
 import EditIcon from '../../../assets/icons/chatIcons/EditIcon';
 import EmailIcon from '../../../assets/icons/EmailIcon';
 import NotificationIcon from '../../../assets/icons/NotificationIcon';
+import QuickFilter from './QuickFilter/QuickFilter';
 
 const heads: ExtendedListColumnProps[] = [
   {
@@ -167,15 +168,7 @@ export default function ChatsList() {
                   </span>
                   <DropdownArrowIcon color="orange" />
                 </div>
-                <div
-                  className="flex justify-between items-center px-1 py-0.5 bg-white items-center rounded-md"
-                  style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
-                >
-                  Quick Filter
-                  <span className="flex items-center pl-1">
-                    <DropdownArrowIcon color="orange" />
-                  </span>
-                </div>
+                <QuickFilter />
                 <div className="flex justify-center bg-white items-center h-6 w-6 rounded-md">
                   <ChatFilter />
                 </div>
