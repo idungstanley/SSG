@@ -22,7 +22,6 @@ function TextField({ taskCustomFields, taskId, fieldId, activeColumn, task }: Te
   const [editMode, setEditMode] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
@@ -108,9 +107,7 @@ function TextField({ taskCustomFields, taskId, fieldId, activeColumn, task }: Te
         </div>
       ) : (
         <input
-          ref={inputRef}
           type="text"
-          autoFocus={true}
           value={currentValue === '-' ? '' : currentValue}
           onChange={(e) => setCurrentValue(e.target.value)}
           onKeyDown={handleKeyDown}
