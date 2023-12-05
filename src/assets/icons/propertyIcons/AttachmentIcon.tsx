@@ -2,9 +2,22 @@
 import React from 'react';
 import { PropertyIconProps } from './AltRouteIcon';
 
-export default function AttachmentIcon({ color }: PropertyIconProps) {
+interface attachmentIconProps extends PropertyIconProps {
+  dimension?: {
+    width: string;
+    height: string;
+  };
+}
+
+export default function AttachmentIcon({ color, dimension }: attachmentIconProps) {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={dimension?.width ?? '20'}
+      height={dimension?.height ?? '20'}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <mask id="mask0_5967_48453" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20">
         <rect width="20" height="20" fill="#D9D9D9" />
       </mask>
