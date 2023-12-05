@@ -5,9 +5,7 @@ import { VerticalScroll } from '../ScrollableContainer/VerticalScroll';
 import { useChatScroll } from '../../hooks';
 import SearchIcon from '../../assets/icons/SearchIcon';
 import { useState } from 'react';
-import { getInitials } from '../../app/helpers';
-import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import DropDownArrow from '../../assets/icons/DropDownArrow';
+import ModalNavCheckEntity from '../Pilot/components/ToolbarNav/Components/ModalNavCheckEntity';
 
 interface ToolbarNavInterface {
   id: string | null;
@@ -17,56 +15,45 @@ interface ToolbarNavInterface {
   nesting: number;
   color: string | undefined;
   entity: string;
+  children?: ToolbarNavInterface[];
 }
 
 interface ModalPilotNavProps {
   modalItemClick: (url: string | null) => void;
   modalNavTree: ToolbarNavInterface[];
   activeNavItem: string;
-  activeArrowItem: string | null;
 }
 
-export default function ModalPilotNav({
-  modalItemClick,
-  modalNavTree,
-  activeNavItem,
-  activeArrowItem
-}: ModalPilotNavProps) {
+export default function ModalPilotNav({ modalItemClick, modalNavTree, activeNavItem }: ModalPilotNavProps) {
   const ref = useChatScroll(modalNavTree);
   const [searchQuery, setSearchQuery] = useState('');
   const [openedNavItems, setOpenedNavItems] = useState<string[]>([]);
 
-  const removeElementsAfterKey = (arr: ToolbarNavInterface[], key: string | null): ToolbarNavInterface[] => {
-    const index = key ? arr.findIndex((item) => item.id === key) : -1;
-    if (index !== -1) {
-      return arr.slice(0, index + 1);
-    }
-    return arr;
+  const buildNestedStructure = (data: ToolbarNavInterface[]): ToolbarNavInterface[] => {
+    const map: { [key: string]: ToolbarNavInterface } = {};
+    const tree: ToolbarNavInterface[] = [];
+
+    data.forEach((item) => {
+      if (!map[item.id as string]) {
+        map[item.id as string] = { ...item, children: [] };
+      }
+    });
+
+    data.forEach((item) => {
+      if (item.parent !== null && map[item.parent as string]) {
+        if (!map[item.parent as string].children) {
+          map[item.parent as string].children = [];
+        }
+        map[item.parent as string].children!.push(map[item.id as string]);
+      } else {
+        tree.push(map[item.id as string]);
+      }
+    });
+
+    return tree;
   };
 
-  modalNavTree.forEach((item) => {
-    let nesting = 0;
-
-    if (item.parent) {
-      const currentElementId = item.id;
-      const filteredToolbarNavTree = removeElementsAfterKey(modalNavTree, currentElementId);
-      let prevParent: string | null = null;
-      filteredToolbarNavTree.reverse().forEach((item) => {
-        if (item.id === prevParent) {
-          prevParent = item.parent;
-          nesting++;
-        }
-        if (!prevParent) {
-          prevParent = item.parent;
-        }
-        if (!item.parent) {
-          prevParent = null;
-          return false;
-        }
-      });
-      item.nesting = nesting;
-    }
-  });
+  const nestedData = buildNestedStructure(modalNavTree);
 
   const filteredNavTree = modalNavTree.filter(
     (item) =>
@@ -78,29 +65,7 @@ export default function ModalPilotNav({
     setSearchQuery(event.target.value);
   };
 
-  const currentNestedLevel = modalNavTree.filter((item) => item.id == activeArrowItem);
-
-  let paddingLeftFirst = 'pl-4 ml-0.5';
-  let paddingLeftSecond = 'pl-9 ml-1';
-  let paddingLeftThird = 'pl-3';
-
-  if (currentNestedLevel[0].nesting == 1) {
-    paddingLeftFirst = 'pl-0';
-    paddingLeftSecond = 'pl-1';
-    paddingLeftThird = 'pl-2';
-  } else if (currentNestedLevel[0].nesting == 2) {
-    paddingLeftSecond = 'pl-0';
-    paddingLeftThird = 'pl-1';
-  } else if (currentNestedLevel[0].nesting == 3) {
-    paddingLeftThird = 'pl-0';
-  }
-
-  const hasChildren = (itemId: string | null) => {
-    return filteredNavTree.filter((item) => item.parent == itemId).length > 0;
-  };
-
-  const ToggleOpenedNavItems = (itemId: string, parentId: string) => {
-    console.log(parentId);
+  const ToggleOpenedNavItems = (itemId: string) => {
     if (openedNavItems.filter((item) => item == itemId).length > 0) {
       setOpenedNavItems(openedNavItems.filter((item) => item !== itemId));
     } else {
@@ -118,7 +83,7 @@ export default function ModalPilotNav({
         minHeight: '100px'
       }}
     >
-      <div className="mb-1.5 mt-2 text-center font-semibold relative">
+      <div className="text-center font-semibold relative" style={{ marginTop: '10px', marginBottom: '7px' }}>
         <div className="flex w-full justify-center relative px-5 mb-1">
           <p className="uppercase" style={{ color: '#424242', fontSize: '8px' }}>
             ENTITY LOCATION
@@ -132,7 +97,7 @@ export default function ModalPilotNav({
             CHOOSE ENTITY
           </p>
         </div>
-        <div className="relative modal-search px-2.5 mt-2">
+        <div className="relative modal-search px-2.5" style={{ marginTop: '5px' }}>
           <SearchIcon
             active={false}
             color="#919191"
@@ -142,7 +107,7 @@ export default function ModalPilotNav({
             style={{ top: '7px', left: '17px' }}
           />
           <input
-            className="rounded w-full font-normal pl-5"
+            className="w-full font-normal pl-5"
             style={{
               border: '.5px solid rgba(178, 178, 178, .5)',
               height: '28px',
@@ -151,7 +116,8 @@ export default function ModalPilotNav({
               paddingTop: '2px',
               paddingBottom: '5px',
               paddingLeft: '22px',
-              letterSpacing: '-.3px'
+              letterSpacing: '-.3px',
+              borderRadius: '5px'
             }}
             type="text"
             placeholder="Search"
@@ -159,174 +125,219 @@ export default function ModalPilotNav({
             onChange={handleSearchInputChange}
           />
           {searchQuery && (
-            <span className="absolute top-1/3 right-6" onClick={() => setSearchQuery('')}>
+            <span className="absolute top-1/3 right-4" onClick={() => setSearchQuery('')}>
               <Close active={false} width="10" height="10" />
             </span>
           )}
         </div>
       </div>
-      <div className="overflow-hidden pl-3" style={{ maxHeight: '250px' }}>
+      <div className="overflow-hidden pl-3" style={{ maxHeight: '260px' }}>
         <VerticalScroll>
-          <div ref={ref} style={{ maxHeight: '250px' }}>
-            {filteredNavTree.map(
-              (item) =>
-                item.nesting >= currentNestedLevel[0].nesting &&
-                (openedNavItems.filter((i) => i == item.parent).length > 0 || !item.parent) && (
-                  <div
-                    key={item.id}
-                    className={`text-alsoit-gray-300  transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-1.5 
+          <div ref={ref} style={{ maxHeight: '260px' }}>
+            {!searchQuery ? (
+              <>
+                {nestedData.map((item) => (
+                  <>
+                    <div
+                      key={item.id}
+                      className={`text-alsoit-gray-300  transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group 
                     ${activeNavItem == item.id ? 'font-semibold' : 'font-medium'}  ${
-                      openedNavItems.filter((i) => i == item.id).length > 0
-                        ? 'bg-alsoit-purple-50'
-                        : 'hover:bg-alsoit-gray-125'
-                    } 
+                        openedNavItems.filter((i) => i == item.id).length > 0 &&
+                        item.children &&
+                        item.children.length > 0
+                          ? 'bg-alsoit-purple-50'
+                          : 'hover:bg-alsoit-gray-125'
+                      } 
 
                     `}
-                    style={{
-                      maxWidth: '180px'
-                    }}
-                  >
-                    <div
-                      className={`flex items-center cursor-pointer ${item.nesting == 1 ? paddingLeftFirst : ''} ${
-                        item.nesting == 2 ? paddingLeftSecond : ''
-                      } ${item.nesting == 3 ? paddingLeftThird : ''}
-                      `}
-                      onClick={() => ToggleOpenedNavItems(item.id as string, item.parent as string)}
+                      style={{
+                        maxWidth: '177px',
+                        marginBottom: '4px'
+                      }}
                     >
-                      {item.entity == 'hub' ? (
-                        <div className="relative flex items-center relative justify-center">
-                          <div
-                            className={`inline-flex items-center justify-center z-5 h-4 w-4 false rounded transition duration-500 ${
-                              openedNavItems.filter((i) => i == item.id).length > 0
-                                ? 'grayscale opacity-50'
-                                : 'group-hover:opacity-50 group-hover:grayscale'
-                            }`}
-                            style={{ backgroundColor: item.color ? item.color : 'blue', width: '15px', height: '15px' }}
-                          >
-                            <span className="inline-flex items-center justify-center z-5 h-full w-full false rounded">
-                              <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
-                                {getInitials(item.name)}
-                              </span>
-                            </span>
-                          </div>
-                          {hasChildren(item.id) && (
-                            <>
-                              <span
-                                className={`absolute transition duration-500 ${
-                                  openedNavItems.filter((i) => i == item.id).length > 0
-                                    ? 'rotate-90 opacity-100'
-                                    : 'opacity-0 group-hover:opacity-100'
-                                }`}
-                              >
-                                <DropDownArrow />
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      ) : item.entity == 'subhub' ? (
-                        <div className="relative flex items-center relative justify-center">
-                          <div
-                            className={`inline-flex items-center justify-center z-5 h-4 w-4 false rounded transition duration-500 ${
-                              openedNavItems.filter((i) => i == item.id).length > 0
-                                ? 'grayscale opacity-50'
-                                : 'group-hover:opacity-50 group-hover:grayscale'
-                            }`}
-                            style={{ backgroundColor: item.color ? item.color : 'orange' }}
-                          >
-                            <span className="inline-flex items-center justify-center z-5 h-4 w-4 false rounded">
-                              <span className="font-bold leading-none text-white" style={{ fontSize: '8px' }}>
-                                {getInitials(item.name)}
-                              </span>
-                            </span>
-                          </div>
-                          {hasChildren(item.id) && (
-                            <>
-                              <span
-                                className={`absolute transition duration-500 ${
-                                  openedNavItems.filter((i) => i == item.id).length > 0
-                                    ? 'rotate-90 opacity-100'
-                                    : 'opacity-0 group-hover:opacity-100'
-                                }`}
-                              >
-                                <DropDownArrow />
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      ) : item.entity == 'wallet' ? (
-                        <div className="relative flex items-center relative justify-center">
-                          <div
-                            className={`inline-flex items-center justify-center z-5 h-4 w-4 false rounded transition duration-500 ${
-                              openedNavItems.filter((i) => i == item.id).length > 0
-                                ? 'grayscale opacity-25'
-                                : 'group-hover:opacity-25 group-hover:grayscale'
-                            }`}
-                          >
-                            {openedNavItems.filter((i) => i == item.id).length > 0 ? (
-                              <FaFolderOpen
-                                className="w-5 h-6"
-                                style={{ width: '18px', height: '15px' }}
-                                color={item.color ? item.color : 'black'}
-                              />
-                            ) : (
-                              <FaFolder
-                                className="w-5 h-6"
-                                style={{ width: '18px', height: '15px' }}
-                                color={item.color ? item.color : 'black'}
-                              />
-                            )}
-                          </div>
-                          {hasChildren(item.id) && (
-                            <>
-                              <span
-                                className={`absolute transition duration-500 ${
-                                  openedNavItems.filter((i) => i == item.id).length > 0
-                                    ? 'rotate-90 opacity-100'
-                                    : 'opacity-0 group-hover:opacity-100'
-                                }`}
-                              >
-                                <DropDownArrow />
-                              </span>
-                            </>
-                          )}
-                        </div>
-                      ) : (
-                        <div>
-                          <span
-                            className="flex items-center justify-center w-3 h-3 rounded-full"
-                            style={{ backgroundColor: item.color ? item.color : 'orange' }}
-                          ></span>
-                          {hasChildren(item.id) && <DropDownArrow />}
-                        </div>
+                      <ModalNavCheckEntity
+                        item={item}
+                        ToggleOpenedNavItems={ToggleOpenedNavItems}
+                        openedNavItems={openedNavItems}
+                      />
+                      <span
+                        className="modal-item cursor-pointer whitespace-nowrap w-full"
+                        style={{ fontSize: '13px', paddingLeft: '5px' }}
+                        onClick={() => modalItemClick(item.url)}
+                      >
+                        {item.name}
+                      </span>
+                      {item.name.length > 15 && (
+                        <BlurEffect
+                          top="0"
+                          right="0"
+                          bottom="0"
+                          left="auto"
+                          width="25px"
+                          height="27.5px"
+                          backgroundImage={
+                            openedNavItems.filter((i) => i == item.id).length > 0 &&
+                            item.children &&
+                            item.children.length > 0
+                              ? 'linear-gradient(to right, transparent , #F9E6FF)'
+                              : 'linear-gradient(to right, transparent , #fff)'
+                          }
+                        />
                       )}
                     </div>
-                    <span
-                      className="modal-item cursor-pointer whitespace-nowrap w-full"
-                      style={{ fontSize: '13px', paddingLeft: '5px' }}
-                      onClick={() => modalItemClick(item.url)}
-                    >
-                      {item.name}
-                    </span>
-                    {((item.nesting == 0 && item.name.length > 20) ||
-                      (item.nesting == 2 && item.name.length > 15) ||
-                      (item.nesting == 3 && item.name.length > 10) ||
-                      (item.nesting == 3 && item.name.length > 5)) && (
-                      <BlurEffect
-                        top="0"
-                        right="0"
-                        bottom="0"
-                        left="auto"
-                        width="25px"
-                        height="27.5px"
-                        backgroundImage={
-                          openedNavItems.filter((i) => i == item.id).length > 0
-                            ? 'linear-gradient(to right, transparent , #F9E6FF)'
-                            : 'linear-gradient(to right, transparent , #fff)'
-                        }
-                      />
+                    {item.children && openedNavItems.filter((i) => i == item.id).length > 0 && (
+                      <>
+                        {item.children.map((child) => (
+                          <>
+                            <div
+                              key={child.id}
+                              className={`text-alsoit-gray-300  transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-1.5 ml-5
+                    ${activeNavItem == child.id ? 'font-semibold' : 'font-medium'}  ${
+                                openedNavItems.filter((i) => i == child.id).length > 0 &&
+                                child.children &&
+                                child.children.length > 0
+                                  ? 'bg-alsoit-purple-50'
+                                  : 'hover:bg-alsoit-gray-125'
+                              }`}
+                              style={{
+                                maxWidth: '157px',
+                                width: '100%'
+                              }}
+                            >
+                              <ModalNavCheckEntity
+                                item={child}
+                                ToggleOpenedNavItems={ToggleOpenedNavItems}
+                                openedNavItems={openedNavItems}
+                              />
+                              <span
+                                className="modal-item cursor-pointer whitespace-nowrap w-full"
+                                style={{ fontSize: '13px', paddingLeft: '5px' }}
+                                onClick={() => modalItemClick(child.url)}
+                              >
+                                {child.name}
+                              </span>
+                              {child.name.length > 20 && (
+                                <BlurEffect
+                                  top="0"
+                                  right="0"
+                                  bottom="0"
+                                  left="auto"
+                                  width="25px"
+                                  height="27.5px"
+                                  backgroundImage={
+                                    openedNavItems.filter((i) => i == child.id).length > 0 &&
+                                    child.children &&
+                                    child.children.length > 0
+                                      ? 'linear-gradient(to right, transparent , #F9E6FF)'
+                                      : 'linear-gradient(to right, transparent , #fff)'
+                                  }
+                                />
+                              )}
+                            </div>
+
+                            {child.children && openedNavItems.filter((i) => i == child.id).length > 0 && (
+                              <>
+                                {child.children.map((lastChild) => (
+                                  <div
+                                    key={lastChild.id}
+                                    className={`text-alsoit-gray-300  transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-1.5 ml-10
+                    ${activeNavItem == lastChild.id ? 'font-semibold' : 'font-medium'}  ${
+                                      openedNavItems.filter((i) => i == lastChild.id).length > 0 &&
+                                      lastChild.children &&
+                                      lastChild.children.length > 0
+                                        ? 'bg-alsoit-purple-50'
+                                        : 'hover:bg-alsoit-gray-125'
+                                    }`}
+                                    style={{
+                                      maxWidth: '137px'
+                                    }}
+                                  >
+                                    <ModalNavCheckEntity
+                                      item={lastChild}
+                                      ToggleOpenedNavItems={ToggleOpenedNavItems}
+                                      openedNavItems={openedNavItems}
+                                    />
+                                    <span
+                                      className="modal-item cursor-pointer whitespace-nowrap w-full"
+                                      style={{ fontSize: '13px', paddingLeft: '5px' }}
+                                      onClick={() => modalItemClick(lastChild.url)}
+                                    >
+                                      {lastChild.name}
+                                    </span>
+                                    {lastChild.name.length > 15 && (
+                                      <BlurEffect
+                                        top="0"
+                                        right="0"
+                                        bottom="0"
+                                        left="auto"
+                                        width="25px"
+                                        height="27.5px"
+                                        backgroundImage={
+                                          openedNavItems.filter((i) => i == lastChild.id).length > 0 &&
+                                          lastChild.children &&
+                                          lastChild.children.length > 0
+                                            ? 'linear-gradient(to right, transparent , #F9E6FF)'
+                                            : 'linear-gradient(to right, transparent , #fff)'
+                                        }
+                                      />
+                                    )}
+                                  </div>
+                                ))}
+                              </>
+                            )}
+                          </>
+                        ))}
+                      </>
                     )}
-                  </div>
-                )
+                  </>
+                ))}
+              </>
+            ) : (
+              <>
+                {filteredNavTree.map((searchItem) => (
+                  <>
+                    <div
+                      key={searchItem.id}
+                      className={`text-alsoit-gray-300  transition duration-300 overflow-hidden relative rounded py-1 pl-2 flex items-center group mb-1.5 hover:bg-alsoit-gray-125
+                    ${activeNavItem == searchItem.id ? 'font-semibold' : 'font-medium'}`}
+                      style={{
+                        maxWidth: '180px',
+                        width: '100%'
+                      }}
+                      onClick={() => modalItemClick(searchItem.url)}
+                    >
+                      <ModalNavCheckEntity
+                        item={searchItem}
+                        ToggleOpenedNavItems={ToggleOpenedNavItems}
+                        openedNavItems={openedNavItems}
+                      />
+                      <span
+                        className="modal-item cursor-pointer whitespace-nowrap w-full"
+                        style={{ fontSize: '13px', paddingLeft: '5px' }}
+                      >
+                        {searchItem.name}
+                      </span>
+                      {searchItem.name.length > 20 && (
+                        <BlurEffect
+                          top="0"
+                          right="0"
+                          bottom="0"
+                          left="auto"
+                          width="25px"
+                          height="27.5px"
+                          backgroundImage={
+                            openedNavItems.filter((i) => i == searchItem.id).length > 0 &&
+                            searchItem.children &&
+                            searchItem.children.length > 0
+                              ? 'linear-gradient(to right, transparent , #F9E6FF)'
+                              : 'linear-gradient(to right, transparent , #fff)'
+                          }
+                        />
+                      )}
+                    </div>
+                  </>
+                ))}
+              </>
             )}
           </div>
         </VerticalScroll>

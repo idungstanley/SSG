@@ -207,7 +207,6 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
                     modalItemClick={modalItemClick}
                     modalNavTree={modalNavTree}
                     activeNavItem={activeNavItem[0]}
-                    activeArrowItem={item.id}
                   />
                 </AlsoitMenuDropdown>
               )}
