@@ -31,7 +31,9 @@ interface AssigneeItem {
 function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned, isWatchers }: AssigneeItem) {
   const dispatch = useAppDispatch();
 
-  const { selectedTasksArray, selectedListIds, selectedTaskParentId } = useAppSelector((state) => state.task);
+  const { selectedTasksArray, selectedListIds, selectedTaskParentId, CompactView } = useAppSelector(
+    (state) => state.task
+  );
 
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee(entity_id as string, item as AssigneeType);
 
@@ -105,7 +107,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned,
   };
 
   return (
-    <div className="flex items-center justify-between cursor-pointer w-full hover:bg-gray-200 h-12 px-4 group">
+    <div className="flex items-center justify-between w-full h-12 px-4 cursor-pointer hover:bg-gray-200 group">
       <div className="relative flex items-center space-x-2 cursor-pointer" onClick={handleAllAssignee}>
         <span className={`${isAssigned ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null}`}>
           {!teams ? (
@@ -114,14 +116,25 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned,
                 <AvatarWithInitials
                   initials={item.user.initials}
                   backgroundColour={item.user.color}
-                  height="h-8"
-                  width="w-8"
+                  height={CompactView ? 'h-5' : 'h-7'}
+                  width={CompactView ? 'w-5' : 'w-7'}
                 />
               )}
-              {item.user.avatar_path && <AvatarWithImage image_path={item.user.avatar_path} height="h-8" width="w-8" />}
+              {item.user.avatar_path && (
+                <AvatarWithImage
+                  image_path={item.user.avatar_path}
+                  height={CompactView ? 'h-5' : 'h-7'}
+                  width={CompactView ? 'w-5' : 'w-7'}
+                />
+              )}
             </div>
           ) : (
-            <AvatarWithInitials initials={item.user.initials} backgroundColour={item.color} height="h-8" width="w-8" />
+            <AvatarWithInitials
+              initials={item.user.initials}
+              backgroundColour={item.color}
+              height={CompactView ? 'h-5' : 'h-7'}
+              width={CompactView ? 'w-5' : 'w-7'}
+            />
           )}
         </span>
         <p className="text-sm text-black truncate hover:text-clip">
@@ -144,7 +157,7 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned,
           </button>
         ) : null}
 
-        <button className="text-black border rounded p-1 bg-white">Profile</button>
+        <button className="p-1 text-black bg-white border rounded">Profile</button>
       </div>
     </div>
   );

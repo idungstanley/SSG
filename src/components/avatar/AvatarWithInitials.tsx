@@ -25,9 +25,6 @@ function AvatarWithInitials({
 }: AvatarWithInitialsProps) {
   const { CompactView } = useAppSelector((state) => state.task);
 
-  const modeHeight = CompactView ? '19px' : '28px';
-  const modeWidth = CompactView ? '19px' : '28px';
-
   return (
     <div className="relative flex items-center">
       <span
@@ -35,9 +32,7 @@ function AvatarWithInitials({
           roundedStyle === 'circular' && 'rounded-full'
         } ${roundedStyle === 'rounded' && 'rounded'}`}
         style={{
-          backgroundColor: backgroundColour,
-          height: modeHeight,
-          width: modeWidth
+          backgroundColor: backgroundColour
         }}
       >
         <span className="font-bold leading-none" style={{ fontSize: textSize, color: textColor }}>
