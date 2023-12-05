@@ -43,8 +43,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   children?: ReactNode;
   taskIndex?: number;
   showSubTasks?: boolean;
-  hoverOn?: boolean;
-  setHoverOn: (i: boolean) => void;
   setShowSubTasks: (i: boolean) => void;
   paddingLeft?: number;
   taskStatusId?: string;
@@ -63,7 +61,6 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 
 export function StickyCol({
-  hoverOn,
   showSubTasks,
   setShowSubTasks,
   children,
@@ -159,21 +156,21 @@ export function StickyCol({
   const onToggleDisplayingSubTasks = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     setShowSubTasks(!showSubTasks);
-
     dispatch(setRootTaskIds(undefined));
     if (!task.parent_id) {
       dispatch(setTaskRootIds({ ...taskRootIds, [task.id]: [task.id] }));
-    } else {
-      const updateTaskRootIds = { ...taskRootIds };
-      for (const key of task.root_task_ids as string[]) {
-        if (updateTaskRootIds[key]) {
-          const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
-
-          updateTaskRootIds[key] = taskRootIdsArray;
-        }
-      }
-      dispatch(setTaskRootIds(updateTaskRootIds));
     }
+    // else {
+    //   const updateTaskRootIds = { ...taskRootIds };
+
+    //   for (const key of task?.root_task_ids as string[]) {
+    //     if (updateTaskRootIds[key]) {
+    //       const taskRootIdsArray = [...(task.root_task_ids as string[]), task.id];
+    //       updateTaskRootIds[key] = taskRootIdsArray;
+    //     }
+    //   }
+    //   dispatch(setTaskRootIds(updateTaskRootIds));
+    // }
   };
 
   const editTaskMutation = useMutation(UseUpdateTaskService, {
@@ -331,51 +328,6 @@ export function StickyCol({
   const [saveToggle, setSaveToggle] = useState<boolean>(false);
   const [closeToggle, setCloseToggle] = useState<boolean>(false);
 
-  const [width, setWidth] = useState(0);
-  const [hoverWidth, setHoverWidth] = useState(0);
-  const badgeRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const divRef = useRef<HTMLDivElement>(null);
-  const observer = useRef<ResizeObserver | null>(null);
-
-  useEffect(() => {
-    if (!contentRef.current || !divRef.current || !badgeRef.current) return;
-    const ref = contentRef.current;
-    observer.current = new ResizeObserver(() => {
-      const contentWidth = () => {
-        if (task.has_attachments && task.has_descendants && task.description) {
-          return ref.clientWidth - 160;
-        } else if (
-          (task.has_attachments && task.has_descendants) ||
-          (task.has_attachments && task.description) ||
-          (task.description && task.has_descendants)
-        ) {
-          return ref.clientWidth - 100;
-        } else if (task.has_descendants || task.has_attachments || task.description) {
-          return ref.clientWidth - 70;
-        } else {
-          return ref.clientWidth - 30;
-        }
-      };
-      const content = contentWidth();
-      const full = divRef.current ? divRef.current.clientWidth : 0;
-      const badge = badgeRef.current ? badgeRef.current.clientWidth + 30 : 0;
-      setWidth(Math.round((content / full) * 100));
-      setHoverWidth(Math.round(((content - badge) / content) * 100));
-    });
-    observer.current.observe(ref);
-    return () => {
-      observer.current?.unobserve(ref);
-    };
-  });
-
-  const renderContentWidth = () => {
-    if (saveSettingOnline?.singleLineView) {
-      return hoverOn ? `${hoverWidth}%` : `${width}%`;
-    }
-    return '100%';
-  };
-
   const handleDroppable = () => {
     if (task.parent_id === draggableItemId && level) {
       return false;
@@ -388,8 +340,7 @@ export function StickyCol({
     <>
       {task.id !== '0' && (
         <td
-          className={`sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start
-          }`}
+          className="sticky left-0 z-10 flex items-center justify-start text-sm font-medium text-gray-900 cursor-pointer text-start"
           style={{ ...styles, zIndex: '1' }}
           {...props}
         >
@@ -417,7 +368,6 @@ export function StickyCol({
             <div className="pr-2">{dragElement}</div>
           </div>
           <div
-            ref={contentRef}
             style={{
               paddingLeft,
               height:
@@ -425,13 +375,14 @@ export function StickyCol({
                   ? '42px'
                   : saveSettingOnline?.CompactView && saveSettingOnline?.singleLineView
                   ? '25px'
-                  : ''
+                  : '',
+              maxWidth: saveSettingOnline?.singleLineView ? 'calc(100% - 40px)' : '100%'
             }}
             onClick={onClickTask}
             onDoubleClick={() => handleSetEditable()}
             className={cl(
               COL_BG,
-              ` ${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
+              `${isChecked && 'tdListV'} ${verticalGrid && 'border-r'} ${
                 verticalGridlinesTask && 'border-r'
               } relative w-full h-full flex items-center`,
               isOver && draggableItemId !== dragOverItemId && !dragToBecomeSubTask
@@ -478,18 +429,18 @@ export function StickyCol({
                 </button>
               </ToolTip>
             ) : null}
-            <div ref={divRef} className="flex flex-col items-start justify-start flex-grow max-w-full pl-2 space-y-1">
+            <div
+              className="flex flex-col items-start justify-start flex-grow pl-2 space-y-1"
+              style={{ maxWidth: '100%', overflow: 'hidden' }}
+            >
               <div
-                className="flex items-center text-left"
-                style={{
-                  maxWidth: renderContentWidth()
-                }}
+                className={`w-full flex items-center text-left ${saveSettingOnline?.singleLineView ? 'truncate' : ''}`}
                 onKeyDown={(e) => (e.key === 'Enter' && eitableContent ? handleEditTask(e, task.id) : null)}
               >
                 <div
                   className={`font-semibold alsoit-gray-300 ${
                     saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
-                  } max-w-full`}
+                  } ${saveSettingOnline?.singleLineView ? 'truncate' : ''}`}
                   contentEditable={eitableContent}
                   suppressContentEditableWarning={true}
                   ref={inputRef}
@@ -500,14 +451,10 @@ export function StickyCol({
                         <DetailsOnHover
                           hoverElement={
                             <div
-                              className={`font-semibold alsoit-gray-300 ${
-                                saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
-                              } w-full`}
-                              style={{
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
-                              }}
+                              className={`${task.name.length > 20 ? 'truncate' : ''} font-semibold alsoit-gray-300 ${
+                                saveSettingOnline?.CompactView ? 'trantext-alsoit-text-md' : 'text-alsoit-text-lg'
+                              }`}
+                              style={{ maxWidth: '90%', whiteSpace: 'nowrap' }}
                             >
                               {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                             </div>
@@ -534,9 +481,10 @@ export function StickyCol({
                   )}
                 </div>
                 <div
-                  ref={badgeRef}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-between pl-2 min-h-fit"
+                  className={`${
+                    task.name.length > 20 ? 'absolute right-0' : ''
+                  } ${COL_BG} h-5/6 flex items-center justify-between pl-2 min-h-fit`}
                 >
                   {children}
                 </div>

@@ -12,7 +12,6 @@ export default function Effect({ ...props }: Props) {
         <path d="M4.44813 3.01758L5.89649 4.5675" stroke="#919191" strokeWidth="0.72" strokeLinecap="round" />
         <path d="M7.24493 3.91934L7.23574 1.79804" stroke="#919191" strokeWidth="0.72" strokeLinecap="round" />
         <path d="M9.19699 5.88469L11.3183 5.87332" stroke="#919191" strokeWidth="0.72" strokeLinecap="round" />
-        <rect x="0.848828" y="0.05" width="11.9" height="11.9" rx="1.95" stroke="#B2B2B2" strokeWidth="0.1" />
       </svg>
     </div>
   );

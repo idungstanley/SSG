@@ -74,6 +74,7 @@ interface workspaceState {
   activityArray: IActivityLog[];
   logType: 'activity' | 'history';
   activeLogTab: 'activity' | 'history';
+  activityFilterDate: { start: Dayjs; end?: Dayjs } | null;
   selectedDate: { date: Dayjs; dateType?: string } | null;
   showTreeInput: boolean;
   workspaceData: undefined | IWorkspaceRes;
@@ -89,6 +90,7 @@ interface workspaceState {
   nestedTimeEntityId: string | null;
   activeView: IView | null;
   entityForPermissions?: IList | IWallet | IHub;
+  isOpenTootipContent: boolean;
 }
 
 const initialState: workspaceState = {
@@ -130,7 +132,7 @@ const initialState: workspaceState = {
   activeClockTab: 'Real Time',
   activeStatusManagementTabId: 'custom',
   activeSubHubManagerTabId: 'create_hub',
-  activeSubCommunicationTabId: 'email',
+  activeSubCommunicationTabId: 'chat',
   fetchAllWorkspace: false,
   showAddHotKeyDropdown: false,
   showExtendedBar: false,
@@ -145,6 +147,7 @@ const initialState: workspaceState = {
   activityArray: [],
   logType: 'activity',
   activeLogTab: 'activity',
+  activityFilterDate: null,
   selectedDate: { date: dayjs() },
   showTreeInput: false,
   lastActiveItem: '',
@@ -158,7 +161,8 @@ const initialState: workspaceState = {
   activeHotkeyIds: hotkeyIdsFromLS,
   nestedTimeEntityId: null,
   activeView: null,
-  entityForPermissions: undefined
+  entityForPermissions: undefined,
+  isOpenTootipContent: false
 };
 
 export const wsSlice = createSlice({
@@ -369,6 +373,9 @@ export const wsSlice = createSlice({
     setActiveLogTab(state, action: PayloadAction<'activity' | 'history'>) {
       state.activeLogTab = action.payload;
     },
+    setActivityFilterDate(state, action: PayloadAction<{ start: Dayjs; end?: Dayjs } | null>) {
+      state.activityFilterDate = action.payload;
+    },
     setSelectedDate(state, action: PayloadAction<{ date: Dayjs; dateType?: string } | null>) {
       state.selectedDate = action.payload;
     },
@@ -395,6 +402,9 @@ export const wsSlice = createSlice({
     },
     setEntityForPermissions(state, action: PayloadAction<IList | IWallet | IHub | undefined>) {
       state.entityForPermissions = action.payload;
+    },
+    setOpenTootipContent(state, action: PayloadAction<boolean>) {
+      state.isOpenTootipContent = action.payload;
     }
   }
 });
@@ -446,6 +456,7 @@ export const {
   setActivityArray,
   setLogType,
   setActiveLogTab,
+  setActivityFilterDate,
   setSelectedDate,
   setShowTreeInput,
   setShowIndependentPilot,
@@ -465,7 +476,8 @@ export const {
   setActiveView,
   setEntityForPermissions,
   setActiveSubLogsTabId,
-  setEditingPilotDetailsTitle
+  setEditingPilotDetailsTitle,
+  setOpenTootipContent
 } = wsSlice.actions;
 
 export default wsSlice.reducer;

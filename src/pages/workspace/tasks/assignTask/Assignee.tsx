@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import GroupAssignee from './GroupAssignee';
@@ -21,7 +21,8 @@ export default function Assignee({
   task,
   icon,
   isAdditionalHeader,
-  isWatchers
+  isWatchers,
+  activeColumn
 }: {
   itemId?: string;
   option: string;
@@ -30,15 +31,18 @@ export default function Assignee({
   icon?: React.ReactNode;
   isAdditionalHeader?: boolean;
   isWatchers?: boolean;
+  activeColumn?: boolean[];
 }) {
   const dispatch = useAppDispatch();
 
-  const { currTeamMemberId } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
 
   const [searchInput, setSearchInput] = useState<string>('');
   const [teams, setTeams] = useState<boolean>(false);
   const [filteredMembers, setFilteredMembers] = useState<ITeamMembersAndGroup[] | undefined>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -117,8 +121,25 @@ export default function Assignee({
     }
   };
 
+  const handleKeyBoardDown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setAnchorEl(containerRef.current);
+    }
+  };
+
+  useEffect(() => {
+    if (containerRef.current && activeColumn) {
+      if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
+        containerRef.current.focus();
+      }
+      containerRef.current.addEventListener('keydown', handleKeyBoardDown);
+    }
+
+    return () => containerRef.current?.removeEventListener('keydown', handleKeyBoardDown);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+
   return (
-    <>
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex items-center justify-center focus:ring-0">
       {option === 'getTeamId' ? (
         <div id="basic-button">{renderIcon()}</div>
       ) : (
@@ -140,12 +161,12 @@ export default function Assignee({
       )}
       <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl as HTMLDivElement | null}>
         <div className="overflow-scroll" style={{ maxHeight: '400px' }}>
-          <section className="relative sticky z-10 flex items-center bg-white top-2">
+          <section className="relative sticky z-10 flex items-center bg-white top-1">
             <AiOutlineSearch className="absolute w-5 h-5 right-3" />
             <input
               type="text"
               placeholder="Search..."
-              className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none"
+              className="w-11/12 p-2 m-auto border-0 rounded-md focus:outline-none focus:ring-0"
               onKeyDown={handleKeyDown}
               onChange={(e) => searchItem(e.target.value)}
             />
@@ -195,6 +216,6 @@ export default function Assignee({
               })}
         </div>
       </AlsoitMenuDropdown>
-    </>
+    </div>
   );
 }

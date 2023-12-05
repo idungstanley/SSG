@@ -3,7 +3,7 @@ import ListNav from '../../../../pages/workspace/lists/components/renderlist/Lis
 export function ChangeView() {
   return (
     <div>
-      <ListNav viewsList="List" viewsSubtasks="Subtasks" changeViews="Show" />
+      <ListNav viewsList="List" viewsSubtasks="Subtasks" changeViews="Switch" />
     </div>
   );
 }

@@ -305,10 +305,12 @@ export function Head({
                 />
               </div>
               <div
-                className="py-0.5 relative px-2 rounded-tr-md -mb-1 flex items-center space-x-1 text-white dFlex"
+                className="py-0.5 relative pr-4 pl-2.5 flex items-center space-x-1 text-white dFlex"
                 style={{
                   backgroundColor: headerStatusColor,
-                  marginLeft: '38px',
+                  borderTopRightRadius: '5px',
+                  borderTopLeftRadius: '5px',
+                  marginLeft: '39px',
                   height: '25px',
                   gap: '5px'
                 }}
@@ -323,7 +325,10 @@ export function Head({
                         hoverBg="white"
                       />
                     </div>
-                    <span ref={scrollToRef} style={{ fontSize: '11px', WebkitTextStroke: '0.5px', fontWeight: 500 }}>
+                    <span
+                      ref={scrollToRef}
+                      style={{ fontSize: '13px', WebkitTextStroke: '0.2px', fontWeight: 400, letterSpacing: '0.28px' }}
+                    >
                       {parsedLabel.toUpperCase()}
                     </span>
                     <div className="items-center pl-2 space-x-1 viewSettings" onClick={(e) => e.stopPropagation()}>
@@ -354,12 +359,12 @@ export function Head({
                 </AlsoitMenuDropdown>
               </div>
               <div
-                className="flex items-center hover:bg-gray-200 p-0.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
-                style={{ fontSize: '11px', WebkitTextStroke: '0.5px' }}
+                className="flex items-center hover:bg-gray-200 p-0.5 pb-[1px] pl-1.5 rounded-xs space-x-1  border-t-2 border-l-2 border-r-2 border-transparent hover:border-r-gray-600 text-alsoit-gray-200 font-semibold"
+                style={{ fontSize: '11px', WebkitTextStroke: '0.1px', letterSpacing: '0.28px' }}
               >
                 <span onClick={(e) => setOptions(e, columns[0])} className="cursor-pointer">
-                  <span className="mr-1.5">{taskLength}</span>
-                  {!collapseTasks ? columns[0].value.toUpperCase() : null}
+                  <span className="mr-1">{taskLength}</span>
+                  {!collapseTasks ? columns[0].value : null}s
                 </span>
                 <>
                   {sortArr.length >= 1 && sortArr.includes(columns[0].value) ? (

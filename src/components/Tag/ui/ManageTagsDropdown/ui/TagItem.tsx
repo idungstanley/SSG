@@ -111,7 +111,9 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
       </div>
 
       <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={() => setAnchorEl(null)}>
-        <TagActions items={actionsConfig} />
+        <div key="tagActions">
+          <TagActions items={actionsConfig} />
+        </div>
       </Menu>
 
       <Menu
@@ -120,7 +122,9 @@ export function TagItem({ tag, onClick, entityId, entityType }: TagItemProps) {
         onClose={() => setShowSelectColorDropdown(false)}
         style={{ marginTop: '100px', marginLeft: '30px' }}
       >
-        <SelectColor onClick={handleClickColor} color={color} />
+        <div key="selectColor">
+          <SelectColor onClick={handleClickColor} color={color} />
+        </div>
       </Menu>
     </>
   );

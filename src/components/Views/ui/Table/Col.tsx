@@ -1,4 +1,4 @@
-import { TdHTMLAttributes } from 'react';
+import { TdHTMLAttributes, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   ICustomField,
@@ -65,12 +65,26 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
 
+  const [arrangedHeaders, setArrangedHeaders] = useState<string[]>([]);
+
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
+  const columnIndex = arrangedHeaders.map((columns): boolean => {
+    return columns === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
+  });
+
+  useEffect(() => {
+    const newArr = taskColumns
+      .filter((columns) => !columns.hidden)
+      .map((columns) => columns.field)
+      .filter((field) => field !== undefined);
+
+    setArrangedHeaders(newArr as string[]);
+  }, [field, taskColumns]);
 
   // fields config
   const fields: Record<string, JSX.Element> = {
-    priority: <TaskPriority task={task as ImyTaskData} />,
+    priority: <TaskPriority task={task as ImyTaskData} activeColumn={columnIndex} />,
     status: value ? (
       <div
         className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize"
@@ -86,21 +100,40 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
           dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
         }}
       >
-        <StatusDropdown taskCurrentStatus={task.status} taskStatuses={task.task_statuses} statusDropdownType="name" />
+        <StatusDropdown
+          taskCurrentStatus={task.status}
+          taskStatuses={task.task_statuses}
+          statusDropdownType="name"
+          task={task}
+          activeColumn={columnIndex}
+        />
       </div>
     ) : (
       <></>
     ),
-    created_at: <DateFormat date={value as string} font="text-sm" type="created_at" />,
-    updated_at: <DateFormat date={value as string} font="text-sm" type="updated_at" />,
-    start_date: <DateFormat date={value as string} font="text-sm" task={task} type="start_date" />,
-    end_date: <DateFormat date={value as string} font="text-sm" task={task} type="end_date" isDueDate={true} />,
+    created_at: <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="created_at" />,
+    updated_at: <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="updated_at" />,
+    start_date: (
+      <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" task={task} type="start_date" />
+    ),
+    end_date: (
+      <DateFormat
+        date={value as string}
+        activeColumn={columnIndex}
+        font="text-sm"
+        task={task}
+        type="end_date"
+        isDueDate={true}
+      />
+    ),
     dropdown: (
       <DropdownFieldWrapper
         taskId={task.id}
         fieldId={fieldId}
         taskCustomFields={task.custom_fields}
         entityCustomProperty={task.custom_field_columns}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     labels: (
@@ -108,6 +141,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         taskId={task.id}
+        task={task}
+        activeColumn={columnIndex}
       />
     ),
     tags: <TagsWrapper tags={task.tags} />,
@@ -116,6 +151,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     email: (
@@ -124,6 +161,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="email"
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     longtext: (
@@ -131,6 +170,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     number: (
@@ -138,6 +179,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     money: (
@@ -146,6 +189,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     date: <DateField />,
@@ -155,6 +200,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     website: (
@@ -163,6 +210,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         fieldType="website"
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     phone: (
@@ -177,6 +226,7 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         task={task as ImyTaskData}
         itemId={task.id}
         option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+        activeColumn={columnIndex}
       />
     ),
     progress_manual: (
@@ -198,6 +248,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     rating: (
@@ -217,6 +269,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields as ICustomField[]}
         taskCustomFieldsColumns={task.custom_field_columns}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     people: (
@@ -225,6 +279,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     files: (
@@ -233,6 +289,8 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
         listId={task.list_id}
+        activeColumn={columnIndex}
+        task={task}
       />
     ),
     location: (
@@ -240,13 +298,11 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         taskId={task.id}
         taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
         fieldId={fieldId}
+        activeColumn={columnIndex}
+        task={task}
       />
     )
   };
-
-  const columnIndex = taskColumns.map((columns): boolean => {
-    return !columns.hidden && columns.field === field && task.id === KeyBoardSelectedTaskData?.id ? true : false;
-  });
 
   return (
     <>

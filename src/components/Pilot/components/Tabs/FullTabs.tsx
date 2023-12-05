@@ -29,8 +29,8 @@ interface TabsProps {
 const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as { tabOrder: string[]; showTabLabel: boolean };
 const tabIdsFromLS = pilotFromLS.tabOrder || [];
 
-const MIN = 99;
-const MAX = 264;
+const MIN = 119;
+const MAX = 320;
 
 export default function FullTabs({ tabs }: TabsProps) {
   const { showTabLabel } = useAppSelector((state) => state.workspace);
@@ -59,6 +59,7 @@ export default function FullTabs({ tabs }: TabsProps) {
       min: MIN,
       max: MAX
     },
+    defaultSize: MAX,
     storageKey: 'pilotFeaturesHeight',
     direction: 'YB'
   });
@@ -79,7 +80,7 @@ export default function FullTabs({ tabs }: TabsProps) {
   return (
     <>
       {showTabLabel ? (
-        <VerticalScroll>
+        <VerticalScroll place="pilot-hotkeys" style={{ margin: 0 }}>
           <div style={{ height: size }}>
             <div ref={blockRef} className={cl('relative h-fit col-span-1 border-r-0 flex items-center')}>
               <nav ref={navRef} className={cl('relative h-full grid grid-cols-1 divide-y grow')} aria-label="Tabs">

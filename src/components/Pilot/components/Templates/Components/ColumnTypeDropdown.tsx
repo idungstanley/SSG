@@ -1,170 +1,170 @@
 import * as React from 'react';
-import MenuItem from '@mui/material/MenuItem';
 import ArrowDown from '../../../../../assets/icons/ArrowDown';
-import { useAppSelector } from '../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
 import { Capitalize } from '../../../../../utils/NoCapWords/Capitalize';
-import { Dialog, Transition } from '@headlessui/react';
 import { useAbsolute } from '../../../../../hooks/useAbsolute';
-import DropdownOptions from './Dropdown/Dropdown';
-import TextOptions from './Texts/Text';
-import DateOptions from './Date/Date';
-import CurrencyOptions from './Currency/Currency';
-import NumberOptions from './Number/Number';
-import EmailOptions from './Email/Email';
-import WebsiteOptions from './Websites/WebsiteOptions';
-import PhoneOptions from './Phone/PhoneOptions';
-import CheckBoxOptions from './Checkbox/CheckboxOptions';
-import RatingOption from './Rating/RatingOptions';
 import { VerticalScroll } from '../../../../ScrollableContainer/VerticalScroll';
-import ProgressOptions from './Progress/Progress';
-import TimeOption from './Time/TimeOptions';
-import FormulaOptions from './Formula/Formula';
-import FilesOptions from './Files/FileOption';
-import PeopleOptions from './People/PeopleOptions';
-import LocationOptions from './Location/LocationOptions';
-
-const columnTypes = [
-  {
-    id: 'Dropdown',
-    title: 'Dropdown',
-    options: <DropdownOptions />
-  },
-  {
-    id: 'Text',
-    title: 'Text',
-    options: <TextOptions />
-  },
-  {
-    id: 'Date',
-    title: 'Date',
-    options: <DateOptions />
-  },
-  {
-    id: 'Currency',
-    title: 'Currency',
-    options: <CurrencyOptions />
-  },
-  {
-    id: 'Number',
-    title: 'Number',
-    options: <NumberOptions />
-  },
-  {
-    id: 'Email',
-    title: 'Email',
-    options: <EmailOptions />
-  },
-  {
-    id: 'Website',
-    title: 'Website',
-    options: <WebsiteOptions />
-  },
-  {
-    id: 'Phone',
-    title: 'Phone',
-    options: <PhoneOptions />
-  },
-  {
-    id: 'Checkbox',
-    title: 'Checkbox',
-    options: <CheckBoxOptions />
-  },
-  {
-    id: 'Rating',
-    title: 'Rating',
-    options: <RatingOption />
-  },
-  {
-    id: 'Progress',
-    title: 'Progress',
-    options: <ProgressOptions />
-  },
-  {
-    id: 'Time',
-    title: 'Time',
-    options: <TimeOption />
-  },
-  {
-    id: 'Formula',
-    title: 'Formula',
-    options: <FormulaOptions />
-  },
-  {
-    id: 'Files',
-    title: 'Files',
-    options: <FilesOptions />
-  },
-  {
-    id: 'People',
-    title: 'People',
-    options: <PeopleOptions />
-  },
-  {
-    id: 'Location',
-    title: 'location',
-    options: <LocationOptions />
-  }
-];
+import AlsoitMenuDropdown from '../../../../DropDowns';
+import { InlineBorderLabel } from '../../../../Dropdown/MenuDropdown';
+import ChatSearch from '../../../../../assets/icons/ChatSearch';
+import { setNewCustomPropertyDetails } from '../../../../../features/task/taskSlice';
+import CustomPropertyList, { columnTypesProps } from './CustomPropertyList';
+// import { FaCaretRight } from 'react-icons/fa';
+import NamedIconPair from './NamedIconPair';
+import SubtractWrapper from '../../../../Dropdown/SubtractWrapper';
 
 export default function ColumnTypeDropdown() {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const closeModal = () => setIsOpen(false);
+  const dispatch = useAppDispatch();
+
+  const { columnTypes } = CustomPropertyList();
+
   const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
+  const { updateCords } = useAppSelector((state) => state.task);
+  const { relativeRef } = useAbsolute(updateCords, 372);
+
+  const [isOpen, setIsOpen] = React.useState<null | HTMLButtonElement>(null);
+  const [searchValue, setSearchValue] = React.useState<string>('');
+  const [filteredCollections, setFilteredCollections] = React.useState<columnTypesProps[]>(columnTypes);
+  const [activeDropdownOption, setActiveDropdownOption] = React.useState<string>('');
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    if (value.length) {
+      setFilteredCollections(columnTypes.filter((item) => item.title.toLowerCase().startsWith(value.toLowerCase())));
+    } else {
+      setFilteredCollections(columnTypes);
+    }
+  };
+
+  const closeModal = () => {
+    setIsOpen(null);
+    setActiveDropdownOption('');
+  };
 
   const onClickOpenDropdown = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    setIsOpen(true);
+    setIsOpen(e.currentTarget);
   };
 
-  const { updateCords } = useAppSelector((state) => state.task);
-  const { cords, relativeRef } = useAbsolute(updateCords, 372);
+  const handleActiveDropdownOption = (value: string) => {
+    setActiveDropdownOption((prev) => (prev === value ? '' : value));
+  };
+
+  const handleSelectChildOption = (name: string, id: string) => {
+    dispatch(setNewCustomPropertyDetails({ ...newCustomPropertyDetails, type: name, id }));
+    closeModal();
+  };
+
+  const selectedPropertyType = React.useMemo(
+    () =>
+      columnTypes.find((option) => option.children.find((child) => child.id === newCustomPropertyDetails.id)) || null,
+    [newCustomPropertyDetails, columnTypes]
+  );
+
+  const selectedChildProperty = React.useMemo(
+    () => selectedPropertyType?.children.find((option) => option.id === newCustomPropertyDetails.id),
+    [selectedPropertyType, newCustomPropertyDetails.id]
+  );
 
   return (
-    <div>
-      <div ref={relativeRef}>
+    <div className="relative w-full">
+      <div ref={relativeRef} className="w-full">
         <button
           onClick={onClickOpenDropdown}
-          className="bg-white flex gap-4 items-center justify-between cursor-pointer w-full px-2"
-          style={{ height: '30px', borderRadius: '6px' }}
+          className="flex items-center justify-between w-full h-8 gap-2 px-2 text-left truncate bg-white cursor-pointer"
+          style={{ borderRadius: '6px' }}
         >
-          <p className="text-black text-alsoit-gray-300-md font-semibold w-full truncate">
-            {Capitalize(newCustomPropertyDetails.type)}
-          </p>
-          <ArrowDown className="w-4 h-4" />
+          {selectedChildProperty?.name && (
+            <NamedIconPair
+              iconColor="text-alsoit-gray-100"
+              color="text-alsoit-gray-300"
+              isLeadingIcon={true}
+              parentName={selectedPropertyType?.title as string}
+              parentIcon={selectedPropertyType?.icon as JSX.Element}
+              childIcon={selectedChildProperty?.icon as JSX.Element}
+              childName={selectedChildProperty?.name}
+            />
+          )}
+          {!selectedChildProperty?.name && (
+            <div
+              className="flex items-center gap-1"
+              style={{ maxWidth: selectedChildProperty?.name ? '40%' : undefined }}
+            >
+              <div>{selectedChildProperty?.icon}</div>
+              <p className="w-full font-semibold truncate text-alsoit-gray-100">
+                {Capitalize(newCustomPropertyDetails.type)}
+              </p>
+            </div>
+          )}
+          <span className={`flex items-center w-4 h-4 ${isOpen ? 'origin-center rotate-180' : ''}`}>
+            <ArrowDown className="w-3 h-3" color={isOpen ? '#BF01FE' : '#919191'} />
+          </span>
         </button>
       </div>
-      <Transition appear show={isOpen} as="div">
-        <Dialog as="div" className="relative z-20" onClose={closeModal}>
-          <div style={{ ...cords }} className="fixed">
-            <div
-              className="flex-col bg-white h-fit py-1 outline-none flex items-start text-left mt-2 rounded-md shadow-lg focus:outline-none"
-              style={{ ...cords, width: '174px' }}
-            >
-              <p className="text-alsoit-text-sm font-bold flex justify-center pt-3 w-full">CUSTOM PROPERTY</p>
-              <div className="relative flex justify-center mt-2 w-full">
-                <hr className="bg-gray-300 h-0.5 w-full relative" />
-                <span className="text-alsoit-text-sm font-bold text-gray-400 text-center absolute -top-1 px-1 bg-white">
-                  SELECT PROPERTY
-                </span>
-              </div>
-              <VerticalScroll>
-                <div className="w-full mt-2 overflow-visible" style={{ maxHeight: '300px', maxWidth: '174px' }}>
-                  {columnTypes.map((item) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className="hover:bg-alsoit-gray-50 cursor-pointer h-10 w-full flex justify-between items-center"
-                      >
-                        <MenuItem className="w-full">{item.options}</MenuItem>
-                      </div>
-                    );
-                  })}
-                </div>
-              </VerticalScroll>
-            </div>
+      <AlsoitMenuDropdown handleClose={closeModal} anchorEl={isOpen}>
+        <InlineBorderLabel
+          label="SELECT PROPERTY"
+          topElement={<p className="flex justify-center w-full pt-3 font-bold text-alsoit-text-sm">CUSTOM PROPERTY</p>}
+        />
+        <div className="mx-2 h-7">
+          <div className="flex items-center w-full bg-white rounded-md grow chatSearch">
+            <span className="mx-1 chatSearch_icon">
+              <ChatSearch color="#919191" />
+            </span>
+            <input
+              className="ring-0 focus:ring-0 focus:outline-0"
+              type="text"
+              value={searchValue}
+              placeholder="Search"
+              onChange={(e) => handleSearch(e)}
+            />
           </div>
-        </Dialog>
-      </Transition>
+        </div>
+        <div className="flex flex-col items-start w-48 py-1 pl-2 mt-1 text-left rounded-md shadow-lg outline-none h-fit focus:outline-none">
+          <VerticalScroll>
+            <div className="w-full mt-1 overflow-visible" style={{ maxHeight: '300px', maxWidth: '174px' }}>
+              {filteredCollections.map((item) => {
+                return item.active ? (
+                  <>
+                    <SubtractWrapper
+                      icon={item.icon}
+                      key={item.title}
+                      isActive={activeDropdownOption === item.title}
+                      handleClick={handleActiveDropdownOption}
+                      label={item.title}
+                    />
+                    {activeDropdownOption === item.title && (
+                      <>
+                        {item.children.map((child) => (
+                          <div
+                            key={child.id}
+                            className="flex items-center justify-between w-full h-8 my-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
+                          >
+                            <div className="w-full px-2 pl-5">
+                              <button
+                                className="flex items-center justify-between w-full h-full"
+                                onClick={() => handleSelectChildOption(child.name, child.id)}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span className="flex items-center w-5 h-5 mx-1 text-lg">{child.icon}</span>
+                                  <p className="font-semibold truncate text-alsoit-gray-300-lg text-alsoit-text-lg">
+                                    {child.name}
+                                  </p>
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </>
+                ) : null;
+              })}
+            </div>
+          </VerticalScroll>
+        </div>
+      </AlsoitMenuDropdown>
     </div>
   );
 }

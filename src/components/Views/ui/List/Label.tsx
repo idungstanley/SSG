@@ -2,13 +2,16 @@ import { Task } from '../../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setSelectedTasksArray } from '../../../../features/task/taskSlice';
 import ListAddModal from './ListAddModal';
-import CollapseIcon from '../collapseIcon/CollapseIcon';
 import { IListColor } from './List';
 import { FilterDropdown } from '../../../TasksHeader/ui/Filter/FilterDropdown';
 import { Search } from '../../../TasksHeader/ui/Search/Search';
 import { Sort } from '../../../TasksHeader/ui/Sort/Sort';
 import { AssigneeSplitSubtasks } from '../../../TasksHeader/ui/Assignee/AssigneeSplitSubtasks';
 import RoundedCheckbox from '../../../Checkbox/RoundedCheckbox';
+// import ActiveEntityAvatar from '../../../avatar/ActiveEntityAvatar';
+import ListCollapseIcon from '../collapseIcon/ListCollapseIcon';
+import LightenColor from './lightenColor/LightenColor';
+import ToolbarNav from '../../../Pilot/components/ToolbarNav';
 
 interface LabelProps {
   showTable: boolean;
@@ -24,7 +27,7 @@ interface LabelProps {
 export function Label({
   showTable,
   listName,
-  hubName,
+  // hubName,
   tasks,
   ListColor,
   isSplitSubtasks,
@@ -94,26 +97,40 @@ export function Label({
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <div
-          className="flex items-center justify-between space-x-5 -mt-1 p-1 pr-7 rounded-tl-lg -ml-1 h-7 rounded-br-[5px]"
-          style={{ backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string) }}
+          className="flex items-center justify-between space-x-5 -mt-1 p-1 pr-2  h-7 rounded-br-[5px]"
+          style={{
+            backgroundColor: !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string)
+          }}
         >
-          <div className="flex items-center pl-2 space-x-2 text-sm text-white w-fit -mt-1">
-            <RoundedCheckbox
-              onChange={handleCheckedGroupTasks}
-              isChecked={allChecked}
-              styles={
-                'w-4 h-4 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 text-alsoit-purple-300'
-              }
-            />
-            <CollapseIcon color="#A854F7" active={showTable} onToggle={onClickChevron} hoverBg="white" />
+          <div className="flex items-center space-x-2 text-sm text-white w-fit -mt-1">
+            <p
+              className="rounded-full h-4 w-4"
+              style={{
+                backgroundColor: LightenColor(
+                  !ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string),
+                  0.4
+                )
+              }}
+            >
+              <RoundedCheckbox
+                onChange={handleCheckedGroupTasks}
+                isChecked={allChecked}
+                styles={
+                  'w-3.5 h-3.5 rounded-full cursor-pointer focus:outline-1 focus:ring-transparent focus:border-2 text-white '
+                }
+                onListStyle={LightenColor(!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string), 0.4)}
+                listBg={!ListColor?.outerColour ? 'black' : (ListColor?.outerColour as string)}
+              />
+            </p>
+            <ListCollapseIcon color="#A854F7" active={!showTable} onToggle={onClickChevron} hoverBg="white" />
             <h1 className="max-w-34 truncate">{listName ?? 'Loading...'}</h1>
           </div>
-          <div className="flex items-center justify-center h-6 bg-white -mt-1 rounded-[5px] w-12">
+          <div className="flex items-center justify-center h-5 bg-white -mt-1 rounded-[5px] w-12">
             <ListAddModal handleCheckedGroupTasks={handleCheckedGroupTasks} ListColor={ListColor} />
           </div>
-          {showTable && <p className="ml-3 max-w-34 truncate text-white">{hubName}</p>}
+          {showTable && <ToolbarNav option="onList" colors="text-white" />}
         </div>
-        {!showTable && <p className="ml-3 max-w-34 truncate">{hubName}</p>}
+        {!showTable && <ToolbarNav option="onList" />}
       </div>
       {isSplitSubtasks ? (
         <div className="flex items-center justify-end mr-5">

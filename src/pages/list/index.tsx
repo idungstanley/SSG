@@ -251,7 +251,7 @@ export function ListPage() {
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     if (hasNextPage && !isFetching) {
       const container = e.target as HTMLElement;
-      const scrollPositionForLoading = 0.9;
+      const scrollPositionForLoading = 0.7;
       const scrollDifference =
         container?.scrollHeight * scrollPositionForLoading - container.scrollTop - container.clientHeight;
       const range = 1;
@@ -277,7 +277,7 @@ export function ListPage() {
         <>
           <Header />
 
-          {isLoading || isFetching ? (
+          {(isLoading || isFetching) && !hasTasks ? (
             <div
               className="flex items-center justify-center w-full h-full mx-auto mt-5"
               style={{ minHeight: '0', maxHeight: '83vh' }}

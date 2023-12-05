@@ -21,19 +21,19 @@ export const logOptions = [
     id: pilotTabs.HISTORY_LOG,
     name: 'History logs',
     icon: <SiGooglephotos className="w-4 h-4" />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.ACTIVITY_LOG,
     name: 'Activity logs',
     icon: <ActivityLogIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.CUSTOM_LOG,
     name: 'Custom logs',
     icon: <LogsIcons />,
-    isVisible: false
+    isVisible: true
   }
 ];
 
@@ -78,8 +78,8 @@ export default function LogSubtabs() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-3"
-            style={{ borderBottom: `3px solid ${activeSubLogsTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid grid-cols-3 px-1 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubLogsTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {logOptions.map((item) => (
               <SubtabDrag

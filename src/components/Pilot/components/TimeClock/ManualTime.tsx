@@ -18,13 +18,11 @@ export function ManualTime() {
     startDate: '',
     endDate: ''
   });
+
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const { mutateAsync } = createManualTimeEntry();
 
-  // const handleChange = ({ value, target }: { value: string; target: string }) => {
-  //   setData((prev) => ({ ...prev, [target]: value }));
-  // };
   const handleDateClose = () => setAnchorEl(null);
   const handleSubmit = () => {
     if (selectedDate?.to) {

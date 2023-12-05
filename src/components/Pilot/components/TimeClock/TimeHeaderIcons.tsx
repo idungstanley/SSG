@@ -5,7 +5,7 @@ import { FilterListIcon } from '../../../../assets/icons/FilterListIcon';
 import Me from '../../../../assets/icons/Me';
 import SearchIcon from '../../../../assets/icons/SearchIcon';
 import ShowIcon from '../../../../assets/icons/ShowIcon';
-import { TimeShowDropDown } from './TimeShowDropDown';
+import { ShowDropDown } from './ShowDropDown';
 import { useAppSelector } from '../../../../app/hooks';
 import { TeamMemberFilter } from './TeamMember';
 import { useGetTimeEntriesMutation } from '../../../../features/task/taskService';
@@ -13,9 +13,10 @@ import DropdownWithHeader from './components/DropdownWithHeader';
 
 interface Props {
   fullContent?: boolean;
+  dateFilter?: boolean;
 }
 
-export function HeaderIcons({ fullContent }: Props) {
+export function HeaderIcons({ fullContent, dateFilter }: Props) {
   const { activeItemId, activeItemType } = useAppSelector((state) => state.workspace);
   const { currentTeamMemberId } = useAppSelector((state) => state.task);
 
@@ -34,7 +35,7 @@ export function HeaderIcons({ fullContent }: Props) {
         <ShowIcon color="gray" className="w-4 h-4" />
       </div>
       <DropdownWithHeader header="customize this view" subHeader="main settings" anchor={anchor} setAnchor={setAnchor}>
-        <TimeShowDropDown />
+        <ShowDropDown />
       </DropdownWithHeader>
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
         <FilterListIcon active={false} color="orange" className="w-4 h-4" />
@@ -55,20 +56,24 @@ export function HeaderIcons({ fullContent }: Props) {
           />
         </div>
       )}
-      <div
-        className={
-          'relative p-0.5 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
-        }
-        onClick={(e) => {
-          setAssignee(e.currentTarget);
-        }}
-      >
-        <AssigneeIcon className="w-4 h-4" active={false} />
-        <ArrowDownFilled dimensions={{ width: 6, height: 6 }} />
-      </div>
-      <div>
-        <TeamMemberFilter anchor={assignee} setAnchor={setAssignee} />
-      </div>
+      {!dateFilter && (
+        <div
+          className={
+            'relative p-0.5 rounded-md flex -space-x-1 items-center justify-between bg-white gap-2 hover:bg-alsoit-purple-50 cursor-pointer'
+          }
+          onClick={(e) => {
+            setAssignee(e.currentTarget);
+          }}
+        >
+          <AssigneeIcon className="w-4 h-4" active={false} />
+          <ArrowDownFilled dimensions={{ width: 6, height: 6 }} />
+        </div>
+      )}
+      {!dateFilter && (
+        <div>
+          <TeamMemberFilter anchor={assignee} setAnchor={setAssignee} />
+        </div>
+      )}
       <div className="flex items-center p-1 bg-white rounded-md cursor-pointer hover:bg-alsoit-purple-50">
         <SearchIcon className="w-4 h-4" color="orange" />
       </div>

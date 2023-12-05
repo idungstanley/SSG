@@ -19,13 +19,13 @@ export const formsOptions = [
     id: pilotTabs.COMING_SOON,
     name: 'Coming soon',
     icon: <IoTimeOutline />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.COMING_SOON_2,
     name: 'Coming soon',
     icon: <IoTimeOutline />,
-    isVisible: false
+    isVisible: true
   }
 ];
 
@@ -70,8 +70,8 @@ export default function FormsSubTabs() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-2"
-            style={{ borderBottom: `3px solid ${activeSubComingTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid grid-cols-2 px-1 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubComingTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {formsOptions.map((item) => (
               <SubtabDrag

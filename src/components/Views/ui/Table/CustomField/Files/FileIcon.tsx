@@ -24,7 +24,7 @@ function FileIcons({ fileExtension, filePath, fileName, width, height }: fileIco
     case 'jpeg':
     case 'png':
     case 'gif':
-      icon = <img className={iconStyle} src={filePath} alt="" />;
+      icon = <img className="w-[50px] max-h-[50px]" src={filePath} alt="" />;
       break;
     case 'doc':
     case 'docx':
@@ -52,7 +52,7 @@ function FileIcons({ fileExtension, filePath, fileName, width, height }: fileIco
     case 'avi':
     case 'mkv':
       icon = (
-        <video width="640" height="360" controls className={iconStyle}>
+        <video width="640" height="360" controls autoPlay={false} muted className={iconStyle}>
           <source src={filePath} type="video/mp4" />
         </video>
       );
@@ -64,7 +64,7 @@ function FileIcons({ fileExtension, filePath, fileName, width, height }: fileIco
 
   return (
     <ToolTip title={fileName}>
-      <a href={filePath} download target="_blank" rel="noreferrer">
+      <a href={filePath} download target="_blank" rel="noreferrer noopener">
         {icon}
       </a>
     </ToolTip>

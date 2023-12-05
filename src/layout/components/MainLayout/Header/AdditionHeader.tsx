@@ -92,7 +92,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
       currentItem = findCurrentWallet(activeEntityId as string, hub);
       return (
         <>
-          <FaFolderOpen className="w-7 h-5" color={currentItem.color || 'black'} />
+          <FaFolderOpen className="h-5 w-7" color={currentItem.color || 'black'} />
           {generateEntityName(currentItem.name)}
         </>
       );
@@ -107,7 +107,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   const generateEntityName = (name: string) => {
     return (
       <ToolTip title={activeItemName}>
-        <span className="font-bold text-left truncate w-72 text-alsoit-text-lg w-auto">
+        <span className="font-bold text-left truncate w-72 text-alsoit-text-lg">
           {activeItemName || name ? Capitalize(activeItemName ? activeItemName : name) : ''}
         </span>
       </ToolTip>
@@ -127,7 +127,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
               width="w-7"
               textSize="14px"
               roundedStyle="rounded"
-              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'blue' : 'orange'}
+              backgroundColour={item.color ? item.color : type === EntityType.hub ? 'orange' : 'blue'}
             />
           )}
         </div>
@@ -297,7 +297,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
   };
 
   return (
-    <div className="flex items-center justify-between w-full px-4 border-b" style={{ height: '50px' }}>
+    <div className="flex items-center justify-between px-4 border-b" style={{ height: '50px' }}>
       <h1
         style={{ height: '50px' }}
         className={`flex items-center ml-0 ${activePlaceId === pages.ALSO_HR ? '' : 'space-x-3'}`}
@@ -406,7 +406,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
             onMouseEnter={() => setShowClock((prev) => ({ ...prev, showMinimal: true }))}
             onMouseLeave={() => setShowClock((prev) => ({ ...prev, showMinimal: false }))}
           >
-            <span className="text-center text-alsoit-text-lg mr-1">
+            <span className="mr-1 text-center text-alsoit-text-lg">
               {moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm`).format(
                 date_format?.toUpperCase() ?? 'MM-DD-YYYY'
               )}
@@ -417,7 +417,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
                 : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
             </span>
             {clockModal && (
-              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-32 w-44">
+              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-36 w-44">
                 <HeaderTimeModal />
               </HeaderModal>
             )}

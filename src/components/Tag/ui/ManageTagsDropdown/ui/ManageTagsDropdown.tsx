@@ -57,7 +57,9 @@ export function ManageTagsDropdown({ tagsArr, entityId, entityType, icon }: Mana
         ) : (
           <button
             type="button"
-            className="p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white"
+            className={`p-1 border rounded-md bg-transparent text-gray-400 hover:text-gray-700 bg-white ${
+              saveSettingOnline?.CompactView ? 'bottom-[1px] relative' : ''
+            }`}
           >
             <span ref={relativeRef}>
               <TagIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />

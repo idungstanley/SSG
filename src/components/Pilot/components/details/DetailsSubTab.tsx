@@ -23,31 +23,31 @@ export const detailOptions = [
     id: pilotTabs.PROPERTIES,
     name: 'Properties',
     icon: <PropertyIcons />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.SUBTASK,
     name: 'Subtask',
     icon: <SubtaskIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.CHECKLISTS,
     name: 'Checklist',
     icon: <CkecklistIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.ATTACHMENTS,
     name: 'Attachments',
     icon: <AttachFileIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.TIES,
     name: 'Ties',
     icon: <TiesIcon />,
-    isVisible: false
+    isVisible: true
   }
 ];
 
@@ -92,8 +92,8 @@ export default function DetailsSubTab() {
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <section>
           <div
-            className="grid px-1 grid-cols-5"
-            style={{ borderBottom: `3px solid ${activeSubDetailsTabId ? '#ebd1fc' : 'transparent'}` }}
+            className="grid grid-cols-5 px-1 bg-alsoit-gray-125"
+            style={{ borderBottom: `2px solid ${activeSubDetailsTabId ? '#F9E6FF' : 'transparent'}` }}
           >
             {detailOptions.map((item) => (
               <SubtabDrag

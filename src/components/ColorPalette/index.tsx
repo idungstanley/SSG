@@ -5,7 +5,7 @@ import { UseEditHubService } from '../../features/hubs/hubService';
 import { UseEditWalletService } from '../../features/wallet/walletService';
 import { UseEditListService } from '../../features/list/listService';
 import { setPaletteDropDown, setSelectedListColours } from '../../features/account/accountSlice';
-import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import { RiArrowDownSLine, RiArrowUpSLine, RiFontColor } from 'react-icons/ri';
 import ListIconComponent from '../ItemsListInSidebar/components/ListIconComponent';
 import { ListColourProps } from '../tasks/ListItem';
 import { changeListManager } from '../../managers/List';
@@ -38,6 +38,10 @@ import { setTasks } from '../../features/task/taskSlice';
 import Filter from '../../assets/icons/filter_alt.svg';
 import ClosePalette from '../../assets/icons/ClosePalette';
 import SavePalette from '../../assets/icons/SavePalette';
+import ArrowDown from '../../assets/icons/ArrowDown';
+import FontStyle from '../Pilot/components/Templates/Components/FontStyles/FontStyle';
+import { InlineBorderLabel } from '../Dropdown/MenuDropdown';
+import { IoColorPaletteOutline } from 'react-icons/io5';
 
 interface PaletteProps {
   title?: string;
@@ -56,6 +60,10 @@ interface PaletteProps {
 export const paletteViews = {
   BOARD: 'Board',
   LIST: 'List'
+};
+export const paletteLibrary = {
+  COLOUR: 'Colour Library',
+  FONT: 'Font Library'
 };
 
 export default function PaletteManager({
@@ -82,10 +90,21 @@ export default function PaletteManager({
   const [isInnerFrameActive, setIsInnerFrameActive] = useState<boolean>(false);
   const [displayColorPicker, setDisplayColorPicker] = useState<boolean>(false);
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
+  const [selectedLibrary, setSelectedLibrary] = useState<string>(paletteLibrary.COLOUR);
+  const [openLibrarySelection, setOpenLibrarySelection] = useState<HTMLDivElement | null>(null);
+
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [showListShapeSelection, setShowListShapeSelection] = useState<null | HTMLDivElement>(null);
   const [color, setColor] = useState<string | ListColourProps | null>(null);
   const { paletteId, paletteType } = paletteDropdown;
+
+  const handleCloseLibrarySelection = () => {
+    setOpenLibrarySelection(null);
+  };
+
+  const handleShowLibrarySelection = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setOpenLibrarySelection(event.currentTarget);
+  };
 
   const closeMenu = () => {
     setOpen(false);
@@ -194,6 +213,17 @@ export default function PaletteManager({
     dispatch(setPaletteDropDown({ ...paletteDropdown, show: false }));
   };
 
+  const libraryOptions = [
+    {
+      label: paletteLibrary.COLOUR,
+      icon: <IoColorPaletteOutline />
+    },
+    {
+      label: paletteLibrary.FONT,
+      icon: <RiFontColor />
+    }
+  ];
+
   const views = [
     {
       label: paletteViews.BOARD,
@@ -235,7 +265,11 @@ export default function PaletteManager({
       }}
       className="MuiMenu-list"
     >
-      <div className="overflow-y-auto text-alsoit-gray-100" style={{ maxWidth: '332px', fontSize: '11px' }}>
+      <div
+        key="colorPalette"
+        className="overflow-y-auto text-alsoit-gray-100"
+        style={{ maxWidth: '350px', fontSize: '11px' }}
+      >
         <div className="z-50 flex flex-col w-full">
           {selectListColours.length > 0 && selectedViews === paletteViews.LIST && (
             <SelectionMenu
@@ -248,13 +282,22 @@ export default function PaletteManager({
           {!isSearch && selectListColours.length === 0 && paletteViews.BOARD && (
             <div className="flex items-center justify-between mb-2">
               <div className="flex gap-1 uppercase items-center-justify-between">
-                <div className="flex items-center h-8 p-1 rounded-br-md bg-alsoit-gray-75 w-[114px]">
+                <div
+                  className="flex items-center h-8 gap-1 p-1 rounded-br-md bg-alsoit-gray-75"
+                  style={{ minWidth: '114px' }}
+                  onClick={(e) => handleShowLibrarySelection(e)}
+                >
                   <p
                     className="bg-['#b2b2b2'] text-white justify-center tracking-wide font-medium"
                     style={{ fontSize: '11px', lineHeight: '13.2px' }}
                   >
                     COLOUR LIBRARY
                   </p>
+                  {paletteId === 'property' && (
+                    <div>
+                      <ArrowDown className="w-2 h-2 cursor-pointer" color="white" />
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center">{title}</div>
               </div>
@@ -287,16 +330,17 @@ export default function PaletteManager({
                     <SearchIcon color="#424242" className="w-4 h-4" />
                   </span>
                 </ToolTip>
-                {activeOutterColor === null ? (
-                  <DefaultColour dimensions={{ width: 26, height: 26 }} />
-                ) : (
-                  <span
-                    className="w-6 h-6 p-2 rounded"
-                    style={{
-                      backgroundColor: isInnerFrameActive ? activeInnerColor : activeOutterColor
-                    }}
-                  ></span>
-                )}
+                {paletteType &&
+                  (activeOutterColor === null ? (
+                    <DefaultColour dimensions={{ width: 26, height: 26 }} />
+                  ) : (
+                    <span
+                      className="w-6 h-6 p-2 rounded"
+                      style={{
+                        backgroundColor: isInnerFrameActive ? activeInnerColor : activeOutterColor
+                      }}
+                    ></span>
+                  ))}
               </div>
             </div>
           )}
@@ -340,37 +384,45 @@ export default function PaletteManager({
               </div>
             )}
             {topContent}
-            {paletteType === EntityType.list && (
-              <div className="flex items-center justify-between pb-1 mt-1 mb-1">
-                <div
-                  className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
-                    showListShapeSelection && 'text-white bg-alsoit-purple-300'
-                  } ${shape && !showListShapeSelection ? 'bg-primary-200 text-alsoit-purple-300' : 'text-gray-500'}`}
-                  onClick={(e) => handleOpenListShapeSelection(e)}
-                >
-                  <p>{`${title} Shapes${shape ? `: ${activeShapeName?.label}` : ''}`}</p>
-                  <ArrowDownFilled color={showListShapeSelection ? 'white' : undefined} />
-                </div>
-                <AlsoitMenuDropdown handleClose={handleCloseListShapeSelection} anchorEl={showListShapeSelection}>
-                  <ListIconSelection
-                    handleSelection={handleShapeSelection as (value: string) => void}
-                    activeShape={shape}
-                  />
-                </AlsoitMenuDropdown>
-                <ListIconComponent
-                  shape={shape}
-                  type="colourToggle"
-                  outterFrameClick={handleOutterFrameClick}
-                  innerFrameClick={handleInnerFrameClick}
-                  isInnerFrameActive={isInnerFrameActive}
-                  isOutterFrameActive={isOutterFrameActive}
-                  innerColour={listComboColour?.innerColour}
-                  outterColour={listComboColour?.outerColour}
-                />
-              </div>
-            )}
+            {selectedLibrary === paletteLibrary.COLOUR ? (
+              <>
+                {paletteType === EntityType.list && (
+                  <div className="flex items-center justify-between pb-1 mt-1 mb-1">
+                    <div
+                      className={`relative flex w-fit items-center justify-between gap-2 p-1 px-2.5 rounded-md hover:text-primary-600 border border-gray-300 hover:bg-primary-100 ${
+                        showListShapeSelection && 'text-white bg-alsoit-purple-300'
+                      } ${
+                        shape && !showListShapeSelection ? 'bg-primary-200 text-alsoit-purple-300' : 'text-gray-500'
+                      }`}
+                      onClick={(e) => handleOpenListShapeSelection(e)}
+                    >
+                      <p>{`${title} Shapes${shape ? `: ${activeShapeName?.label}` : ''}`}</p>
+                      <ArrowDownFilled color={showListShapeSelection ? 'white' : undefined} />
+                    </div>
+                    <AlsoitMenuDropdown handleClose={handleCloseListShapeSelection} anchorEl={showListShapeSelection}>
+                      <ListIconSelection
+                        handleSelection={handleShapeSelection as (value: string) => void}
+                        activeShape={shape}
+                      />
+                    </AlsoitMenuDropdown>
+                    <ListIconComponent
+                      shape={shape}
+                      type="colourToggle"
+                      outterFrameClick={handleOutterFrameClick}
+                      innerFrameClick={handleInnerFrameClick}
+                      isInnerFrameActive={isInnerFrameActive}
+                      isOutterFrameActive={isOutterFrameActive}
+                      innerColour={listComboColour?.innerColour}
+                      outterColour={listComboColour?.outerColour}
+                    />
+                  </div>
+                )}
 
-            {selectedElement && selectedElement}
+                {selectedElement && selectedElement}
+              </>
+            ) : (
+              <FontStyle />
+            )}
             <div
               className={cl('flex gap-1 items-center mt-1', displayColorPicker ? 'justify-left' : 'justify-between')}
             >
@@ -404,7 +456,7 @@ export default function PaletteManager({
                 <ClosePalette fill={onHover} />
               </span>
             </ToolTip>
-            <ToolTip title="Update Hub">
+            <ToolTip title={`Update ${title}`}>
               <span className="cursor-pointer" onClick={handleClick}>
                 <SavePalette />
               </span>
@@ -414,6 +466,27 @@ export default function PaletteManager({
         </div>
         <AdvanceColourPalette show={displayColorPicker} />
       </div>
+      <AlsoitMenuDropdown
+        handleClose={handleCloseLibrarySelection}
+        anchorEl={openLibrarySelection as HTMLDivElement | null}
+      >
+        <InlineBorderLabel
+          label="SELECT OPTION"
+          topElement={<p className="flex items-center justify-center">ADD EFFECTS</p>}
+        />
+        <div className="flex flex-col w-48 p-2 space-y-2">
+          {libraryOptions.map((item, index) => (
+            <div
+              className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50 text-alsoit-gray-300"
+              key={index}
+              onClick={() => setSelectedLibrary(item.label)}
+            >
+              {item.icon}
+              <p>{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </AlsoitMenuDropdown>
     </Menu>
   );
 }
