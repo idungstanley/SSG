@@ -93,7 +93,10 @@ export default function ModalPilotNav({ modalItemClick, modalNavTree, activeNavI
           <span className="absolute w-full z-0" style={{ top: '6px' }}>
             <hr />
           </span>
-          <p className="px-2 z-10 uppercase" style={{ fontSize: '8px', background: '#fff', color: '#B2B2B2' }}>
+          <p
+            className="px-2 z-10 uppercase text-alsoit-gray-75 hover:text-alsoit-gray-100 transition duration-500 cursor-default"
+            style={{ fontSize: '8px', background: '#fff' }}
+          >
             CHOOSE ENTITY
           </p>
         </div>
@@ -107,11 +110,12 @@ export default function ModalPilotNav({ modalItemClick, modalNavTree, activeNavI
             style={{ top: '7px', left: '17px' }}
           />
           <input
-            className="w-full font-normal pl-5"
+            className={`w-full font-normal pl-5 hover:text-alsoit-gray-300 transition duration-500 ${
+              searchQuery ? 'text-alsoit-gray-300' : 'text-alsoit-gray-100'
+            }`}
             style={{
               border: '.5px solid rgba(178, 178, 178, .5)',
               height: '28px',
-              color: '#919191',
               fontSize: '11px',
               paddingTop: '2px',
               paddingBottom: '5px',

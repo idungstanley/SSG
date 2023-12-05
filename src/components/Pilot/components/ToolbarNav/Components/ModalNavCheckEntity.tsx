@@ -140,7 +140,7 @@ export default function ModalNavCheckEntity({ item, ToggleOpenedNavItems, opened
         <div className="group-hover:opacity-25 group-hover:grayscale duration-500 transition">
           <span
             className="flex items-center justify-center w-3 h-3 rounded-full"
-            style={{ backgroundColor: item.color ? item.color : 'orange' }}
+            style={{ backgroundColor: item.color ? item.color : 'orange', marginLeft: '2px', paddingLeft: '3px' }}
           ></span>
         </div>
       )}
