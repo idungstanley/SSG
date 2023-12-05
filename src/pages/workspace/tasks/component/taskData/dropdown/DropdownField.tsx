@@ -12,7 +12,7 @@ import {
   setEntityForCustom,
   setNewCustomPropertyDetails
 } from '../../../../../../features/task/taskSlice';
-import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import SearchIcon from '../../../../../../assets/icons/SearchIcon';
 import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
 import { Task } from '../../../../../../features/task/interface.tasks';
@@ -79,7 +79,8 @@ export default function DropdownField({ field, taskId, currentProperty, activeCo
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.PROPERTIES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(
       setNewCustomPropertyDetails({
@@ -119,7 +120,7 @@ export default function DropdownField({ field, taskId, currentProperty, activeCo
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
   return (
-    <div ref={containerRef} tabIndex={0} className="w-full h-full flex items-center justify-center focus:ring-0">
+    <div ref={containerRef} tabIndex={0} className="flex items-center justify-center w-full h-full focus:ring-0">
       <div
         className={cl('flex items-center justify-center w-full h-full', activeOption?.color && 'text-white')}
         style={{ backgroundColor: activeOption?.color }}

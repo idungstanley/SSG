@@ -13,7 +13,7 @@ import CustomPropertyList, { columnTypesProps } from './CustomPropertyList';
 import NamedIconPair from './NamedIconPair';
 import SubtractWrapper from '../../../../Dropdown/SubtractWrapper';
 
-export default function ColumnTypeDropdown() {
+export default function ColumnTypeDropdown({ mactchingData }: { mactchingData?: columnTypesProps }) {
   const dispatch = useAppDispatch();
 
   const { columnTypes } = CustomPropertyList();
@@ -72,21 +72,25 @@ export default function ColumnTypeDropdown() {
       <div ref={relativeRef} className="w-full">
         <button
           onClick={onClickOpenDropdown}
-          className="flex items-center justify-between w-full h-8 gap-2 px-2 text-left truncate bg-white cursor-pointer"
+          className="flex items-center justify-between w-full h-8 gap-2 px-1 text-left truncate bg-white cursor-pointer"
           style={{ borderRadius: '6px' }}
         >
-          {selectedChildProperty?.name && (
+          {(selectedChildProperty?.name || mactchingData) && (
             <NamedIconPair
               iconColor="text-alsoit-gray-100"
               color="text-alsoit-gray-300"
               isLeadingIcon={true}
-              parentName={selectedPropertyType?.title as string}
-              parentIcon={selectedPropertyType?.icon as JSX.Element}
-              childIcon={selectedChildProperty?.icon as JSX.Element}
-              childName={selectedChildProperty?.name}
+              parentName={mactchingData ? mactchingData.title : (selectedPropertyType?.title as string)}
+              parentIcon={mactchingData ? mactchingData.icon : (selectedPropertyType?.icon as JSX.Element)}
+              childIcon={
+                mactchingData
+                  ? (mactchingData.children[0].icon as JSX.Element)
+                  : (selectedChildProperty?.icon as JSX.Element)
+              }
+              childName={(mactchingData ? mactchingData.children[0]?.name : selectedChildProperty?.name) as string}
             />
           )}
-          {!selectedChildProperty?.name && (
+          {!selectedChildProperty?.name && !mactchingData && (
             <div
               className="flex items-center gap-1"
               style={{ maxWidth: selectedChildProperty?.name ? '40%' : undefined }}
@@ -141,7 +145,7 @@ export default function ColumnTypeDropdown() {
                             key={child.id}
                             className="flex items-center justify-between w-full h-8 my-1 rounded cursor-pointer hover:bg-alsoit-gray-50"
                           >
-                            <div className="w-full px-2 pl-5">
+                            <div className="w-full px-2 pl-3">
                               <button
                                 className="flex items-center justify-between w-full h-full"
                                 onClick={() => handleSelectChildOption(child.name, child.id)}
