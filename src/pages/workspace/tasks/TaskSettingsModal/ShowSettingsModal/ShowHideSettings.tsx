@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Menu as HeadMenu } from '@headlessui/react';
-import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import { useSwitchSettings } from './SwitchSettings';
 import Button from '../../../../../components/Buttons/Button';
@@ -21,6 +20,7 @@ import DropdownSubtitle from '../../../../../components/DropDowns/DropdownSubtit
 import ArrowOpenDown from '../../../../../assets/icons/ArrowOpenDown';
 import ShowmenuswitchOn from '../../../../../assets/icons/ShowmenuswitchOn';
 import { VerticalScroll } from '../../../../../components/ScrollableContainer/VerticalScroll';
+import ThreeDotIcon from '../../../../../assets/icons/ThreeDotIcon';
 
 interface IShowHideSettings {
   isActive: string;
@@ -242,11 +242,13 @@ export default function ShowHideSettings({
       <Menu anchorEl={dropdownEl} open={!!dropdownEl} onClose={() => setDropdownEl(null)} style={{ marginTop: '10px' }}>
         <VerticalScroll>
           <div key="showHideSettings" style={{ zIndex: 61, width: '247px' }} className="w-64 h-96 relative">
+            <p className="flex justify-end rounded-sm text-[#919191] relative top-3 right-2 cursor-pointer">
+              <ThreeDotIcon />
+            </p>
             <DropdownTitle content="CUSTOMIZE THIS VIEW" />
             <DropdownSubtitle content="MAIN SETTINGS" />
             <div className="flex items-center justify-between mx-auto mt-4" style={{ width: '93%' }}>
-              <p className="text-sm">Property Column </p>
-              <BsChevronRight />
+              <p className="text-alsoit-text-large mb-1.5">Property Column </p>
             </div>
             {viewSettings.map((view, index) => (
               <Fragment key={view.id}>
@@ -265,7 +267,7 @@ export default function ShowHideSettings({
                     {view.label === 'Task In Multiple Lists' && (
                       <p className="relative">
                         <p
-                          className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
+                          className="absolute text-center text-gray-400 px-1 bg-white whitespace-nowrap"
                           style={{ top: '-35px', right: '23px', fontSize: '8px' }}
                         >
                           TASKS SETTINGS
@@ -275,7 +277,7 @@ export default function ShowHideSettings({
                     {view.label === 'Title Vertical Grid Line' && (
                       <p className="relative">
                         <p
-                          className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
+                          className="absolute text-center text-gray-400 bg-white px-1 whitespace-nowrap"
                           style={{ top: '-35px', right: '28px', fontSize: '8px' }}
                         >
                           GRID SETTINGS
@@ -285,7 +287,7 @@ export default function ShowHideSettings({
                     {view.label === 'Split 2 level of subtasks' && (
                       <p className="relative">
                         <p
-                          className="absolute text-center text-gray-400 bg-white border border-gray-100 whitespace-nowrap"
+                          className="absolute text-center text-gray-400 bg-white px-1 whitespace-nowrap"
                           style={{ top: '-35px', right: '20px', fontSize: '8px' }}
                         >
                           SUB TASK SETTINGS
