@@ -8,10 +8,14 @@ interface buttonComponentProps {
   withoutBg?: boolean;
   unusing?: boolean;
   onClick?: () => void;
+  place?: string;
 }
 
-function Button({ active, children, withoutBg, unusing, onClick }: buttonComponentProps) {
+function Button({ active, children, withoutBg, unusing, onClick, place }: buttonComponentProps) {
   const style = active ? ACTIVE_BUTTON : DEFAULT_BUTTON;
+
+  const assigneeModeStyles = place == 'assigneeMode' && { borderRadius: '0 5px 5px 0' };
+  const meModeStyles = place == 'meMode' && { borderRadius: '5px 0 0 5px' };
 
   const generateBg = () => {
     if (withoutBg) return 'hover:bg-alsoit-purple-50';
@@ -31,7 +35,7 @@ function Button({ active, children, withoutBg, unusing, onClick }: buttonCompone
   return (
     <div>
       <div
-        style={{ ...style, ...unusingStyles }}
+        style={{ ...style, ...unusingStyles, ...assigneeModeStyles, ...meModeStyles }}
         className={cl('flex items-center font-semibold', generateBg())}
         onClick={onClick}
       >
