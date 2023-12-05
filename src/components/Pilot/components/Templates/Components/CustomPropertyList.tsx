@@ -14,19 +14,11 @@ import FormulaOptions from './Formula/Formula';
 import FilesOptions from './Files/FileOption';
 import PeopleOptions from './People/PeopleOptions';
 import LocationOptions from './Location/LocationOptions';
-import {
-  MdAccessTime,
-  MdAlternateEmail,
-  MdOutlineAttachEmail,
-  MdOutlinePeopleAlt,
-  MdOutlineStarRate
-} from 'react-icons/md';
-import Text from '../../../../../assets/branding/Text';
+import { MdAccessTime, MdAlternateEmail, MdOutlineAttachEmail, MdOutlinePeopleAlt } from 'react-icons/md';
 import { CiCalendarDate, CiDollar, CiHashtag } from 'react-icons/ci';
 import { BiGlobe, BiLabel, BiSolidCaretDownSquare } from 'react-icons/bi';
 import { BsFillTelephoneOutboundFill } from 'react-icons/bs';
 import { ImCheckboxChecked } from 'react-icons/im';
-import { GiProgression } from 'react-icons/gi';
 import { TbMathFunction } from 'react-icons/tb';
 import { FaFileSignature, FaPeopleArrows } from 'react-icons/fa';
 import { IoLocation } from 'react-icons/io5';
@@ -65,6 +57,21 @@ export interface columnTypesProps {
 }
 
 import React from 'react';
+import AutoprogressIcon from '../../../../../assets/icons/propertyIcons/AutoprogressIcon';
+import ShortTextIcon from '../../../../../assets/icons/propertyIcons/ShortTextIcon';
+import LongTextIcon from '../../../../../assets/icons/propertyIcons/LongTextIcon';
+import DotIcon from '../../../../../assets/icons/propertyIcons/DotIcon';
+import FilesUploadedIcon from '../../../../../assets/icons/propertyIcons/FilesUploadedIcon';
+import Docs from '../../../../../assets/icons/propertyIcons/Docs';
+import CheckBoxIcon from '../../../../../assets/icons/propertyIcons/CheckBoxIcon';
+import ToggleIcon from '../../../../../assets/icons/propertyIcons/ToggleIcon';
+import AbOptionIcon from '../../../../../assets/icons/propertyIcons/AbOptionIcon';
+import PercentageIcon from '../../../../../assets/icons/propertyIcons/PercentageIcon';
+import NumbersIcon from '../../../../../assets/icons/propertyIcons/NumbersIcon';
+import CallIcon from '../../../../../assets/icons/propertyIcons/CallIcon';
+import EmailIcon from '../../../../../assets/icons/propertyIcons/EmailIcon';
+import DirectoryIcon from '../../../../../assets/icons/propertyIcons/DirectoryIcon';
+import AlsoitIcon from '../../../../../assets/icons/AlsoitIcon';
 
 export default function CustomPropertyList(color?: string) {
   const columnTypes: columnTypesProps[] = [
@@ -84,13 +91,13 @@ export default function CustomPropertyList(color?: string) {
         {
           id: 'Location',
           name: 'Location',
-          icon: <LocationIcon />,
+          icon: <LocationIcon color={color} />,
           onclick: () => null
         },
         {
           id: 'Routes',
           name: 'Routes',
-          icon: <AltRouteIcon />,
+          icon: <AltRouteIcon color={color} />,
           onclick: () => null
         }
       ]
@@ -105,10 +112,16 @@ export default function CustomPropertyList(color?: string) {
       ),
       children: [
         {
-          id: 'date',
-          name: 'Date',
+          id: 'Workspace',
+          name: 'Workspace',
           onclick: () => null,
-          icon: <CiCalendarDate />
+          icon: <AlsoitIcon dimensions={{ width: 12, height: 12 }} />
+        },
+        {
+          id: 'Neighbours',
+          name: 'Neighbours',
+          onclick: () => null,
+          icon: <DotIcon />
         }
       ]
     },
@@ -154,15 +167,15 @@ export default function CustomPropertyList(color?: string) {
       children: [
         {
           id: 'progress_auto',
-          name: 'Progress(Auto)',
-          icon: <GiProgression />,
+          name: 'Auto',
+          icon: <AutoprogressIcon />,
           onclick: () => null,
           type: 'progress_auto'
         },
         {
           id: 'progress_manual',
-          name: 'Progress(Manual)',
-          icon: <GiProgression />,
+          name: 'Manual',
+          icon: <ProgressBarIcon color={color} />,
           type: 'progress_manual',
           onclick: () => null
         }
@@ -179,25 +192,13 @@ export default function CustomPropertyList(color?: string) {
           id: 'short_text',
           name: 'Short Text',
           onclick: () => null,
-          icon: <GoNumber />
+          icon: <ShortTextIcon color={color} />
         },
         {
           id: 'long_text',
           name: 'Long Text',
           onclick: () => null,
-          icon: <Text />
-        },
-        {
-          id: 'email',
-          name: 'Email',
-          onclick: () => null,
-          icon: <Text />
-        },
-        {
-          id: 'website',
-          name: 'Website',
-          onclick: () => null,
-          icon: <Text />
+          icon: <LongTextIcon color={color} />
         }
       ]
     },
@@ -209,10 +210,22 @@ export default function CustomPropertyList(color?: string) {
       icon: <BooleanIcon color={color} />,
       children: [
         {
-          id: 'date',
-          name: 'Date',
+          id: 'Checkbox',
+          name: 'Checkbox',
           onclick: () => null,
-          icon: <CiCalendarDate />
+          icon: <CheckBoxIcon color={color} />
+        },
+        {
+          id: 'Toggle',
+          name: 'Toggle',
+          onclick: () => null,
+          icon: <ToggleIcon color={color} />
+        },
+        {
+          id: 'A_b_option',
+          name: 'A/B Option',
+          onclick: () => null,
+          icon: <AbOptionIcon color={color} />
         }
       ]
     },
@@ -224,10 +237,40 @@ export default function CustomPropertyList(color?: string) {
       icon: <LabelIcon color={color} />,
       children: [
         {
-          id: 'date',
-          name: 'Date',
+          id: 'directory',
+          name: 'Directory',
           onclick: () => null,
-          icon: <CiCalendarDate />
+          icon: <DirectoryIcon color={color} />
+        },
+        {
+          id: 'Text',
+          name: 'Text',
+          onclick: () => null,
+          icon: <ShortTextIcon color={color} />
+        },
+        {
+          id: 'single_label',
+          name: 'Single Label',
+          onclick: () => null,
+          icon: <NestedTextIcon color={color} />
+        },
+        {
+          id: 'Shapes',
+          name: 'Shapes',
+          onclick: () => null,
+          icon: <DotIcon color={color} />
+        },
+        {
+          id: 'Images',
+          name: 'Images',
+          onclick: () => null,
+          icon: <DotIcon color={color} />
+        },
+        {
+          id: 'Avatar',
+          name: 'Avatar',
+          onclick: () => null,
+          icon: <DotIcon color={color} />
         }
       ]
     },
@@ -254,9 +297,15 @@ export default function CustomPropertyList(color?: string) {
       icon: <AttachmentIcon color={color} />,
       children: [
         {
-          id: 'formula',
-          name: 'Formula',
-          icon: <TbMathFunction />,
+          id: 'workspace_files',
+          name: 'Workspace Files',
+          icon: <Docs color={color} />,
+          onclick: () => null
+        },
+        {
+          id: 'uploaded_files',
+          name: 'Uploaded Files',
+          icon: <FilesUploadedIcon color={color} />,
           onclick: () => null
         }
       ]
@@ -264,14 +313,20 @@ export default function CustomPropertyList(color?: string) {
     {
       id: 'ID_Generator',
       title: 'ID Generator',
-      active: false,
+      active: true,
       options: <FormulaOptions />,
       icon: <IdGeneratorIcon color={color} />,
       children: [
         {
-          id: 'formula',
-          name: 'Formula',
-          icon: <TbMathFunction />,
+          id: 'GSI_integration',
+          name: 'GSI Integration',
+          icon: <DotIcon color={color} />,
+          onclick: () => null
+        },
+        {
+          id: 'Auto_id',
+          name: 'Auto ID',
+          icon: <DotIcon color={color} />,
           onclick: () => null
         }
       ]
@@ -284,7 +339,7 @@ export default function CustomPropertyList(color?: string) {
       icon: <CalendarIcon color={color} />,
       children: [
         {
-          id: 'date',
+          id: 'Date',
           name: 'Date',
           onclick: () => null,
           icon: <CiCalendarDate />
@@ -294,15 +349,26 @@ export default function CustomPropertyList(color?: string) {
     {
       id: 'Rating',
       active: true,
-
       title: 'Rating',
       options: <RatingOption />,
       icon: <RatingIcon color={color} />,
       children: [
         {
-          id: 'rating',
-          name: 'Rating',
-          icon: <MdOutlineStarRate />,
+          id: 'Economic',
+          name: 'Economic',
+          icon: <DotIcon color={color} />,
+          onclick: () => null
+        },
+        {
+          id: 'Percentage',
+          name: 'Percentage',
+          icon: <PercentageIcon color={color} />,
+          onclick: () => null
+        },
+        {
+          id: 'Numbers',
+          name: 'Numbers',
+          icon: <NumbersIcon color={color} />,
           onclick: () => null
         }
       ]
@@ -330,9 +396,15 @@ export default function CustomPropertyList(color?: string) {
       icon: <ContactIcon color={color} />,
       children: [
         {
-          id: 'rating',
-          name: 'Rating',
-          icon: <MdOutlineStarRate />,
+          id: 'Phone Number',
+          name: 'Phone Number',
+          icon: <CallIcon color={color} />,
+          onclick: () => null
+        },
+        {
+          id: 'Email',
+          name: 'Email',
+          icon: <EmailIcon color={color} />,
           onclick: () => null
         }
       ]

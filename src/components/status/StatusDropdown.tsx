@@ -33,7 +33,6 @@ export default function StatusDropdown({
 
   const [status, setStatus] = useState('');
   const [statusName, setStatusName] = useState(taskCurrentStatus?.name);
-  const [statusColor, setStatusColor] = useState(taskCurrentStatus?.color);
   const [isOpen, setIsOpen] = useState<null | HTMLSpanElement | HTMLDivElement>(null);
   const [sortedStatuses, setSortedStatuses] = useState<ITask_statuses[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -69,10 +68,9 @@ export default function StatusDropdown({
   const handleStatusSelection = (status: ITask_statuses) => {
     setStatus(status.id);
     setStatusName(status.name);
-    setStatusColor(status.color);
+    setIsOpen(null);
     dispatch(setNewTaskStatus(status));
     dispatch(setStatusId(status.id));
-    setIsOpen(null);
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -102,7 +100,11 @@ export default function StatusDropdown({
             className="flex items-center justify-center w-full text-sm border-none focus:border-none active:ring-0 active:border-none focus:outline-none focus:ring-0 hover:text-gray-700"
           >
             <div ref={relativeRef} className="mb-1">
-              {statusDropdownType === 'name' ? statusName : <StatusIconComp color={statusColor} />}
+              {statusDropdownType === 'name' ? (
+                taskCurrentStatus?.name
+              ) : (
+                <StatusIconComp color={taskCurrentStatus?.color as string} />
+              )}
             </div>
           </button>
         </ToolTip>

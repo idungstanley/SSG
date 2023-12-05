@@ -25,6 +25,7 @@ module.exports = {
         'alsoit-purple-400': '#8601B2',
         'alsoit-success': '#19D03A',
         'alsoit-success-50': '#E6FAE9',
+        'alsoit-success-75': '#2BD54A',
         'alsoit-warning': '#ffde66',
         'alsoit-danger': '#FF0000',
         'alsoit-danger-50': '#FFDEDE',
