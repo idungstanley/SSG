@@ -2,7 +2,6 @@ import ICONS_INTERACTIONS from '../../utils/Constants/IconInteractions';
 import { IconProps } from './PlusIcon';
 
 /* eslint-disable max-len */
-
 export default function ThreeDotIcon({ active, dimensions, color, ...props }: IconProps) {
   return (
     <svg
