@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { cl } from '../../utils';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
 
 import { priorities } from '../../app/constants/priorities';
-import AlsoitMenuDropdown from '../DropDowns';
 import { priorityArr } from '../../utils/PriorityArr';
 import Priority from '../../assets/icons/Priority';
 import { Task } from '../../features/task/interface.tasks';
+import DropdownWithHeader from '../Pilot/components/TimeClock/components/DropdownWithHeader';
+import { PriorityDropDownModal } from './PriorityDropDownModal';
 
 export interface priorityType {
   id: string;
@@ -92,31 +92,21 @@ export default function PriorityDropdown({ taskCurrentPriority, icon, activeColu
           <div>{icon ? icon : setPriorityColor(taskCurrentPriority)}</div>
         </button>
       </div>
-      <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
-        <div className="overflow-y-auto" key="priority">
-          <div className="flex flex-col items-center justify-center w-48 px-1 py-1 text-center divide-y divide-gray-100 rounded-md shadow-lg outline-none w-fit h-fit ring-1 ring-black ring-opacity-5 focus:outline-none">
-            {priorityList.map((priority) => (
-              <button
-                key={priority.id}
-                type="button"
-                className={cl(
-                  taskCurrentPriority === priority.title ? `bg-${priority.bg}-200` : '',
-                  'flex items-center px-4 py-1 hover:bg-alsoit-gray-50 text-sm text-gray-600 text-left space-x-2 w-full rounded-md'
-                )}
-                onClick={() => {
-                  priority.handleClick();
-                  setIsOpen(null);
-                }}
-              >
-                <p>
-                  <Priority fill={`${priority.color}`} />
-                </p>
-                <p>{priority.title}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </AlsoitMenuDropdown>
+      {isOpen && (
+        <DropdownWithHeader
+          setAnchor={handleCloseDropdown}
+          anchor={isOpen}
+          header="task priority"
+          subHeader="select task priority"
+        >
+          <PriorityDropDownModal
+            priorityList={priorityList}
+            setIsOpen={setIsOpen}
+            taskCurrentPriority={taskCurrentPriority}
+            taskId={task?.id as string}
+          />
+        </DropdownWithHeader>
+      )}
     </div>
   );
 }
