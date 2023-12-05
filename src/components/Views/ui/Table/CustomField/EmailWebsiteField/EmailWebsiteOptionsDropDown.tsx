@@ -47,7 +47,7 @@ export function EmailWebsiteDropDown({ fieldOptions, fieldType, taskId }: Props)
     };
   }, [focusedIndex]);
   useEffect(() => {
-    if (focusedIndex) {
+    if (focusedIndex !== null) {
       fieldOptions[focusedIndex].callBack();
       dispatch(setTaskRowFocus(!taskRowFocus));
     }

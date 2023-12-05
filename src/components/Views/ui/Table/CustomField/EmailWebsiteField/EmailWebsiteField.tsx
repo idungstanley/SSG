@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ICustomField, setTaskRowFocus } from '../../../../../../features/task/taskSlice';
-import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import {
+  useClearEntityCustomFieldValue,
+  useUpdateEntityCustomFieldValue
+} from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
 import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
 import { CopyIcon } from '../../../../../../assets/icons';
@@ -39,6 +42,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+  const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   useEffect(() => {
     if (taskCustomFields) {
@@ -66,6 +70,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
       setCurrentValue('-');
       dispatch(setTaskRowFocus(true));
     }
+    if (currentValue === activeValue) dispatch(setTaskRowFocus(true));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -83,9 +88,8 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
 
   const handleDeleteEmail = () => {
     setEditMode(false);
-    onUpdate({
+    onClear({
       taskId,
-      value: [{ value: '' }],
       fieldId
     });
     setAnchorEl(null);
