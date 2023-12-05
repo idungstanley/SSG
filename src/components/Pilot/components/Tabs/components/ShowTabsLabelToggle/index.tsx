@@ -20,7 +20,7 @@ function ShowTabsLabelToggle() {
   };
 
   return (
-    <label className="switch pilot-modal-toggle" style={{ width: '24px', height: '12.63px' }}>
+    <label className="switch pilot-modal-toggle" style={{ width: '20px', height: '10.53px' }}>
       <input className="inputShow" type="checkbox" checked={!showTabLabel} onChange={() => toggleShowTabLabel()} />
       <div className={`slider ${!showTabLabel ? 'checked' : ''} `}></div>
     </label>

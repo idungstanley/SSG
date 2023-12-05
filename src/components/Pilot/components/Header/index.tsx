@@ -68,15 +68,13 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
               {isMinified ? <CompactIcon /> : <GroupIcon />}
             </button>
           </ToolTip>
-          <ToolTip placement="left" title="Pilot settings">
-            <div
-              style={{
+          <div
+            style={{
               margin: isMinified ? '0' : '1px 7px 5px 0'
-              }}
-            >
-              {menu}
-            </div>
-          </ToolTip>
+            }}
+          >
+            {menu}
+          </div>
         </div>
       </div>
     </div>
