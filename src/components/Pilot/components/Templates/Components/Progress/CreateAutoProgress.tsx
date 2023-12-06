@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import AlsoitMenuDropdown from '../../../../../DropDowns';
 import ArrowDown from '../../../../../../assets/icons/ArrowDown';
-import SaveCols from '../SaveCols';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
+import PermissionIcon from '../../../../../../assets/icons/PermissionIcon';
+import InformationsolidIcon from '../../../../../../assets/icons/InformationsolidIcon';
+import ToolTip from '../../../../../Tooltip/Tooltip';
+import ClosePalette from '../../../../../../assets/icons/ClosePalette';
+import SavePalette from '../../../../../../assets/icons/SavePalette';
 
 const completType = [
   {
@@ -74,15 +78,15 @@ function CreateAutoProgress() {
       <div className="w-full my-1">
         <label className="text-alsoit-text-lg text-alsoit-gray-300">TRACK COMPLETION OF</label>
         <button
-          className="w-full h-8 bg-white rounded px-2 flex justify-between items-center"
+          className="flex items-center justify-between w-full h-8 px-2 bg-white rounded"
           onClick={(e) => setAnchorEl(e.currentTarget)}
         >
-          <h3 className="text-black text-alsoit-gray-300-md font-semibold">{selectedOpts}</h3>
+          <h3 className="font-semibold text-black text-alsoit-gray-300-md">{selectedOpts}</h3>
           <ArrowDown className="w-4 h-4" />
         </button>
         <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
-          <div className="rounded p-2">
-            <div className="w-full flex items-center my-2">
+          <div className="p-2 rounded">
+            <div className="flex items-center w-full my-2">
               <input
                 type="checkbox"
                 className="mx-2"
@@ -114,10 +118,10 @@ function CreateAutoProgress() {
       <div className="w-full my-4">
         <label className="text-alsoit-text-lg text-alsoit-gray-300">TASKS WITHOUT ACTION ITEMS</label>
         <button
-          className="w-full h-8 bg-white rounded px-2 flex justify-between items-center"
+          className="flex items-center justify-between w-full h-8 px-2 bg-white rounded"
           onClick={(e) => setCompleteAnchor(e.currentTarget)}
         >
-          <h3 className="text-black-md font-semibold text-alsoit-text-lg">{selectedType.title}</h3>
+          <h3 className="font-semibold text-black-md text-alsoit-text-lg">{selectedType.title}</h3>
           <ArrowDown className="w-4 h-4" />
         </button>
         <AlsoitMenuDropdown anchorEl={CompleteAnchor} handleClose={() => setCompleteAnchor(null)}>
@@ -126,7 +130,7 @@ function CreateAutoProgress() {
               return (
                 <h3
                   key={item.id}
-                  className="h-8 p-2 text-alsoit-text-lg text-black font-semibold cursor-pointer hover:bg-alsoit-gray-50 flex items-center"
+                  className="flex items-center h-8 p-2 font-semibold text-black cursor-pointer text-alsoit-text-lg hover:bg-alsoit-gray-50"
                   onClick={() => {
                     setSelectedType(item);
                     setCompleteAnchor(null);
@@ -140,11 +144,26 @@ function CreateAutoProgress() {
         </AlsoitMenuDropdown>
       </div>
       <div>
-        <SaveCols
-          handleSubmit={handleSubmit}
-          header="Progress"
-          body="This custom property which allows to track progress of tasks"
-        />
+        <p className="flex items-center p-1 my-1 rounded text-alsoit-gray-300">Host in template center</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
+            <PermissionIcon />
+            <div className="text-black">Permissions</div>
+            <InformationsolidIcon />
+          </div>
+          <div className="flex items-center justify-end gap-2 p-1">
+            <ToolTip title="Cancel">
+              <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
+                <ClosePalette fill="white" />
+              </span>
+            </ToolTip>
+            <ToolTip title="Add Property">
+              <span className="cursor-pointer" onClick={handleSubmit}>
+                <SavePalette />
+              </span>
+            </ToolTip>
+          </div>
+        </div>
       </div>
     </div>
   );

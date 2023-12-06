@@ -14,6 +14,7 @@ import { DragOverlay } from '@dnd-kit/core';
 import HubItemOverlay from '../../../../../../../components/tasks/HubItemOverLay';
 import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IWallet } from '../../../../../../../features/hubs/hubs.interfaces';
+import { setEntityForCustom } from '../../../../../../../features/task/taskSlice';
 
 interface IWListProps {
   wallets: Wallet[];
@@ -33,6 +34,7 @@ export default function WList({ wallets, leftMargin, paddingLeft, type, level = 
   const handleLocation = (id: string, name: string, item: IWallet) => {
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, item) as string;
 
+    dispatch(setEntityForCustom({ id, type }));
     navigate(viewsUrl, { replace: true });
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));

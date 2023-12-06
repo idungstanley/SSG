@@ -25,6 +25,7 @@ import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 import { pilotTabs } from '../../../../../../../app/constants/pilotTabs';
 import { APP_HR, APP_TASKS } from '../../../../../../../app/constants/app';
 import { setStatusTaskListDetails } from '../../../../../../../features/list/listSlice';
+import { setEntityForCustom } from '../../../../../../../features/task/taskSlice';
 
 export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -65,6 +66,7 @@ export default function HList({ hubs, openNewHub, placeHubType }: ListProps) {
       return false;
     }
     dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
+    dispatch(setEntityForCustom({ id, type: EntityType.hub }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     dispatch(setParentHubExt({ id: id, type: EntityType.hub }));
     dispatch(

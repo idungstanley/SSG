@@ -121,7 +121,7 @@ export default function CustomPropertyList(color?: string) {
           id: 'Neighbours',
           name: 'Neighbours',
           onclick: () => null,
-          icon: <DotIcon />
+          icon: <DotIcon color={color} />
         }
       ]
     },
@@ -168,7 +168,7 @@ export default function CustomPropertyList(color?: string) {
         {
           id: 'progress_auto',
           name: 'Auto',
-          icon: <AutoprogressIcon />,
+          icon: <AutoprogressIcon color={color} />,
           onclick: () => null,
           type: 'progress_auto'
         },

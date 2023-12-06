@@ -71,7 +71,7 @@ export default function CardWrapper({
                   isActiveCollection ? 'light-green' : 'light-orange'
                 }`}
               >
-                <p className="overflow-hidden text-justify whitespace-no-wrap">{cardName}</p>
+                <p className="overflow-hidden text-justify whitespace-nowrap">{cardName}</p>
               </div>
             </ToolTip>
           )}
