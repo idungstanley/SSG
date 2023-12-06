@@ -63,7 +63,7 @@ function Schedules() {
     } else if (!popoutItems.calendar && !popoutItems.createNew) {
       return '70vh';
     } else if (popoutItems.calendar && popoutItems.createNew) {
-      return '30vh';
+      return '28vh';
     }
   };
 
