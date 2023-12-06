@@ -18,7 +18,7 @@ interface InputDataTypes {
   height?: string;
   isBorder?: boolean;
   classes?: string;
-  styles?: { color: string };
+  styles?: { color: string; fontSize?: string; fontWeight?: string; lineHeight?: string };
   labelClasses?: string;
 }
 function Input({
