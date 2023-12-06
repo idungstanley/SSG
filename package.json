@@ -60,6 +60,7 @@
     "react-google-autocomplete": "^2.7.3",
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.7.1",
+    "react-image-crop": "^11.0.1",
     "react-infinite-scroll-hook": "^4.0.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.13.0",

@@ -1,31 +1,22 @@
 import { useDispatch } from 'react-redux';
 import Uppy from '@uppy/core';
-import XHRUpload from '@uppy/xhr-upload';
 import { useUppy, DashboardModal } from '@uppy/react';
 import Webcam from '@uppy/webcam';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
-import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useAppSelector } from '../../../../../app/hooks';
-import { setShowAvatarUpload } from '../../../../../features/settings/user/userSettingsSlice';
+import { setAvatarFile, setShowAvatarUpload } from '../../../../../features/settings/user/userSettingsSlice';
 
-interface UploadFileModalProps {
-  invalidateQuery?: InvalidateQueryFilters<unknown>;
-  endpoint?: string;
-}
-
-export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileModalProps) {
-  const queryClient = useQueryClient();
+export default function UploadAvatar() {
   const dispatch = useDispatch();
-  const { currentWorkspaceId, accessToken } = useAppSelector((state) => state.auth);
+
   const { showAvatarUpload } = useAppSelector((state) => state.userSetting);
 
   // init
   const uppy = useUppy(() =>
     new Uppy({
       debug: true,
-      autoProceed: true,
+      autoProceed: false,
       meta: {},
       restrictions: {
         maxFileSize: null,
@@ -36,20 +27,6 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
         allowedFileTypes: ['image/*']
       }
     })
-      .use(XHRUpload, {
-        allowedMetaFields: ['image', 'path'],
-        endpoint: '',
-        bundle: false,
-        headers: currentWorkspaceId
-          ? {
-              Authorization: `Bearer ${accessToken}`,
-              current_workspace_id: currentWorkspaceId
-            }
-          : undefined,
-        method: 'POST',
-        formData: true,
-        fieldName: 'avatar'
-      })
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       .use(Webcam, {
         mirror: true,
@@ -59,26 +36,9 @@ export default function UploadAvatar({ invalidateQuery, endpoint }: UploadFileMo
       })
   );
 
-  const { xhrUpload } = uppy.getState();
-
-  // setup data
-  useEffect(() => {
-    uppy.setState({
-      xhrUpload: {
-        ...xhrUpload,
-        endpoint: `${process.env.REACT_APP_API_BASE_URL}/api/${endpoint}`
-      }
-    });
-  }, [endpoint]);
-
-  // invalidate query
-  uppy.on('upload-success', (_file, response) => {
-    const { status } = response;
-    const { success } = response.body as { success: boolean };
-
-    if (status === 200 && success) {
-      queryClient.invalidateQueries(invalidateQuery);
-    }
+  uppy.on('complete', (result) => {
+    dispatch(setAvatarFile(result.successful[0]));
+    dispatch(setShowAvatarUpload(false));
   });
 
   return (

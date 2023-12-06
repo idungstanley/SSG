@@ -10368,6 +10368,11 @@ react-icons@^4.7.1:
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.11.0.tgz#4b0e31c9bfc919608095cc429c4f1846f4d66c65"
   integrity sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==
 
+react-image-crop@^11.0.1:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.0.1.tgz#fffb7bad14042a820c1c18fea2fc8ba8ac65d567"
+  integrity sha512-rPXi9iJWoSZP0RWNhevoyAHvNz2ZElQilWE89AWXXRM9MKQUws5J9D0gfpuDOJBtUocirbWUyDcdNPAggP2AYQ==
+
 react-infinite-scroll-hook@^4.0.3:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/react-infinite-scroll-hook/-/react-infinite-scroll-hook-4.1.1.tgz#25c0c2cb9a41039019bd723823e21db1404c137d"

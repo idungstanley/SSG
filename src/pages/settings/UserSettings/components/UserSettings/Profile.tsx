@@ -2,38 +2,98 @@ import CurrentUser from './CurrentUser';
 import Region from './Region';
 import { useAppSelector, useAppDispatch } from '../../../../../app/hooks';
 import {
+  setAvatarFile,
   setCurrentUserModal,
   setShowAvatarUpload,
   setShowConfirmationModal,
   setUserInfo
 } from '../../../../../features/settings/user/userSettingsSlice';
 import UploadAvatar from '../UploadAvatar';
-import { InvalidateQueryFilters, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import PaletteManager from '../../../../../components/ColorPalette';
-import { UseRemoveAvatar } from '../../../../../features/settings/user/userSettingsServices';
-import { useState } from 'react';
+import { UseRemoveAvatar, UseUpdateAvatar } from '../../../../../features/settings/user/userSettingsServices';
+import { DependencyList, useEffect, useRef, useState } from 'react';
 import { ListColourProps } from '../../../../../components/tasks/ListItem';
 import { useGetColors } from '../../../../../features/account/accountService';
 import { useAbsolute } from '../../../../../hooks/useAbsolute';
 import { setPaletteDropDown } from '../../../../../features/account/accountSlice';
+import ReactCrop, { PixelCrop, type Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import { Menu } from '@mui/material';
+
+function useDebounceEffect(fn: () => void, waitTime: number, deps?: DependencyList) {
+  useEffect(() => {
+    const t = setTimeout(() => {
+      fn(...(deps as []));
+    }, waitTime);
+
+    return () => {
+      clearTimeout(t);
+    };
+  }, deps);
+}
+
+async function canvasPreview(image: HTMLImageElement, canvas: HTMLCanvasElement, crop: PixelCrop) {
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    throw new Error('No 2d context');
+  }
+
+  const scaleX = image.naturalWidth / image.width;
+  const scaleY = image.naturalHeight / image.height;
+  const pixelRatio = window.devicePixelRatio;
+
+  canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
+  canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+
+  ctx.scale(pixelRatio, pixelRatio);
+  ctx.imageSmoothingQuality = 'high';
+
+  const cropX = crop.x * scaleX;
+  const cropY = crop.y * scaleY;
+
+  const centerX = image.naturalWidth / 2;
+  const centerY = image.naturalHeight / 2;
+
+  ctx.save();
+  ctx.translate(-cropX, -cropY);
+  ctx.translate(centerX, centerY);
+  ctx.translate(-centerX, -centerY);
+  ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight, 0, 0, image.naturalWidth, image.naturalHeight);
+  ctx.restore();
+}
 
 function Profile() {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
-  const { name, email, time_format, date_format, start_week, showAvatarUpload, userData } = useAppSelector(
+  const { name, email, time_format, date_format, start_week, showAvatarUpload, userData, avatarFile } = useAppSelector(
     (state) => state.userSetting
   );
   const { paletteDropdown } = useAppSelector((state) => state.account);
   const { updateCords } = useAppSelector((state) => state.task);
 
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [paletteColor, setPaletteColor] = useState<string | ListColourProps | null | undefined>(
     userData?.color as string
   );
 
+  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
   const { show } = paletteDropdown;
 
   useGetColors();
+
+  const updateAvatarMutation = useMutation(UseUpdateAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['self']);
+      dispatch(setAvatarFile(null));
+    }
+  });
+
   const deleteAvatarMutation = useMutation(UseRemoveAvatar, {
     onSuccess: () => {
       queryClient.invalidateQueries(['self']);
@@ -47,6 +107,61 @@ function Profile() {
     setPaletteColor(c);
     dispatch(setUserInfo({ color: c as string }));
   };
+
+  useDebounceEffect(
+    async () => {
+      if (completedCrop?.width && completedCrop?.height && imgRef.current && previewCanvasRef.current) {
+        canvasPreview(imgRef.current, previewCanvasRef.current, completedCrop);
+      }
+    },
+    100,
+    [completedCrop]
+  );
+
+  const onDownloadCropClick = async () => {
+    const image = imgRef.current;
+    const previewCanvas = previewCanvasRef.current;
+    if (!image || !previewCanvas || !completedCrop) {
+      throw new Error('Crop canvas does not exist');
+    }
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const offscreen = new OffscreenCanvas(completedCrop.width * scaleX, completedCrop.height * scaleY);
+    const ctx = offscreen.getContext('2d');
+    if (!ctx) {
+      throw new Error('No 2d context');
+    }
+
+    ctx.drawImage(
+      previewCanvas,
+      0,
+      0,
+      previewCanvas.width,
+      previewCanvas.height,
+      0,
+      0,
+      offscreen.width,
+      offscreen.height
+    );
+    const blob = await offscreen.convertToBlob({ type: 'image/png' });
+    const newFile = new File([blob], 'avatar.png', { type: 'image/png' });
+
+    updateAvatarMutation.mutateAsync(newFile);
+  };
+
+  useEffect(() => {
+    if (avatarFile?.preview && !crop && !completedCrop) {
+      const startedPosition = {
+        unit: 'px',
+        width: 50,
+        height: 50,
+        x: 0,
+        y: 0
+      };
+      setCrop(startedPosition as Crop);
+      setCompletedCrop(startedPosition as PixelCrop);
+    }
+  }, [avatarFile?.preview, crop, completedCrop]);
 
   return (
     <div className="w-full m-2 bg-white rounded-lg">
@@ -219,12 +334,59 @@ function Profile() {
             </div>
           </section>
         </section>
-        {showAvatarUpload && (
-          <UploadAvatar
-            endpoint={'auth/account/avatar'}
-            invalidateQuery={['self'] as InvalidateQueryFilters<unknown>}
-          />
-        )}
+
+        {showAvatarUpload && <UploadAvatar />}
+
+        <Menu
+          open={!!avatarFile && !!crop}
+          onClose={() => {
+            dispatch(setAvatarFile(null));
+            setCrop(undefined);
+            setCompletedCrop(undefined);
+          }}
+          anchorOrigin={{
+            vertical: 'center',
+            horizontal: 'center'
+          }}
+          transformOrigin={{
+            vertical: 'center',
+            horizontal: 'center'
+          }}
+          PaperProps={{
+            style: { borderRadius: '5px' }
+          }}
+        >
+          <div key="avatar_image" className="flex flex-col items-center min-w-[400px] p-4">
+            <ReactCrop crop={crop} onChange={(c) => setCrop(c)} onComplete={(c) => setCompletedCrop(c)} aspect={9 / 9}>
+              <img ref={imgRef} src={avatarFile?.preview} style={{ maxHeight: '300px' }} />
+            </ReactCrop>
+            {!!completedCrop && (
+              <>
+                <div className="flex justify-center mt-2">
+                  <canvas
+                    ref={previewCanvasRef}
+                    style={{
+                      border: '1px solid black',
+                      objectFit: 'contain',
+                      width: completedCrop.width,
+                      height: completedCrop.height
+                    }}
+                  />
+                </div>
+                <div className="w-full">
+                  <div className="flex justify-end mt-2">
+                    <button
+                      className="flex hover:bg-alsoit-purple-100 text-white font-bold py-2 px-6 rounded bg-alsoit-purple-300"
+                      onClick={onDownloadCropClick}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </Menu>
       </div>
     </div>
   );
