@@ -15,7 +15,6 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 import { useResize } from '../../../../hooks/useResize';
 import { IPilotTab } from '../../../../types';
 import { cl } from '../../../../utils';
-import ShowTabsLabelToggle from './components/ShowTabsLabelToggle';
 import Tab from './components/Tab';
 import { VerticalScroll } from '../../../ScrollableContainer/VerticalScroll';
 import { useAppSelector } from '../../../../app/hooks';
@@ -93,7 +92,6 @@ export default function FullTabs({ tabs }: TabsProps) {
               </nav>
             </div>
             <Dividers />
-            <ShowTabsLabelToggle />
           </div>
         </VerticalScroll>
       ) : (
@@ -116,7 +114,6 @@ export default function FullTabs({ tabs }: TabsProps) {
               </SortableProvider>
             </nav>
           </div>
-          <ShowTabsLabelToggle />
         </>
       )}
     </>

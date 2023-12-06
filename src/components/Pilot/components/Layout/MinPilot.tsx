@@ -6,6 +6,7 @@ import MinTabs from '../Tabs/MinTabs';
 import Header from '../Header';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import { setActiveTabId } from '../../../../features/workspace/workspaceSlice';
+import Menu from '../HotKeys/components/Dropdown';
 
 interface MinPilotProps {
   featureTabs: IPilotTab[];
@@ -34,7 +35,7 @@ export default function MinPilot({ featureTabs, activeSection, setShowModal, sho
         {activeSection?.element}
       </div>
 
-      <Header isMinified menu={<Header.Menu setShowModal={setShowModal} />} />
+      <Header isMinified menu={<Menu setShowModal={setShowModal} />} />
 
       <MinHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
