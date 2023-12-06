@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DropdownForMention from './DropdownForMention';
 import { useSendMessageToChat } from '../../../../../features/chat/chatService';
 import ChatEmoticons from '../../../../../assets/icons/ChatEmoticons';
