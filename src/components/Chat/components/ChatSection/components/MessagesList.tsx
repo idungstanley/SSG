@@ -13,8 +13,8 @@ import { CiMail } from 'react-icons/ci';
 import { ClockIcon } from '@heroicons/react/24/outline';
 import { getInitials } from '../../../../../app/helpers';
 import MessageSuccess from '../../../../../assets/icons/chatIcons/MessageSuccess';
-import FileIcons from '../../../../Views/ui/Table/CustomField/Files/FileIcon';
 import DownloadIcon from '../../../../../assets/icons/DownloadIcon';
+import FileChatIcons from '../../../../Views/ui/Table/CustomField/Files/FileChatIcon';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -42,6 +42,14 @@ export default function MessagesList({ messages }: MessagesListProps) {
   const handleClosePopup = () => {
     setAnchorEl(null);
     setActiveUserPopup(null);
+  };
+
+  const showFileSize = (size: number) => {
+    const MB_SIZE = 1000000;
+    const KB_SIZE = 1000;
+    if (size > MB_SIZE) return `${Math.round(size / MB_SIZE)} MB`;
+    if (size > KB_SIZE) return `${Math.round(size / KB_SIZE)} KB`;
+    return `${size} B`;
   };
 
   return (
@@ -79,30 +87,38 @@ export default function MessagesList({ messages }: MessagesListProps) {
                     {message?.attachments.length ? (
                       <>
                         {message.attachments.map((file) => (
-                          <div
-                            key={file.id}
-                            className="w-full p-1 pr-[7px] shadow-sm bg-alsoit-purple-50 sm:text-sm rounded-[5px]"
-                          >
-                            <div className="flex justify-between items-center max-h-[100px] text-sm text-alsoit-gray-300">
-                              <div className="flex items-center">
-                                <FileIcons
-                                  fileExtension={file.physical_file.file_format.extension}
-                                  filePath={file.path}
-                                  fileName={file.physical_file.name}
-                                  height="h-8"
-                                  width="w-8"
-                                />
-                                <p className="ml-2">{file.physical_file.display_name}</p>
-                              </div>
-                              <div
-                                className={`ml-2 p-[3px] ${
-                                  isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
-                                } rounded-[5px]`}
-                              >
-                                <DownloadIcon width={16} height={16} />
+                          <>
+                            <div
+                              key={file.id}
+                              className="w-full p-1 pr-[7px] shadow-sm bg-alsoit-purple-50 sm:text-sm rounded-[5px]"
+                            >
+                              <div className="flex justify-between items-center max-h-[100px] text-sm text-alsoit-gray-300">
+                                <div className="flex items-center">
+                                  <FileChatIcons
+                                    fileExtension={file.physical_file.file_format.extension}
+                                    filePath={file.path}
+                                    fileName={file.physical_file.name}
+                                    height="h-[22px]"
+                                    width="w-[20px]"
+                                  />
+                                  <div className="ml-2">
+                                    <p className="text-[13px]">{file.physical_file.display_name}</p>
+                                  </div>
+                                </div>
+                                <div
+                                  className={`ml-2 p-[3px] ${
+                                    isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
+                                  } rounded-[5px]`}
+                                >
+                                  <DownloadIcon width={16} height={16} />
+                                </div>
                               </div>
                             </div>
-                          </div>
+                            <div className="flex text-[13px] text-[#424242]">
+                              <div>{showFileSize(file.physical_file.size)} -</div>
+                              <div className="ml-1">{file.physical_file.file_format.extension}</div>
+                            </div>
+                          </>
                         ))}
                       </>
                     ) : null}
