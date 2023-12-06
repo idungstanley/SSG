@@ -26,7 +26,7 @@ export default function AlsoitMenuDropdown({ handleClose, anchorEl, children, st
         'aria-labelledby': 'basic-button'
       }}
       PaperProps={{
-        style: paperStyle ? paperStyle : { borderRadius: '5px' }
+        style: paperStyle
       }}
     >
       {children}
