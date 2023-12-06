@@ -216,6 +216,7 @@ interface TaskState {
   keyBoardSelectedIndex: number;
   KeyBoardSelectedTaskData: ITaskFullList | null;
   taskColumnIndex: number;
+  taskRowFocus: boolean;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
@@ -246,6 +247,7 @@ interface TaskState {
   timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
+  voiceRecording: 'idle' | 'recording';
   recorder: MediaRecorder | null;
   stream: MediaStream | null;
   updateCords: number;
@@ -372,6 +374,7 @@ const initialState: TaskState = {
   keyBoardSelectedIndex: 0,
   KeyBoardSelectedTaskData: null,
   taskColumnIndex: 0,
+  taskRowFocus: true,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
   selectedIndexStatus: null,
@@ -401,6 +404,7 @@ const initialState: TaskState = {
   timeSortArr: [],
   timeLogColumnData: [],
   screenRecording: 'idle',
+  voiceRecording: 'idle',
   stream: null,
   recorder: null,
   updateCords: Date.now(),
@@ -545,6 +549,9 @@ export const taskSlice = createSlice({
     },
     setTaskColumnIndex(state, action: PayloadAction<number>) {
       state.taskColumnIndex = action.payload;
+    },
+    setTaskRowFocus(state, action: PayloadAction<boolean>) {
+      state.taskRowFocus = action.payload;
     },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
@@ -781,6 +788,17 @@ export const taskSlice = createSlice({
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
+    setVoiceRecording(state, action: PayloadAction<'idle' | 'recording'>) {
+      state.voiceRecording = action.payload;
+    },
+    setVoiceRecordingMedia(
+      state,
+      action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
+    ) {
+      const { recorder, stream } = action.payload;
+      state.stream = stream;
+      state.recorder = recorder;
+    },
     setScreenRecordingMedia(
       state,
       action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
@@ -897,6 +915,7 @@ export const {
   setKeyBoardSelectedIndex,
   setKeyBoardSelectedTaskData,
   setTaskColumnIndex,
+  setTaskRowFocus,
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSettingLocal,
@@ -950,6 +969,8 @@ export const {
   setTimeArr,
   setTimeSortArr,
   setTimeLogColumnData,
+  setVoiceRecording,
+  setVoiceRecordingMedia,
   setScreenRecording,
   setScreenRecordingMedia,
   setUpdateCords,

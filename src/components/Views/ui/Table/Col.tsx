@@ -91,7 +91,7 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
         style={{
           backgroundColor:
             task.id === '0' || task.id === currentTaskStatusId
-              ? newTaskStatus?.color || task?.status?.color
+              ? task?.status?.color || newTaskStatus?.color
               : task?.status?.color
         }}
         onClick={() => {

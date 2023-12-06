@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import SubtractIcon from '../../assets/icons/propertyIcons/SubtractIcon';
+import { cl } from '../../utils';
 
 interface SubtractProps {
   children?: ReactNode;
@@ -10,6 +11,7 @@ interface SubtractProps {
   height?: string;
   topPosition?: string;
   leftPosition?: string;
+  hasChildren: boolean;
 }
 
 export default function SubtractWrapper({
@@ -19,7 +21,8 @@ export default function SubtractWrapper({
   label,
   icon,
   topPosition = 'top-0',
-  leftPosition = 'left-0'
+  leftPosition = 'left-0',
+  hasChildren
 }: SubtractProps) {
   return (
     <div
@@ -32,16 +35,23 @@ export default function SubtractWrapper({
         <button className="flex items-center justify-between w-full h-full">
           <div className="flex items-center gap-2">
             <div className="relative w-5 h-5 group-hover:bg-[#ffff] group-hover:bg-opacity-25 rounded">
-              <span className="flex items-center justify-center w-5 h-5 text-lg group-hover:opacity-25 group-hover:bg-opacity-25 group-hover:text-opacity-25">
+              <span
+                className={cl(
+                  'flex items-center justify-center w-5 h-5 text-lg',
+                  hasChildren && 'group-hover:opacity-25 group-hover:bg-opacity-25 group-hover:text-opacity-25'
+                )}
+              >
                 {icon}
               </span>
-              <div
-                className={`absolute flex items-center justify-center w-5 h-5  opacity-0 group-hover:opacity-100 ${topPosition} ${leftPosition} ${
-                  isActive ? 'origin-center rotate-90' : ''
-                }`}
-              >
-                <SubtractIcon />
-              </div>
+              {hasChildren && (
+                <div
+                  className={`absolute flex items-center justify-center w-5 h-5  opacity-0 group-hover:opacity-100 ${topPosition} ${leftPosition} ${
+                    isActive ? 'origin-center rotate-90' : ''
+                  }`}
+                >
+                  <SubtractIcon />
+                </div>
+              )}
             </div>
             <p className="font-semibold truncate text-alsoit-gray-300-lg text-alsoit-text-lg">{label}</p>
           </div>

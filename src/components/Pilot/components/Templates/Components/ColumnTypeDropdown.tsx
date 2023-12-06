@@ -138,6 +138,7 @@ export default function ColumnTypeDropdown({ mactchingData }: { mactchingData?: 
                       isActive={activeDropdownOption === item.title}
                       handleClick={handleActiveDropdownOption}
                       label={item.title}
+                      hasChildren={item.children ? true : false}
                     />
                     {activeDropdownOption === item.title && (
                       <>

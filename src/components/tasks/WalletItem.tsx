@@ -198,6 +198,8 @@ export default function WalletItem({
       data-url={generateViewsUrl(wallet.id, activeView?.id as string, wallet, EntityType.wallet) as string}
       data-parent={wallet.parent_id}
       data-name={wallet.name}
+      data-color={wallet.color}
+      data-entity={EntityType.wallet}
     >
       <section
         className={`bg-white items-center truncate text-sm group ${

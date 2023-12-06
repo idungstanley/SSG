@@ -7,6 +7,7 @@ import ModalPilotNav from '../../../Modal/ModalPilotNav';
 import { initialPlaces } from '../../../../layout/components/MainLayout/Sidebar/components/Places';
 import PilotNavIcon from '../../../../assets/icons/PilotNavIcon';
 import ToolTip from '../../../Tooltip/Tooltip';
+import AlsoitMenuDropdown from '../../../DropDowns';
 import ActiveEntityAvatar from '../../../avatar/ActiveEntityAvatar';
 
 interface ToolbarNavInterface {
@@ -15,6 +16,8 @@ interface ToolbarNavInterface {
   url: string | null;
   parent: string | null;
   nesting: number;
+  color: string | undefined;
+  entity: string;
 }
 
 export default function ToolbarNav({ option, colors }: { option?: string; colors?: string }) {
@@ -26,6 +29,17 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
   const [modalNavTree, setModalNavTree] = useState<ToolbarNavInterface[]>([]);
   const activeItems = document.querySelectorAll('.nav-item-parent .nav-item');
   const activePlace = initialPlaces.filter((place) => place.id == activePlaceId);
+  const [showPilotNavMenu, setShowPilotNavMenu] = useState<null | HTMLDivElement>(null);
+
+  const handleOpenPilotNavsMenu = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShowPilotNavMenu(event.currentTarget);
+  };
+
+  const handleClosePilotNavMenu = () => {
+    setShowPilotNavMenu(null);
+    setModalOpened('');
+  };
+
   const activeNavItemElement = document.querySelectorAll('.active-nav-item');
 
   const activeNavItem = Array.from(activeNavItemElement)
@@ -42,7 +56,9 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
       name: element.getAttribute('data-name'),
       url: element.getAttribute('data-url'),
       parent: element.getAttribute('data-parent'),
-      nesting: 0
+      nesting: 0,
+      color: element.getAttribute('data-color'),
+      entity: element.getAttribute('data-entity')
     } as ToolbarNavInterface);
     if (activeItemName === element.getAttribute('data-name')) {
       i = activeItems.length;
@@ -56,7 +72,15 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
     while (currentId !== null) {
       const item: ToolbarNavInterface | undefined = data.find((obj: ToolbarNavInterface) => obj.id === currentId);
       if (item) {
-        paginationTree.unshift({ id: item.id, name: item.name, url: item.url, parent: item.parent, nesting: 0 });
+        paginationTree.unshift({
+          id: item.id,
+          name: item.name,
+          url: item.url,
+          parent: item.parent,
+          nesting: 0,
+          color: item.color,
+          entity: item.entity
+        });
         currentId = item.parent;
       } else {
         currentId = null;
@@ -91,14 +115,17 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
         name: element.getAttribute('data-name'),
         url: element.getAttribute('data-url'),
         parent: element.getAttribute('data-parent'),
-        nesting: 0
+        nesting: 0,
+        color: element.getAttribute('data-color'),
+        entity: element.getAttribute('data-entity')
       } as ToolbarNavInterface);
     }
 
     return modalNavItems;
   };
 
-  const arrowClick = (id: string) => {
+  const arrowClick = (id: string, e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    handleOpenPilotNavsMenu(e);
     setModalNavTree(getModalNavTree());
 
     if (modalOpened) {
@@ -171,16 +198,17 @@ export default function ToolbarNav({ option, colors }: { option?: string; colors
             <span
               className="relative overflow-visible rounded cursor-pointer pilot-nav-arrow"
               style={{ padding: option !== 'onList' ? '13px 5px 13px 2.5px' : '0px 5px 0px 2.5px' }}
-              onClick={() => arrowClick(item.name)}
+              onClick={(e) => arrowClick(item.name, e as React.MouseEvent<HTMLDivElement, MouseEvent>)}
             >
               <ArrowRightPilot active={modalOpened == item.name} />
               {modalOpened == item.name && (
-                <ModalPilotNav
-                  modalItemClick={modalItemClick}
-                  modalNavTree={modalNavTree}
-                  activeNavItem={activeNavItem[0]}
-                  activeArrowItem={item.id}
-                />
+                <AlsoitMenuDropdown anchorEl={showPilotNavMenu} handleClose={handleClosePilotNavMenu}>
+                  <ModalPilotNav
+                    modalItemClick={modalItemClick}
+                    modalNavTree={modalNavTree}
+                    activeNavItem={activeNavItem[0]}
+                  />
+                </AlsoitMenuDropdown>
               )}
             </span>
           )}

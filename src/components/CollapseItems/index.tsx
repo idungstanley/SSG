@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import { cl } from '../../utils';
 import ToolTip from '../Tooltip/Tooltip';
-import CollapseIcon from '../Views/ui/collapseIcon/CollapseIcon';
+import CarretIcon from '../../assets/icons/CarretIcon';
 
 interface collapseAllProps {
   children?: ReactNode;
@@ -11,6 +11,8 @@ interface collapseAllProps {
   headerTrailing?: ReactNode;
   menuButton?: ReactNode;
   headerIcon?: ReactNode;
+  handleToggle: VoidFunction;
+  open: boolean;
 }
 
 function CollapseItems({
@@ -20,33 +22,46 @@ function CollapseItems({
   menuButton,
   headerText,
   headerBg,
-  headerIcon
+  headerIcon,
+  handleToggle,
+  open
 }: collapseAllProps) {
-  const [open, setOpen] = useState(true);
+  const [caretColor, setCaretColor] = useState(open ? '#B2B2B2' : '#FFFFFF');
   return (
     <div className="w-full my-1">
       <div className="flex items-center justify-between w-full text-alsoit-text-xi">
         <div
-          className={cl(
-            'w-2/5 h-8 flex items-center justify-cente gap-1 rounded-br-lg group',
-            `${headerBg ?? 'bg-alsoit-gray-50'}`
-          )}
-          onClick={() => setOpen(!open)}
+          className={cl('w-2/5 h-8 flex items-center gap-1 rounded-br-lg group', `${headerBg ?? 'bg-alsoit-gray-50'}`)}
+          onClick={handleToggle}
         >
           <span className="flex justify-center w-6 ml-1">
             {headerIcon ? (
               <div>{headerIcon}</div>
             ) : (
               <ToolTip title={`${open ? 'Close' : 'Open'} ${header}`} placement="top">
-                <span className={cl('cursor-pointer', !open && '-rotate-90 transform')}>
-                  <CollapseIcon active={false} iconColor="rgb(244 244 244)" color="#424242" />
+                <span
+                  className={cl(
+                    'cursor-pointer h-4 w-4  rounded-full flex justify-center items-center border border-white',
+                    open ? 'bg-white hover:bg-transparent' : 'bg-transparent hover:bg-white -rotate-90 transform'
+                  )}
+                  onMouseEnter={() => setCaretColor(open ? '#FFFFFF' : '#B2B2B2')}
+                  onMouseLeave={() => setCaretColor(open ? '#B2B2B2' : '#FFFFFF')}
+                >
+                  <CarretIcon color={caretColor} />
                 </span>
               </ToolTip>
             )}
           </span>
           {/* <CollapseAllIcon />s */}
           <ToolTip title={header} placement="top">
-            <h2 className={cl('text-alsoit-text-md uppercase font-bold', `${headerText ?? 'text-alsoit-gray-300'}`)}>
+            <h2
+              className={cl(
+                'text-alsoit-text-md uppercase font-bold mx-2 hover:text-alsoit-gray-200',
+                `${headerText ?? 'text-alsoit-gray-300'}`
+              )}
+              onMouseEnter={() => setCaretColor('#626262')}
+              onMouseLeave={() => setCaretColor(open ? '#B2B2B2' : '#FFFFFF')}
+            >
               {header}
             </h2>
           </ToolTip>

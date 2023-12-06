@@ -183,6 +183,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       data-url={generateViewsUrl(list.id, activeView?.id as string, list, EntityType.list) as string}
       data-parent={list.parent_id}
       data-name={list.name}
+      data-color={outerColour}
+      data-entity={EntityType.list}
     >
       <section
         className={cl(
