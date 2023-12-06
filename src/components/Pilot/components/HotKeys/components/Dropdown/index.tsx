@@ -115,7 +115,7 @@ export default function Menu({ setShowModal }: HotKeysProps) {
                     style={{
                       fontSize: '13px',
                       paddingLeft: '5px',
-                      color: i.id == 'show_hide_pilot_feature' ? 'orange' : ''
+                      color: i.id == 'show_hide_hot_button' || i.id == 'show_hide_feature_button' ? 'orange' : ''
                     }}
                   >
                     {i.label}
