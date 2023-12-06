@@ -13,6 +13,7 @@ import ArrowDown from '../../../../assets/icons/ArrowDown';
 import PlusCircle from '../../../../assets/icons/AddCircle';
 import AddCircleWhite from '../../../../assets/icons/propertyIcons/AddCircleWhite';
 import StackIcon from '../../../../assets/icons/propertyIcons/StackIcon';
+import SearchCancel from '../../../../assets/icons/propertyIcons/SearchCancel';
 
 const mockChatsData = [
   {
@@ -77,13 +78,15 @@ function Templates() {
   const [filteredCollections, setFilteredCollections] = useState<IField[]>(customFiledsColumns);
   const [addProperties, setAddProperties] = useState<boolean>(false);
   const [btnHover, setBtnHover] = useState<boolean>(false);
+  const [hoverSearchBtn, setHoverSearchBtn] = useState<boolean>(false);
+  const [hoverSearchCloseBtn, setHoverSearchCloseBtn] = useState<boolean>(false);
 
-  const handleSearchChat = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchProperty = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchValue(value);
     if (value.length) {
-      setFilteredCollections(
-        customFiledsColumns.filter((collection) => collection.name.toLowerCase().startsWith(value.toLowerCase()))
+      setFilteredCollections((prev) =>
+        prev.filter((collection) => collection.name.toLowerCase().startsWith(value.toLowerCase()))
       );
     } else {
       setFilteredCollections(customFiledsColumns);
@@ -93,7 +96,7 @@ function Templates() {
   return (
     <div className="flex-col w-full h-full gap-3 p-2 pl-4 space-y-2 overflow-scroll">
       <span
-        className={`flex items-center justify-between  ${customFiledsColumns.length === 0 ? 'gap-20' : ''}`}
+        className={`flex items-center justify-between  ${customFiledsColumns.length === 0 || isSearch ? 'gap-20' : ''}`}
         style={{ fontSize: '11px', fontWeight: '600', lineHeight: '13.2px' }}
       >
         <div
@@ -110,72 +113,90 @@ function Templates() {
         ) : (
           mockChatsData.length && (
             <div
-              className="flex items-center gap-2"
+              className={`flex items-center gap-2 ${isSearch ? 'grow' : ''}`}
               style={{ fontSize: '10px', fontWeight: '500', lineHeight: '12px' }}
             >
-              <div
-                className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
-                style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
-              >
-                <StackIcon color="orange" />
-                Subtasks
-                <span className="flex items-center pl-3">
-                  <ArrowDown className="w-2 h-2" color="#424242" />
-                </span>
-              </div>
-              <div
-                className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
-                style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
-              >
-                Nested Lineage
-                <span className="flex items-center pl-2">
-                  <label className="switch small" onClick={(event) => event.stopPropagation()}>
+              {!isSearch ? (
+                <>
+                  <div
+                    className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
+                    style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
+                  >
+                    <StackIcon color="orange" />
+                    Subtasks
+                    <span className="flex items-center pl-3">
+                      <ArrowDown className="w-2 h-2" color="#424242" />
+                    </span>
+                  </div>
+                  <div
+                    className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
+                    style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
+                  >
+                    Nested Lineage
+                    <span className="flex items-center pl-2">
+                      <label className="switch small" onClick={(event) => event.stopPropagation()}>
+                        <input
+                          className="inputShow"
+                          type="checkbox"
+                          checked={isNestedLineage}
+                          onChange={() => setNestedLineage((prev) => !prev)}
+                        />
+                        <div className={`slider sliderGray ${isNestedLineage ? 'checked' : ''}`} />
+                      </label>
+                    </span>
+                  </div>
+                  <div
+                    className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
+                    style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
+                  >
+                    Archived
+                    <span className="flex items-center pl-2">
+                      <label className="switch small" onClick={(event) => event.stopPropagation()}>
+                        <input
+                          className="inputShow"
+                          type="checkbox"
+                          checked={isArchived}
+                          onChange={() => setArchived(!isArchived)}
+                        />
+                        <div className={`slider sliderGray ${isArchived ? 'checked' : ''}`} />
+                      </label>
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-center w-6 h-6 rounded-md bg-alsoit-gray-125">
+                    <ChatFilter />
+                  </div>
+                  <div
+                    className="flex items-center justify-center w-6 h-6 rounded-md cursor-pointer bg-alsoit-gray-125 hover:bg-purple-100"
+                    onClick={() => setSearch(true)}
+                    onMouseEnter={() => setHoverSearchBtn(true)}
+                    onMouseLeave={() => setHoverSearchBtn(false)}
+                  >
+                    <ChatSearch color={hoverSearchBtn ? '#BF01FE' : '#424242'} />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="relative flex items-center justify-start h-8 bg-white rounded-md grow chatSearch">
+                    <span className="chatSearch_icon">
+                      <ChatSearch color="#424242" />
+                    </span>
                     <input
-                      className="inputShow"
-                      type="checkbox"
-                      checked={isNestedLineage}
-                      onChange={() => setNestedLineage((prev) => !prev)}
+                      className="ring-0 focus:ring-0 focus:outline-0"
+                      type="text"
+                      value={searchValue}
+                      placeholder="Search Property"
+                      onChange={(e) => handleSearchProperty(e)}
                     />
-                    <div className={`slider sliderGray ${isNestedLineage ? 'checked' : ''}`} />
-                  </label>
-                </span>
-              </div>
-              <div
-                className="flex justify-between px-1 py-0.5 bg-alsoit-gray-125 items-center rounded-md"
-                style={{ minHeight: '24px', color: 'orange', fontSize: '10px' }}
-              >
-                Archived
-                <span className="flex items-center pl-2">
-                  <label className="switch small" onClick={(event) => event.stopPropagation()}>
-                    <input
-                      className="inputShow"
-                      type="checkbox"
-                      checked={isArchived}
-                      onChange={() => setArchived(!isArchived)}
-                    />
-                    <div className={`slider sliderGray ${isArchived ? 'checked' : ''}`} />
-                  </label>
-                </span>
-              </div>
-              <div className="flex items-center justify-center w-6 h-6 rounded-md bg-alsoit-gray-125">
-                <ChatFilter />
-              </div>
-              <div className="flex items-center justify-center w-6 h-6 rounded-md bg-alsoit-gray-125">
-                <ChatSearch color="#424242" />
-              </div>
-              {isSearch && (
-                <div className="flex items-center justify-start h-8 bg-white rounded-md grow chatSearch">
-                  <span className="chatSearch_icon" onClick={() => setSearch((prev) => !prev)}>
-                    <ChatSearch color="#424242" />
-                  </span>
-                  <input
-                    className="ring-0 focus:ring-0 focus:outline-0"
-                    type="text"
-                    value={searchValue}
-                    placeholder="Search Property"
-                    onChange={(e) => handleSearchChat(e)}
-                  />
-                </div>
+                    <span
+                      className="absolute flex items-center cursor-pointer right-2"
+                      onClick={() => setSearch(false)}
+                      onMouseEnter={() => setHoverSearchCloseBtn(true)}
+                      onMouseLeave={() => setHoverSearchCloseBtn(false)}
+                    >
+                      <SearchCancel hoverBg={hoverSearchCloseBtn ? '#FFE7E7' : undefined} />
+                    </span>
+                  </div>
+                </>
               )}
             </div>
           )
