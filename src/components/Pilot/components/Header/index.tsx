@@ -45,7 +45,7 @@ export default function Header({ menu, children, isMinified, additionalNavItems 
         <div
           className={cl(
             'relative flex items-center',
-            isMinified ? 'justify-center w-full flex-wrap gap-1 flex-col' : 'flex-col'
+            isMinified ? 'justify-center w-full flex-wrap gap-1 flex-col' : 'flex-col mr-2'
           )}
           style={{
             marginLeft: !isMinified ? '' : ''
