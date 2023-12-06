@@ -312,7 +312,7 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
             ? 'border-b-2 border-alsoit-purple-300'
             : dragOverItemId === task.id && draggableItemId !== dragOverItemId && dragToBecomeSubTask
             ? 'mb-0.5'
-            : columnIndex[taskColumnIndex]
+            : taskColumnIndex && columnIndex[taskColumnIndex]
             ? 'border border-alsoit-gray-200'
             : 'border-t',
           COL_BG,

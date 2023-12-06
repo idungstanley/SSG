@@ -3,29 +3,31 @@ import { VerticalScroll } from '../../ScrollableContainer/VerticalScroll';
 import { Cords } from '../../../hooks/useAbsolute';
 import { ITask_statuses } from '../../../features/list/list.interfaces';
 import { cl } from '../../../utils';
-import { Status } from '../../../features/task/interface.tasks';
+import { Status, Task } from '../../../features/task/interface.tasks';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { useEffect, useState } from 'react';
-import { setTaskRowFocus } from '../../../features/task/taskSlice';
+import {
+  setCurrentTaskStatusId,
+  setKeyBoardSelectedIndex,
+  setSelectedTaskParentId,
+  setSelectedTaskType,
+  setTaskColumnIndex,
+  setTaskRowFocus
+} from '../../../features/task/taskSlice';
+import { EntityType } from '../../../utils/EntityTypes/EntityType';
 
 type Props = {
   cords: Cords;
   sortedStatuses: ITask_statuses[];
   taskCurrentStatus: Status;
   handleStatusSelection: (status: ITask_statuses) => void;
-  taskId: string;
+  task: Task;
 };
 
-export function StatusDropDownModal({
-  cords,
-  sortedStatuses,
-  handleStatusSelection,
-  taskCurrentStatus,
-  taskId
-}: Props) {
+export function StatusDropDownModal({ cords, sortedStatuses, handleStatusSelection, taskCurrentStatus, task }: Props) {
   const dispatch = useAppDispatch();
 
-  const { taskRowFocus, KeyBoardSelectedTaskData } = useAppSelector((state) => state.task);
+  const { taskRowFocus, KeyBoardSelectedTaskData, currentTaskStatusId } = useAppSelector((state) => state.task);
 
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
@@ -39,6 +41,12 @@ export function StatusDropDownModal({
 
       if (event.key === 'Enter' && focusedIndex !== null && focusedIndex < sortedStatuses.length) {
         handleStatusSelection(sortedStatuses[focusedIndex]);
+        dispatch(setCurrentTaskStatusId(task.id));
+        dispatch(setSelectedTaskParentId(task.parent_id || task.list_id));
+        dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
+        dispatch(setTaskRowFocus(true));
+        dispatch(setTaskColumnIndex(null));
+        dispatch(setKeyBoardSelectedIndex(0));
       }
     };
 
@@ -47,11 +55,11 @@ export function StatusDropDownModal({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focusedIndex]);
+  }, [focusedIndex, currentTaskStatusId]);
 
   useEffect(() => {
-    if (taskId === KeyBoardSelectedTaskData?.id) dispatch(setTaskRowFocus(!taskRowFocus));
-  }, [taskId, KeyBoardSelectedTaskData]);
+    if (task.id === KeyBoardSelectedTaskData?.id) dispatch(setTaskRowFocus(!taskRowFocus));
+  }, [task, KeyBoardSelectedTaskData]);
 
   return (
     <div className="relative z-10">

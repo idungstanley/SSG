@@ -8,7 +8,7 @@ import ToolTip from '../Tooltip/Tooltip';
 import { ITask_statuses } from '../../features/list/list.interfaces';
 import { setNewTaskStatus, setStatusId } from '../../features/task/taskSlice';
 import { StatusDropDownModal } from './Components/StatusDropDownModal';
-import DropdownWithHeader from '../Pilot/components/TimeClock/components/DropdownWithHeader';
+import AlsoitMenuDropdown from '../DropDowns';
 
 interface StatusDropdownProps {
   taskCurrentStatus: Status;
@@ -80,7 +80,7 @@ export default function StatusDropdown({
   };
 
   useEffect(() => {
-    if (containerRef.current && activeColumn) {
+    if (containerRef.current && activeColumn && taskColumnIndex) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
         containerRef.current.focus();
       }
@@ -110,20 +110,15 @@ export default function StatusDropdown({
         </ToolTip>
       </div>
       {isOpen && (
-        <DropdownWithHeader
-          setAnchor={handleCloseStatusDropdown}
-          anchor={isOpen as HTMLDivElement | null}
-          header="task status"
-          subHeader="select status"
-        >
+        <AlsoitMenuDropdown handleClose={handleCloseStatusDropdown} anchorEl={isOpen as HTMLDivElement | null}>
           <StatusDropDownModal
             cords={cords}
             handleStatusSelection={handleStatusSelection}
             sortedStatuses={sortedStatuses}
             taskCurrentStatus={taskCurrentStatus}
-            taskId={task?.id as string}
+            task={task as Task}
           />
-        </DropdownWithHeader>
+        </AlsoitMenuDropdown>
       )}
     </div>
   );

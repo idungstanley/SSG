@@ -10,9 +10,9 @@ import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
 import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { Task } from '../../../../../../features/task/interface.tasks';
-import DropdownWithHeader from '../../../../../Pilot/components/TimeClock/components/DropdownWithHeader';
 import TrashIcon from '../../../../../../assets/icons/TrashIcon';
 import { EmailWebsiteDropDown } from './EmailWebsiteOptionsDropDown';
+import AlsoitMenuDropdown from '../../../../../DropDowns';
 
 interface EmailFieldProps {
   taskCustomFields?: ICustomField;
@@ -144,7 +144,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
   ];
 
   useEffect(() => {
-    if (containerRef.current && activeColumn) {
+    if (containerRef.current && activeColumn && taskColumnIndex) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
         if (!currentValue || currentValue === '-') setEditMode(true);
         containerRef.current.focus();
@@ -218,14 +218,9 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
         </div>
       )}
       {anchorEl !== null && (
-        <DropdownWithHeader
-          anchor={anchorEl}
-          setAnchor={setAnchorEl}
-          header={fieldType === 'website' ? 'Website Options' : 'Email Options'}
-          subHeader={fieldType === 'website' ? 'select options for websites' : 'select option for Emails'}
-        >
+        <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
           <EmailWebsiteDropDown fieldOptions={fieldOptions} fieldType={fieldType} taskId={task?.id as string} />
-        </DropdownWithHeader>
+        </AlsoitMenuDropdown>
       )}
     </div>
   );

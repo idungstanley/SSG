@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
 import { useAppSelector } from '../../app/hooks';
-
 import { priorities } from '../../app/constants/priorities';
 import { priorityArr } from '../../utils/PriorityArr';
 import Priority from '../../assets/icons/Priority';
 import { Task } from '../../features/task/interface.tasks';
-import DropdownWithHeader from '../Pilot/components/TimeClock/components/DropdownWithHeader';
 import { PriorityDropDownModal } from './PriorityDropDownModal';
+import AlsoitMenuDropdown from '../DropDowns';
 
 export interface priorityType {
   id: string;
@@ -29,7 +28,6 @@ export default function PriorityDropdown({ taskCurrentPriority, icon, activeColu
 
   const { selectedTasksArray, selectedListIds, selectedTaskParentId, taskColumnIndex, KeyBoardSelectedTaskData } =
     useAppSelector((state) => state.task);
-  // const { activeItemId } = useAppSelector((state) => state.workspace);
 
   const [isOpen, setIsOpen] = useState<HTMLElement | null>(null);
 
@@ -71,14 +69,17 @@ export default function PriorityDropdown({ taskCurrentPriority, icon, activeColu
   };
 
   useEffect(() => {
-    if (containerRef.current && activeColumn) {
+    if (containerRef.current && activeColumn && taskColumnIndex) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
         containerRef.current.focus();
       }
+
       containerRef.current.addEventListener('keydown', handleKeyDown);
     }
 
-    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      containerRef.current?.removeEventListener('keydown', handleKeyDown);
+    };
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
   return (
@@ -93,19 +94,14 @@ export default function PriorityDropdown({ taskCurrentPriority, icon, activeColu
         </button>
       </div>
       {isOpen && (
-        <DropdownWithHeader
-          setAnchor={handleCloseDropdown}
-          anchor={isOpen}
-          header="task priority"
-          subHeader="select task priority"
-        >
+        <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
           <PriorityDropDownModal
             priorityList={priorityList}
             setIsOpen={setIsOpen}
             taskCurrentPriority={taskCurrentPriority}
-            taskId={task?.id as string}
+            task={task as Task}
           />
-        </DropdownWithHeader>
+        </AlsoitMenuDropdown>
       )}
     </div>
   );

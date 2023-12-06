@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AvatarWithInitials } from '../../../../components';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import {
@@ -11,12 +11,18 @@ import {
   UseTaskWatchersAssignService
 } from '../../../../features/task/taskService';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
-import { setCurrTeamMemId } from '../../../../features/task/taskSlice';
+import {
+  setCurrTeamMemId,
+  setSelectedTaskParentId,
+  setSelectedTaskType,
+  setTaskColumnIndex,
+  setTaskRowFocus
+} from '../../../../features/task/taskSlice';
 import AvatarWithImage from '../../../../components/avatar/AvatarWithImage';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
-import { AssigneeType } from '../../../../features/task/interface.tasks';
+import { AssigneeType, Task } from '../../../../features/task/interface.tasks';
 
 interface AssigneeItem {
   item: ITeamMembersAndGroup;
@@ -26,14 +32,33 @@ interface AssigneeItem {
   handleClose: () => void;
   isAssigned?: boolean;
   isWatchers?: boolean;
+  assigneeArr: ITeamMembersAndGroup[];
+  task: Task;
 }
 
-function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned, isWatchers }: AssigneeItem) {
+function AssigneeItem({
+  item,
+  option,
+  entity_id,
+  teams,
+  handleClose,
+  isAssigned,
+  isWatchers,
+  assigneeArr,
+  task
+}: AssigneeItem) {
   const dispatch = useAppDispatch();
 
-  const { selectedTasksArray, selectedListIds, selectedTaskParentId, CompactView } = useAppSelector(
-    (state) => state.task
-  );
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+
+  const {
+    selectedTasksArray,
+    selectedListIds,
+    selectedTaskParentId,
+    CompactView,
+    taskRowFocus,
+    KeyBoardSelectedTaskData
+  } = useAppSelector((state) => state.task);
 
   const { mutate: onCheklistItemAssign } = UseChecklistItemAssignee(entity_id as string, item as AssigneeType);
 
@@ -106,8 +131,41 @@ function AssigneeItem({ item, option, entity_id, teams, handleClose, isAssigned,
     });
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp' && focusedIndex !== null && focusedIndex > 0) {
+        setFocusedIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
+      } else if (event.key === 'ArrowDown') {
+        setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : Math.min(prevIndex + 1, assigneeArr.length - 1)));
+      }
+
+      if (event.key === 'Enter' && focusedIndex !== null && focusedIndex < assigneeArr.length) {
+        dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
+        dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
+        handleAllAssignee();
+        dispatch(setTaskRowFocus(true));
+        dispatch(setTaskColumnIndex(null));
+        handleClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [focusedIndex]);
+
+  useEffect(() => {
+    if (task.id === KeyBoardSelectedTaskData?.id) dispatch(setTaskRowFocus(!taskRowFocus));
+  }, [task, KeyBoardSelectedTaskData]);
+
   return (
-    <div className="flex items-center justify-between w-full h-12 px-4 cursor-pointer hover:bg-gray-200 group">
+    <div
+      className={`flex items-center justify-between w-full h-12 px-4 cursor-pointer ${
+        focusedIndex && assigneeArr[focusedIndex].id === item.id ? 'bg-alsoit-gray-50' : ''
+      } hover:bg-alsoit-gray-50 group`}
+    >
       <div className="relative flex items-center space-x-2 cursor-pointer" onClick={handleAllAssignee}>
         <span className={`${isAssigned ? 'ring ring-green-500 ring-offset-2 rounded-full ' : null}`}>
           {!teams ? (

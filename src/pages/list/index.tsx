@@ -98,8 +98,8 @@ export function ListPage() {
       }
     }
 
-    if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
-      const newIndex = Math.min(taskColumns.length - 1, taskColumnIndex + 1);
+    if (e.key === 'ArrowRight') {
+      const newIndex = taskColumnIndex !== null ? Math.min(taskColumns.length - 1, taskColumnIndex + 1) : 0;
       dispatch(setTaskColumnIndex(newIndex));
     }
 
