@@ -1,13 +1,17 @@
 /* eslint-disable max-len */
 import React from 'react';
+import { Props } from '../AddCircle';
 
-interface Props {
-  color?: string;
-}
-
-export default function TrashIcon({ color }: Props) {
+export default function TrashIcon({ dimensions, color, ...props }: Props) {
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={dimensions?.width ?? '14'}
+      height={dimensions?.height ?? '14'}
+      viewBox="0 0 14 14"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <rect width="14" height="14" rx="2.1" fill="white" />
       <mask id="mask0_5348_140132" maskUnits="userSpaceOnUse" x="0" y="0" width="14" height="14">
         <rect width="14" height="14" fill="#D9D9D9" />
