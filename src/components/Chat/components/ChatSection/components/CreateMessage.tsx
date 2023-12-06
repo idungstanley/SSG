@@ -126,27 +126,9 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
           } bg-[#D9D9D9]`}
         >
           <div className="w-full">
-            {chatAttachmentsFiles.length ? (
-              <div className="">
-                <div className="flex flex-wrap ">
-                  {chatAttachmentsFiles.map((file) => (
-                    <div key={file.id} className="flex flex-col justify-center items-center w-[16.6%] mb-1">
-                      <FileIcons
-                        fileExtension={file.extension}
-                        filePath={file.preview}
-                        fileName={file.name}
-                        height="h-8"
-                        width="w-8"
-                      />
-                      <p className="text-center text-[10px]">{file.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
             {selectedMessage ? (
               <div
-                className="relative flex flex-col p-1 overflow-hidden bg-white border-gray-300 rounded-md shadow-sm text-[13px]"
+                className="relative flex flex-col mb-1 p-1 overflow-hidden bg-white border-gray-300 rounded-md shadow-sm text-[13px]"
                 style={{ minWidth: '217px', maxWidth: '90%' }}
               >
                 <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
@@ -156,6 +138,22 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
                     <span key={index}>{item.value}</span>
                   ))}
                 </div>
+              </div>
+            ) : null}
+            {chatAttachmentsFiles.length ? (
+              <div className="flex flex-wrap">
+                {chatAttachmentsFiles.map((file) => (
+                  <div key={file.id} className="flex flex-col justify-center items-center w-[16.6%] mb-1">
+                    <FileIcons
+                      fileExtension={file.extension}
+                      filePath={file.preview}
+                      fileName={file.name}
+                      height="h-8"
+                      width="w-8"
+                    />
+                    <p className="text-center text-[10px]">{file.name}</p>
+                  </div>
+                ))}
               </div>
             ) : null}
           </div>
