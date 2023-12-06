@@ -139,10 +139,10 @@ function AssigneeItem({
         setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : Math.min(prevIndex + 1, assigneeArr.length - 1)));
       }
 
-      if (event.key === 'Enter' && focusedIndex !== null && focusedIndex < assigneeArr.length) {
+      if (event.key === 'Enter' && focusedIndex !== null) {
         dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
         dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
-        handleAllAssignee();
+        handleAssignTask(assigneeArr[focusedIndex].id);
         dispatch(setTaskRowFocus(true));
         dispatch(setTaskColumnIndex(null));
         handleClose();

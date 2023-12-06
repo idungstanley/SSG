@@ -92,8 +92,8 @@ export function ListPage() {
             : Math.min(combinedArr.length - 1, keyBoardSelectedIndex !== null ? keyBoardSelectedIndex + 1 : 0);
 
         dispatch(setKeyBoardSelectedIndex(newIndex));
-      } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
-        const newIndex = Math.max(0, taskColumnIndex - 1);
+      } else if (e.key === 'ArrowLeft') {
+        const newIndex = taskColumnIndex !== null ? Math.min(taskColumns.length - 1, taskColumnIndex - 1) : 0;
         dispatch(setTaskColumnIndex(newIndex));
       }
     }
