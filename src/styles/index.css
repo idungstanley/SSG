@@ -4,6 +4,7 @@
 
 @import url('./Spinner.css');
 @import url('./Tooltip.css');
+@import url('./animations.css');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
 
@@ -49,10 +50,16 @@ body {
   pointer-events: none;
 }
 
-.green::after{
+.light-green::after{
 background-image: linear-gradient(to right, rgba(255, 255, 255, 0), #e6fae9);
 }
+.green::after{
+background-image: linear-gradient(to right, rgba(255, 255, 255, 0), #00CC25);
+}
 .orange::after{
+background-image: linear-gradient(to right, rgba(255, 255, 255, 0), #F7A100);
+}
+.light-orange::after{
 background-image: linear-gradient(to right, rgba(255, 255, 255, 0), #FEF6E6);
 }
 

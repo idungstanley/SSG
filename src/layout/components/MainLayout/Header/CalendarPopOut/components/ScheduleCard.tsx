@@ -17,7 +17,7 @@ interface scheduleCards {
 function ScheduleCard({ schedule }: scheduleCards) {
   return (
     <div className="w-full">
-      <div className="flex bg-white rounded p-2">
+      <div className="flex bg-white rounded p-2 group/parent">
         <div className="text-center" style={{ width: '15%' }}>
           <h2 className="text-alsoit-text-md w-full flex justify-center">{schedule.day}</h2>
           <span className="text-alsoit-text-md w-full flex justify-center">
@@ -28,7 +28,7 @@ function ScheduleCard({ schedule }: scheduleCards) {
           {schedule.schedules.map((item) => {
             return (
               <div className="h-8 flex items-center my-1 group" key={item.title}>
-                <div className="h-full flex flex-col justify-between mx-1 opacity-0 group-hover:opacity-100">
+                <div className="h-full flex flex-col justify-between mx-1 opacity-0 group-hover:opacity-100 group-hover/parent:opacity-100">
                   <ToolTip title="Add new">
                     <button>
                       <PlusIcon dimensions={{ width: 5, height: 5 }} />

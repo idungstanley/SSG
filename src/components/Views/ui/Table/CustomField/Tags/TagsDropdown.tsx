@@ -10,7 +10,7 @@ import {
   setEntityForCustom,
   setNewCustomPropertyDetails
 } from '../../../../../../features/task/taskSlice';
-import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
 import '../../../../../../styles/task.css';
 import { pilotTabs } from '../../../../../../app/constants/pilotTabs';
@@ -53,7 +53,8 @@ function TagsDropdown({ optionsFromField, allOptions, currentProperty, taskId }:
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.PROPERTIES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(
       setNewCustomPropertyDetails({

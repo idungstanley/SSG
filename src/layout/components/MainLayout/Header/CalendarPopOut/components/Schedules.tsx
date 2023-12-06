@@ -9,6 +9,8 @@ import { VerticalScroll } from '../../../../../../components/ScrollableContainer
 import SearchIcon from '../../../../../../assets/icons/SearchIcon';
 import FilterIcon from '../../../../../../assets/icons/FilterIcon';
 import ToolTip from '../../../../../../components/Tooltip/Tooltip';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
+import { setSchedule } from '../../../../../../features/workspace/workspaceSlice';
 
 const scheduleData = [
   {
@@ -50,19 +52,36 @@ const scheduleData = [
 ];
 
 function Schedules() {
+  const dispatch = useAppDispatch();
+  const { popoutItems } = useAppSelector((state) => state.workspace);
+
+  const calculateScheduleHeight = () => {
+    if (popoutItems.calendar && !popoutItems.createNew) {
+      return '43vh';
+    } else if (!popoutItems.calendar && popoutItems.createNew) {
+      return '55vh';
+    } else if (!popoutItems.calendar && !popoutItems.createNew) {
+      return '70vh';
+    } else if (popoutItems.calendar && popoutItems.createNew) {
+      return '28vh';
+    }
+  };
+
   return (
     <div>
       <CollapseItems
+        handleToggle={() => dispatch(setSchedule())}
+        open={popoutItems.schedule}
         header="Schedule"
         headerTrailing={
           <div className="w-full flex items-center justify-end gap-1 mr-2">
             <ToolTip title="Filter schedule" placement="left">
-              <button className="h-6 w-6 bg-white rounded flex justify-center items-center">
+              <button className="h-6 w-6 bg-white hover:bg-alsoit-purple-50 rounded flex justify-center items-center">
                 <FilterIcon />
               </button>
             </ToolTip>
             <ToolTip title="Search schedule" placement="left">
-              <button className="h-6 w-6 bg-white rounded flex justify-center items-center">
+              <button className="h-6 w-6 bg-white rounded flex justify-center items-center hover:bg-alsoit-purple-50">
                 <SearchIcon className="w-4 h-4 hover:text-alsoit-purple-300" />
               </button>
             </ToolTip>
@@ -100,7 +119,7 @@ function Schedules() {
             </div>
           </div>
           <VerticalScroll>
-            <div className="m-auto" style={{ maxWidth: '90%', maxHeight: '43vh' }}>
+            <div className="m-auto" style={{ maxWidth: '90%', maxHeight: calculateScheduleHeight() }}>
               {scheduleData.map((schedule) => {
                 return (
                   <div key={schedule.day} className="my-1 w-full">

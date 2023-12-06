@@ -252,6 +252,8 @@ export default function HubItem({
       data-url={generateViewsUrl(item.id, activeView?.id as string, item, EntityType.hub) as string}
       data-parent={item.parent_id}
       data-name={item.name}
+      data-color={item.color}
+      data-entity={type}
     >
       <div
         className={`bg-white w-full truncate items-center group ${

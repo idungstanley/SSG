@@ -1,4 +1,3 @@
-import { BsPower } from 'react-icons/bs';
 import { useAppSelector } from '../../../../app/hooks';
 import TaskMenu from '../../../../pages/workspace/tasks/component/taskMenu/TaskMenu';
 import { Assignee } from '../Assignee/Assignee';
@@ -7,13 +6,16 @@ import { FilterDropdown } from '../Filter/FilterDropdown';
 import { Search } from '../Search/Search';
 import { Sort } from '../Sort/Sort';
 import ListSettingsModal from '../listSettings/ListSettingsModal';
-import { AiOutlineHome, AiOutlineSave, AiOutlineUser } from 'react-icons/ai';
 import { ReactNode, useEffect, useState } from 'react';
-import { MdOutlinePrivacyTip } from 'react-icons/md';
-import { BiLock } from 'react-icons/bi';
-import { HiDownload } from 'react-icons/hi';
 import TimeClockInsightsIcon from '../../../../assets/icons/TimeClockInsightsIcon';
 import { ChangeViewInsights } from '../ChangeViewInsights/ChangeViewInsights';
+import AutoSaveIcon from '../../../../assets/icons/AutoSaveIcon';
+import ProtectViewIcon from '../../../../assets/icons/ProtectViewIcon';
+import EveryoneIcon from '../../../../assets/icons/EveryoneIcon';
+import MeIcon from '../../../../assets/icons/MeIcon';
+import ResetIcon from '../../../../assets/icons/ResetIcon';
+import ExportIcon from '../../../../assets/icons/ExportIcon';
+import PrivateViewIcon from '../../../../assets/icons/PrivateViewIcon';
 
 interface IHeader {
   isInsights?: boolean;
@@ -37,31 +39,31 @@ export function Header({ isInsights }: IHeader) {
   const items = [
     {
       label: 'AutoSave View',
-      icon: <AiOutlineSave />
+      icon: <AutoSaveIcon />
     },
     {
       label: 'Protect View',
-      icon: <MdOutlinePrivacyTip />
+      icon: <ProtectViewIcon />
     },
     {
       label: 'Private View',
-      icon: <BiLock />
+      icon: <PrivateViewIcon />
     },
     {
       label: 'Default for everyone',
-      icon: <AiOutlineHome />
+      icon: <EveryoneIcon />
     },
     {
       label: 'Default to ME Mode',
-      icon: <AiOutlineUser />
+      icon: <MeIcon />
     },
     {
       label: 'Reset view to defaults',
-      icon: <BsPower />
+      icon: <ResetIcon />
     },
     {
       label: 'Export',
-      icon: <HiDownload />
+      icon: <ExportIcon />
     }
   ];
 

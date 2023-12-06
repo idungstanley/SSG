@@ -33,6 +33,7 @@ import PlusIcon from '../../assets/icons/PlusIcon';
 import SubDropdown from '../Dropdown/SubDropdown';
 import { APP_TASKS } from '../../app/constants/app';
 import { STORAGE_KEYS, dimensions } from '../../app/config/dimensions';
+import { setEntityForCustom } from '../../features/task/taskSlice';
 
 interface ListItemProps {
   list: IList;
@@ -76,6 +77,7 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
   // function for the list shape selection
   const handleListLocation = (id: string, name: string) => {
     dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
+    dispatch(setEntityForCustom({ id, type: EntityType.list }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, list, EntityType.list) as string;
     dispatch(
       setActiveItem({
@@ -181,6 +183,8 @@ export default function ListItem({ list, paddingLeft }: ListItemProps) {
       data-url={generateViewsUrl(list.id, activeView?.id as string, list, EntityType.list) as string}
       data-parent={list.parent_id}
       data-name={list.name}
+      data-color={outerColour}
+      data-entity={EntityType.list}
     >
       <section
         className={cl(

@@ -216,6 +216,7 @@ interface TaskState {
   keyBoardSelectedIndex: number;
   KeyBoardSelectedTaskData: ITaskFullList | null;
   taskColumnIndex: number;
+  taskRowFocus: boolean;
   defaultSubtaskListId: null | string;
   selectedIndexStatus: string | null;
   selectedListIds: string[];
@@ -246,6 +247,7 @@ interface TaskState {
   timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
+  voiceRecording: 'idle' | 'recording';
   recorder: MediaRecorder | null;
   stream: MediaStream | null;
   updateCords: number;
@@ -286,6 +288,7 @@ interface TaskState {
   fileUploadProps: fileUploadPropsType;
   taskInputValue?: string;
   rootTaskIds?: string[];
+  customFiledsColumns: IField[];
 }
 
 const initialState: TaskState = {
@@ -371,6 +374,7 @@ const initialState: TaskState = {
   keyBoardSelectedIndex: 0,
   KeyBoardSelectedTaskData: null,
   taskColumnIndex: 0,
+  taskRowFocus: true,
   subtaskDefaultStatusId: null,
   defaultSubtaskListId: null,
   selectedIndexStatus: null,
@@ -400,6 +404,7 @@ const initialState: TaskState = {
   timeSortArr: [],
   timeLogColumnData: [],
   screenRecording: 'idle',
+  voiceRecording: 'idle',
   stream: null,
   recorder: null,
   updateCords: Date.now(),
@@ -453,7 +458,8 @@ const initialState: TaskState = {
     listId: undefined,
     openModal: false
   },
-  taskInputValue: ''
+  taskInputValue: '',
+  customFiledsColumns: []
 };
 
 export const taskSlice = createSlice({
@@ -544,6 +550,9 @@ export const taskSlice = createSlice({
     setTaskColumnIndex(state, action: PayloadAction<number>) {
       state.taskColumnIndex = action.payload;
     },
+    setTaskRowFocus(state, action: PayloadAction<boolean>) {
+      state.taskRowFocus = action.payload;
+    },
     setSelectedIndexStatus(state, action: PayloadAction<string>) {
       state.selectedIndexStatus = action.payload;
     },
@@ -570,6 +579,9 @@ export const taskSlice = createSlice({
     },
     getTaskColumns(state, action: PayloadAction<listColumnProps[]>) {
       state.taskColumns = action.payload;
+    },
+    setCustomFiledsColumns(state, action: PayloadAction<IField[]>) {
+      state.customFiledsColumns = action.payload;
     },
     hideTaskColumns(state, action) {
       return {
@@ -776,6 +788,17 @@ export const taskSlice = createSlice({
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
+    setVoiceRecording(state, action: PayloadAction<'idle' | 'recording'>) {
+      state.voiceRecording = action.payload;
+    },
+    setVoiceRecordingMedia(
+      state,
+      action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
+    ) {
+      const { recorder, stream } = action.payload;
+      state.stream = stream;
+      state.recorder = recorder;
+    },
     setScreenRecordingMedia(
       state,
       action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
@@ -892,6 +915,7 @@ export const {
   setKeyBoardSelectedIndex,
   setKeyBoardSelectedTaskData,
   setTaskColumnIndex,
+  setTaskRowFocus,
   setSelectedIndexStatus,
   setSelectedListIds,
   setSaveSettingLocal,
@@ -945,6 +969,8 @@ export const {
   setTimeArr,
   setTimeSortArr,
   setTimeLogColumnData,
+  setVoiceRecording,
+  setVoiceRecordingMedia,
   setScreenRecording,
   setScreenRecordingMedia,
   setUpdateCords,
@@ -973,6 +999,7 @@ export const {
   setOpenFileUploadModal,
   setTaskInputValue,
   setRootTaskIds,
-  setNewTaskStatus
+  setNewTaskStatus,
+  setCustomFiledsColumns
 } = taskSlice.actions;
 export default taskSlice.reducer;

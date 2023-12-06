@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import CreateNewColumn from './Components/CreateNewColumn';
 import { useAppSelector } from '../../../../app/hooks';
 import EditDropdown from './Edit/EditDropdown';
 import Button from '../../../Button';
@@ -8,15 +7,10 @@ import ChatFilter from '../../../../assets/icons/ChatFilter';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import AddProperty from './Properties/component/AddProperty';
 import CardWrapper from '../CardWrapper';
-import { columnTypes, columnTypesProps } from './Components/CustomPropertyList';
+import CustomPropertyList from './Components/CustomPropertyList';
 import NamedIconPair from './Components/NamedIconPair';
-import NewColumn from './Components/NewColumn';
-import PermissionIcon from '../../../../assets/icons/chatIcons/PermissionIcon';
-import InformationsolidIcon from '../../../../assets/icons/InformationsolidIcon';
-import ToolTip from '../../../Tooltip/Tooltip';
-import ClosePalette from '../../../../assets/icons/ClosePalette';
-import SavePalette from '../../../../assets/icons/SavePalette';
-import CollectionsIcon from '../../../../assets/icons/chatIcons/CollectionsIcon';
+import { IField } from '../../../../features/list/list.interfaces';
+import { Capitalize } from '../../../../utils/NoCapWords/Capitalize';
 
 const mockChatsData = [
   {
@@ -70,11 +64,12 @@ const mockChatsData = [
 ];
 
 function Templates() {
-  const { entityForCustom, editCustomProperty } = useAppSelector((state) => state.task);
+  const { customFiledsColumns } = useAppSelector((state) => state.task);
 
   const [isArchived, setArchived] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [filteredCollections, setFilteredCollections] = useState<columnTypesProps[]>(columnTypes);
+  const { columnTypes } = CustomPropertyList('white');
+  const [filteredCollections, setFilteredCollections] = useState<IField[]>(customFiledsColumns);
   const [addProperties, setAddProperties] = useState<boolean>(false);
 
   const handleSearchChat = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,10 +77,10 @@ function Templates() {
     setSearchValue(value);
     if (value.length) {
       setFilteredCollections(
-        columnTypes.filter((collection) => collection.title.toLowerCase().startsWith(value.toLowerCase()))
+        customFiledsColumns.filter((collection) => collection.name.toLowerCase().startsWith(value.toLowerCase()))
       );
     } else {
-      setFilteredCollections(columnTypes);
+      setFilteredCollections(customFiledsColumns);
     }
   };
 
@@ -93,7 +88,7 @@ function Templates() {
     <div className="flex-col w-full h-full gap-3 p-2 pl-3 space-y-2 overflow-scroll">
       <span className="flex items-center gap-12">
         <Button
-          height="h-8 text-white"
+          height="h-8 text-white w-32"
           icon={<IoIosAddCircleOutline className="text-base text-white" />}
           label="ADD PROPERTY"
           labelSize="text-xs"
@@ -140,61 +135,38 @@ function Templates() {
       </span>
       {addProperties && <AddProperty />}
       <div className="mt-2">
-        {filteredCollections.map((collection, index) => (
-          <CardWrapper
-            type="properties"
-            titleElement={
-              <NamedIconPair
-                parentName={collection?.title}
-                parentIcon={collection?.icon}
-                childIcon={collection.children[0]?.icon as JSX.Element}
-                childName={collection.children[0].name}
+        {filteredCollections.map((collection, index) => {
+          const matchingObject = columnTypes.find((item) => item.title.toLowerCase() === collection.type.toLowerCase());
+          if (matchingObject) {
+            return (
+              <CardWrapper
+                type="properties"
+                titleElement={
+                  <NamedIconPair
+                    type="card"
+                    isLeadingIcon={true}
+                    fadeOutColour={matchingObject.active}
+                    parentName={matchingObject?.title}
+                    parentIcon={matchingObject?.icon}
+                    childIcon={matchingObject.children[0]?.icon as JSX.Element}
+                    childName={matchingObject.children[0].name}
+                  />
+                }
+                key={matchingObject.title + index}
+                collection={matchingObject}
+                cardName={Capitalize(collection.name)}
+                bodyElement={
+                  <div className="p-2 pl-4">
+                    {/* <NewColumn /> */}
+                    <EditDropdown editCustomProperty={collection} mactchingData={matchingObject} />
+                  </div>
+                }
               />
-            }
-            key={collection.title + index}
-            collection={collection}
-            cardName={collection?.title}
-            bodyElement={
-              <div className="p-2 pl-4">
-                <NewColumn />
-                <div className="my-2 text-xs">CLICK HERE TO HOST IN TEMPLATE</div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
-                      <PermissionIcon />
-                      <div className="text-black">Permissions</div>
-                      <InformationsolidIcon />
-                    </div>
-                    <div
-                      className="flex items-center justify-center bg-white rounded-sm"
-                      style={{ minWidth: '16px', height: '16px', fontSize: '8px', padding: '4px 2px', color: 'orange' }}
-                    >
-                      <span className="pr-1">
-                        <CollectionsIcon color="orange" />
-                      </span>
-                      Collection
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-end gap-2 p-1">
-                    <ToolTip title="Cancel">
-                      <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
-                        <ClosePalette fill="white" />
-                      </span>
-                    </ToolTip>
-                    <ToolTip title="Add Property">
-                      <span className="cursor-pointer" onClick={() => ({})}>
-                        <SavePalette />
-                      </span>
-                    </ToolTip>
-                  </div>
-                </div>
-              </div>
-            }
-          />
-        ))}
+            );
+          }
+          return null;
+        })}
       </div>
-      {entityForCustom.id && entityForCustom.type && <CreateNewColumn />}
-      {editCustomProperty && <EditDropdown />}
     </div>
   );
 }

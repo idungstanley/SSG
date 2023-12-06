@@ -19,56 +19,37 @@ import CoriDocsIcon from '../../../../../assets/icons/chatIcons/CoriDocsIcon';
 import CommentsIcon from '../../../../../assets/icons/chatIcons/CommentsIcon';
 
 export const communicationOptions = [
-  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: false },
+  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: true },
   {
     id: pilotTabs.TICKETS,
     name: 'Tickets',
     icon: <TicketsPilotIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.COMMENTS,
     name: 'Comments',
     icon: <CommentsIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.CORI_DOCS,
     name: 'CoriDocs',
     icon: <CoriDocsIcon />,
-    isVisible: false
+    isVisible: true
   },
   {
     id: pilotTabs.EMAIL,
     name: 'Emails',
     icon: <MdAlternateEmail className="w-4 h-4" />,
-    isVisible: false
+    isVisible: true
   },
-  { id: pilotTabs.CHAT, name: 'Chat', icon: <BsChatLeftText className="w-4 h-4" />, isVisible: true },
   {
     id: pilotTabs.PHONE,
     name: 'Phone',
     icon: <MdOutlineCall className="w-4 h-4" />,
-    isVisible: false
+    isVisible: true
   }
-  // {
-  //   id: pilotTabs.COMMENTS,
-  //   name: 'Comment',
-  //   icon: <CommentIcon />,
-  //   isVisible: true
-  // },
-  // {
-  //   id: pilotTabs.EMAIL,
-  //   name: 'Email',
-  //   icon: <MdAlternateEmail className="w-4 h-4" />,
-  //   isVisible: true
-  // }
-  // // {
-  // //   id: pilotTabs.VOICE_CALL,
-  // //   name: 'Voice Call',
-  // //   icon: <MdOutlineCall className="w-4 h-4" />,
-  // //   isVisible: true
-  // // }
 ];
 
 export default function CommunicationSubTab() {
@@ -111,10 +92,10 @@ export default function CommunicationSubTab() {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => handleDragEnd(e)}>
       <SortableContext strategy={rectSortingStrategy} items={items}>
         <div
-          className="grid px-1 grid-cols-6 bg-alsoit-gray-125"
-          style={{ borderBottom: `3px solid ${activeSubCommunicationTabId ? '#ebd1fc' : 'transparent'}` }}
+          className="grid grid-cols-6 px-1 bg-alsoit-gray-125"
+          style={{ borderBottom: `2px solid ${activeSubCommunicationTabId ? '#F9E6FF' : 'transparent'}` }}
         >
-          {items.map((item) => (
+          {communicationOptions.map((item) => (
             <SubtabDrag
               key={item.id}
               id={item.id}
@@ -122,7 +103,7 @@ export default function CommunicationSubTab() {
               activeSub={activeSubCommunicationTabId}
               showPilot={showPilot}
               name={pilotTabs.CONNECT}
-              items={items}
+              items={communicationOptions}
               item={item}
             />
           ))}

@@ -120,23 +120,25 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
       </div>
 
       <AlsoitMenuDropdown handleClose={handleCloseDropdown} anchorEl={isOpen}>
-        <div className="items-center mx-auto font-bold" style={{ width: '93%' }}>
-          <DropdownTitle content="VIEW" />
-          <DropdownSubtitle content="SETTINGS" />
+        <div className="items-center mx-auto font-bold" style={{ width: '200px' }}>
+          <DropdownTitle content="VIEW SETTINGS" />
+          <DropdownSubtitle content="SELECT OPTION" />
         </div>
 
         {itemsArray.map((view, index) => (
           <Fragment key={view.label}>
             <div
-              className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full "
+              className="flex items-center py-2 text-alsoit-text-lg font-semibold text-left w-full hover:bg-[#F4F4F4]"
               style={{ lineHeight: '15.6px' }}
             >
               <button className={'flex justify-between items-center w-full group '}>
                 <div className="flex items-center space-x-2 pl-2 text-md whitespace-nowrap">
-                  <p className="flex items-center space-x-2 pl-1 text-md whitespace-nowrap">{view.icon}</p>
-                  <p className="pr-2">{view.label}</p>
+                  <p className="flex items-center space-x-2 pl-1 text-md whitespace-nowrap justify-center w-5">
+                    {view.icon}
+                  </p>
+                  <p>{view.label}</p>
                 </div>
-                <p className="flex items-center pr-2 ">
+                <p className="flex items-center pr-2">
                   <label className="switch" onClick={(event) => event.stopPropagation()}>
                     <input
                       className="inputShow"
@@ -144,7 +146,9 @@ export default function ListSettingsModal({ itemsArray }: IShowHideSettings) {
                       checked={checkedStates[index]}
                       onChange={() => handleChange(view.label, index)}
                     />
-                    <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
+                    {index === 5 || index === 6 ? null : (
+                      <div className={`slider ${checkedStates[index] ? 'checked' : ''}`}></div>
+                    )}
                   </label>
                 </p>
               </button>

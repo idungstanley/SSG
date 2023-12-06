@@ -41,6 +41,8 @@ import { useDeleteCustomField } from '../../../../../features/list/listService';
 import { generateSortField } from '../../../../../utils/TaskHeader/GenerateSortField';
 import LightenColor from '../../List/lightenColor/LightenColor';
 import { IListColor } from '../../List/List';
+import DropdownTitle from '../../../../DropDowns/DropdownTitle';
+import DropdownSubtitle from '../../../../DropDowns/DropdownSubtitle';
 
 interface HeadProps {
   columns: ExtendedListColumnProps[];
@@ -264,7 +266,8 @@ export function Head({
     dispatch(setEntityForCustom({ id, type }));
     dispatch(setListForCustom(listId as string));
     dispatch(setEditCustomProperty(undefined));
-    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.PROPERTIES));
   };
 
   const handleRemoveColumn = () => {
@@ -341,9 +344,10 @@ export function Head({
                   handleClose={handleCloseStatusDropdown}
                   anchorEl={showStatusDropdown as HTMLDivElement | null}
                 >
-                  <div className="flex flex-col p-2 px-2 space-y-2">
-                    <p className="text-alsoit-gray-75">Group Options</p>
-                    <div className="flex flex-col space-y-2">
+                  <div>
+                    <DropdownTitle content="Group Options" />
+                    <DropdownSubtitle content="Select" />
+                    <div className="flex flex-col space-y-2 w-44">
                       {statusDropdownOptions.map((item, index) => (
                         <div
                           className="flex items-center gap-2 p-1 rounded cursor-pointer hover:bg-alsoit-gray-50"

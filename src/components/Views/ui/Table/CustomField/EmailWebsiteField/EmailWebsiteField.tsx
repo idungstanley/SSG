@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ICustomField } from '../../../../../../features/task/taskSlice';
-import { useUpdateEntityCustomFieldValue } from '../../../../../../features/list/listService';
+import { ICustomField, setTaskRowFocus } from '../../../../../../features/task/taskSlice';
+import {
+  useClearEntityCustomFieldValue,
+  useUpdateEntityCustomFieldValue
+} from '../../../../../../features/list/listService';
 import { cl } from '../../../../../../utils';
 import ThreeDotIcon from '../../../../../../assets/icons/ThreeDotIcon';
-import AlsoitMenuDropdown from '../../../../../DropDowns';
 import { CopyIcon } from '../../../../../../assets/icons';
 import EditIcon from '../../../../../../assets/icons/Edit';
-import { RiDeleteBinLine } from 'react-icons/ri';
-import { Capitalize } from '../../../../../../utils/NoCapWords/Capitalize';
-import { useAppSelector } from '../../../../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../app/hooks';
 import { Task } from '../../../../../../features/task/interface.tasks';
+import DropdownWithHeader from '../../../../../Pilot/components/TimeClock/components/DropdownWithHeader';
+import TrashIcon from '../../../../../../assets/icons/TrashIcon';
+import { EmailWebsiteDropDown } from './EmailWebsiteOptionsDropDown';
 
 interface EmailFieldProps {
   taskCustomFields?: ICustomField;
@@ -25,6 +28,8 @@ const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const websitePattern = /^(?:(https?:\/\/|www\.)[\w.-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})|[\w.-]+\.[a-zA-Z]{2,})$/;
 
 function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activeColumn, task }: EmailFieldProps) {
+  const dispatch = useAppDispatch();
+
   const { KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -37,6 +42,7 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const { mutate: onUpdate } = useUpdateEntityCustomFieldValue(taskId);
+  const { mutate: onClear } = useClearEntityCustomFieldValue();
 
   useEffect(() => {
     if (taskCustomFields) {
@@ -59,9 +65,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
         fieldId
       });
       setAnchorEl(null);
+      dispatch(setTaskRowFocus(true));
     } else if (!isValidEntry(currentValue)) {
       setCurrentValue('-');
+      dispatch(setTaskRowFocus(true));
     }
+    if (currentValue === activeValue) dispatch(setTaskRowFocus(true));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,13 +88,13 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
 
   const handleDeleteEmail = () => {
     setEditMode(false);
-    onUpdate({
+    onClear({
       taskId,
-      value: [{ value: '' }],
       fieldId
     });
     setAnchorEl(null);
     setCurrentValue('-');
+    dispatch(setTaskRowFocus(true));
   };
 
   const handleCopyTexts = async () => {
@@ -94,15 +103,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     setTimeout(() => {
       setAnchorEl(null);
       setIsCopied(0);
+      dispatch(setTaskRowFocus(true));
     }, 500);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClick = () => {
+    setAnchorEl(containerRef.current);
   };
 
   const handleEditEmail = () => {
@@ -123,6 +129,20 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
     }
   };
 
+  const fieldOptions = [
+    { title: isCopied === 0 ? 'Copy' : 'Copied', callBack: handleCopyTexts, icon: <CopyIcon className="w-5 h-5" /> },
+    {
+      title: 'Edit',
+      callBack: handleEditEmail,
+      icon: <EditIcon active={false} dimensions={{ height: 20, width: 20 }} />
+    },
+    {
+      title: 'Remove',
+      callBack: handleDeleteEmail,
+      icon: <TrashIcon active={false} className="w-5 h-5" />
+    }
+  ];
+
   useEffect(() => {
     if (containerRef.current && activeColumn) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
@@ -136,12 +156,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
   return (
-    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4">
+    <div ref={containerRef} tabIndex={0} className="w-full h-full flex justify-center items-center p-4 relative">
       {!editMode ? (
         <div className="w-full h-full group/parent" onClick={() => setEditMode(true)}>
           <span
             className={cl(
-              'h-full flex items-center  cursor-pointer w-full',
+              'h-full flex items-center relative cursor-pointer w-full',
               currentValue !== '-' ? 'justify-between' : 'justify-center'
             )}
           >
@@ -170,12 +190,12 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
             )}
 
             {currentValue !== '-' && (
-              <button
-                className="flex items-center justify-end opacity-0 group-hover/parent:opacity-100 w-5 h-5 absolute bg-white right-0"
-                onClick={(e) => handleClick(e)}
+              <div
+                className="flex items-center justify-end opacity-0 group-hover/parent:opacity-100 w-5 h-5 relative bg-white right-0"
+                onClick={handleClick}
               >
                 <ThreeDotIcon />
-              </button>
+              </div>
             )}
           </span>
         </div>
@@ -197,30 +217,16 @@ function EmailWebsiteField({ taskCustomFields, taskId, fieldId, fieldType, activ
           />
         </div>
       )}
-      <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-        <div className="block" style={{ width: '150px' }}>
-          <button
-            className="flex w-full gap-2 items-center p-1 hover:bg-alsoit-purple-50 rounded"
-            onClick={handleCopyTexts}
-          >
-            <CopyIcon className="w-5 h-5" />
-            <h1> {isCopied === 0 ? `Copy ${Capitalize(fieldType)}` : 'Copied'}</h1>
-          </button>
-          <button
-            className="flex w-full  gap-2 items-center  p-1 hover:bg-alsoit-purple-50 rounded"
-            onClick={handleEditEmail}
-          >
-            <EditIcon active={false} />
-            {`Edit ${Capitalize(fieldType)}`}
-          </button>
-          <button
-            className="flex w-full gap-2 items-center text-alsoit-danger p-1 hover:bg-alsoit-purple-50 rounded"
-            onClick={handleDeleteEmail}
-          >
-            <RiDeleteBinLine className="w-4 h-4" /> {`Remove ${Capitalize(fieldType)}`}
-          </button>
-        </div>
-      </AlsoitMenuDropdown>
+      {anchorEl !== null && (
+        <DropdownWithHeader
+          anchor={anchorEl}
+          setAnchor={setAnchorEl}
+          header={fieldType === 'website' ? 'Website Options' : 'Email Options'}
+          subHeader={fieldType === 'website' ? 'select options for websites' : 'select option for Emails'}
+        >
+          <EmailWebsiteDropDown fieldOptions={fieldOptions} fieldType={fieldType} taskId={task?.id as string} />
+        </DropdownWithHeader>
+      )}
     </div>
   );
 }

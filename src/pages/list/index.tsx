@@ -51,6 +51,7 @@ export function ListPage() {
     keyBoardSelectedIndex,
     taskColumnIndex,
     taskColumns,
+    taskRowFocus,
     KeyBoardSelectedTaskData
   } = useAppSelector((state) => state.task);
   const { activeView } = useAppSelector((state) => state.workspace);
@@ -83,23 +84,18 @@ export function ListPage() {
   const combinedArr = Object.values(tasksFromRes).flatMap((lists) => lists);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp') {
-      if (keyBoardSelectedIndex !== null) {
-        const newIndex = Math.max(0, keyBoardSelectedIndex - 1);
+    if (taskRowFocus) {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        const newIndex =
+          e.key === 'ArrowUp'
+            ? Math.max(0, keyBoardSelectedIndex !== null ? keyBoardSelectedIndex - 1 : 0)
+            : Math.min(combinedArr.length - 1, keyBoardSelectedIndex !== null ? keyBoardSelectedIndex + 1 : 0);
+
         dispatch(setKeyBoardSelectedIndex(newIndex));
-      } else {
-        dispatch(setKeyBoardSelectedIndex(0));
+      } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
+        const newIndex = Math.max(0, taskColumnIndex - 1);
+        dispatch(setTaskColumnIndex(newIndex));
       }
-    } else if (e.key === 'ArrowDown') {
-      if (keyBoardSelectedIndex !== null) {
-        const newIndex = Math.min(combinedArr.length - 1, keyBoardSelectedIndex + 1);
-        dispatch(setKeyBoardSelectedIndex(newIndex));
-      } else {
-        dispatch(setKeyBoardSelectedIndex(0));
-      }
-    } else if (e.key === 'ArrowLeft' && taskColumnIndex !== null) {
-      const newIndex = Math.max(0, taskColumnIndex - 1);
-      dispatch(setTaskColumnIndex(newIndex));
     }
 
     if (e.key === 'ArrowRight' && taskColumnIndex !== null) {
@@ -135,7 +131,7 @@ export function ListPage() {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData]);
+  }, [keyBoardSelectedIndex, taskColumns, taskColumnIndex, KeyBoardSelectedTaskData, taskRowFocus]);
 
   useEffect(() => {
     if (listId) {

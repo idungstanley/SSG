@@ -13,6 +13,7 @@ import FileCopyIcon from '../../../../assets/icons/FileCopyIcon';
 import SharePilotIcon from '../../../../assets/icons/SharePilotIcon';
 import PrintPilotIcon from '../../../../assets/icons/PrintPilotIcon';
 import BlurEffect from '../../../BlurEffect';
+import Menu from '../HotKeys/components/Dropdown';
 
 interface FullPilotProps {
   featureTabs: IPilotTab[];
@@ -41,7 +42,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
           <Header
             isMinified={false}
-            menu={<Header.Menu setShowModal={setShowModal} />}
+            menu={<Menu setShowModal={setShowModal} />}
             additionalNavItems={
               <>
                 <div

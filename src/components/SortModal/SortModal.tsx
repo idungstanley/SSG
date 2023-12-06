@@ -18,7 +18,7 @@ import { RiFilter2Line } from 'react-icons/ri';
 import { MdEditNote, MdOutlineDeleteForever, MdOutlineFilter1 } from 'react-icons/md';
 import { HiOutlineDuplicate, HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { TbAlignJustified } from 'react-icons/tb';
-import { setActiveTabId } from '../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId } from '../../features/workspace/workspaceSlice';
 import { pilotTabs } from '../../app/constants/pilotTabs';
 import { IField } from '../../features/list/list.interfaces';
 import { displayPrompt, setVisibility } from '../../features/general/prompt/promptSlice';
@@ -93,7 +93,8 @@ export default function SortModal({
       handleClick: () => {
         if (!activeTaskColumn.defaulField) {
           dispatch(setEditCustomProperty(activeTaskColumn as IField));
-          dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+          dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+          dispatch(setActiveSubHubManagerTabId(pilotTabs.PROPERTIES));
           dispatch(setEntityForCustom({ id: undefined, type: undefined }));
           handleClose();
         }
@@ -306,7 +307,7 @@ export default function SortModal({
               <Fragment key={index}>
                 {!item.isHide ? (
                   <div onClick={item.handleClick}>
-                    <div className="flex items-center justify-between h-8 px-1 hover:bg-gray-200 cursor-pointer">
+                    <div className="flex items-center justify-between h-8 px-1 cursor-pointer hover:bg-gray-200">
                       <div className="flex items-center gap-1">
                         {item.icon}
                         <span>{item.label}</span>

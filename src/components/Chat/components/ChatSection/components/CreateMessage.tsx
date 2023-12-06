@@ -1,12 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DropdownForMention from './DropdownForMention';
 import { useSendMessageToChat } from '../../../../../features/chat/chatService';
 import ChatEmoticons from '../../../../../assets/icons/ChatEmoticons';
 import ChatFile from '../../../../../assets/icons/ChatFile';
 import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import { setSelectedMessage } from '../../../../../features/chat/chatSlice';
+import {
+  setChatAttachmentsFiles,
+  setSelectedMessage,
+  setShowFileAttachModal
+} from '../../../../../features/chat/chatSlice';
 import { IMentionUser, IMessage, IReplyOn } from '../../../../../features/chat/chat.interfaces';
 import ChatRemoveReply from '../../../../../assets/icons/ChatRemoveReply';
+import FileIcons from '../../../../Views/ui/Table/CustomField/Files/FileIcon';
+import MicIcon from '../../../../../assets/icons/chatIcons/MicIcon';
+import { useVoiceRecorder } from '../../../../Pilot/components/RecordScreen/VoiceRecordHandler';
+import VoiceAudio from './VoiceAudio';
+import DropdownArrowIcon from '../../../../../assets/icons/chatIcons/DropdownArrowIcon';
 
 interface IParsedMessage {
   value: string;
@@ -39,61 +48,122 @@ interface CreateMessageProps {
 export default function CreateMessage({ chatId }: CreateMessageProps) {
   const dispatch = useAppDispatch();
 
-  const { selectedMessage } = useAppSelector((state) => state.chat);
+  const { selectedMessage, chatAttachmentsFiles } = useAppSelector((state) => state.chat);
 
-  const [error, setError] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [selectedMembers, setSelectedMembers] = useState<{ id: string; name: string }[]>([]);
 
   const { mutate: onSendMessage } = useSendMessageToChat();
 
-  const messageRef = useRef<HTMLInputElement>(null);
+  const {
+    startRecording: Record,
+    stopRecording: StopRecord,
+    isRecording,
+    recordedBlob,
+    recordedData
+  } = useVoiceRecorder();
 
-  const [selectedMembers, setSelectedMembers] = useState<{ id: string; name: string }[]>([]);
+  const startRecording = async () => {
+    Record();
+  };
+
+  const stopRecording = () => {
+    StopRecord();
+    recordedData.recorder?.stop();
+  };
 
   const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const message = messageRef.current?.value;
-
+    let messageWithUserIds = '';
     if (message) {
-      if (message.length <= 2) {
-        setError('Short message');
-      } else {
-        const messageWithUserIds = `${message} ${selectedMembers.map((user) => `@[${user.id}] `)}`.trim();
-
-        onSendMessage({
-          message: messageWithUserIds,
-          chatId,
-          selectedMessage: selectedMessage as IMessage | null
-        });
-
-        messageRef.current.value = '';
-        setError('');
-        setSelectedMembers([]);
-        dispatch(setSelectedMessage(null));
-      }
+      messageWithUserIds = `${message} ${selectedMembers.map((user) => `@[${user.id}] `)}`.trim();
     }
+    const files = [];
+    if (chatAttachmentsFiles.length) {
+      files.push(...chatAttachmentsFiles.map((file) => file.data));
+    }
+    if (recordedBlob) {
+      files.push(recordedBlob);
+    }
+    onSendMessage({
+      message: messageWithUserIds,
+      chatId,
+      selectedMessage: selectedMessage as IMessage | null,
+      files
+    });
+
+    if (message) setMessage('');
+    handleClearAdditionalItems();
+    handleClearVoice();
+  };
+
+  const handleClearAdditionalItems = () => {
+    setSelectedMembers([]);
+    dispatch(setSelectedMessage(null));
+    dispatch(setChatAttachmentsFiles([]));
+  };
+
+  const [voiceRecordUrl, setVoiceRecordUrl] = useState('');
+  useEffect(() => {
+    if (!isRecording && recordedBlob) {
+      setVoiceRecordUrl(URL.createObjectURL(recordedBlob));
+    } else {
+      handleClearVoice();
+    }
+  }, [isRecording, recordedBlob]);
+
+  const handleClearVoice = () => {
+    setVoiceRecordUrl('');
   };
 
   return (
     <>
-      {selectedMessage ? (
-        <div className="flex justify-between px-4 pt-2 pb-2 bg-[#D9D9D9]">
-          <div
-            className="relative p-1 overflow-hidden bg-white border-gray-300 rounded-md shadow-sm text-[13px]"
-            style={{ minWidth: '217px', maxWidth: '90%' }}
-          >
-            <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
-            <div className="ml-2 text-alsoit-purple-300">{selectedMessage.team_member.user.name}</div>
-            <div className="ml-2 text-alsoit-gray-75">
-              {generateMessageWithUserNames(selectedMessage).map((item, index) => (
-                <span key={index}>{item.value}</span>
-              ))}
-            </div>
+      {selectedMessage || chatAttachmentsFiles.length ? (
+        <div
+          className={`flex justify-between pl-4 pr-[22px] pt-2 ${
+            isRecording || voiceRecordUrl ? '' : 'pb-2'
+          } bg-[#D9D9D9]`}
+        >
+          <div className="w-full">
+            {selectedMessage ? (
+              <div
+                className="relative flex flex-col mb-1 p-1 overflow-hidden bg-white border-gray-300 rounded-md shadow-sm text-[13px]"
+                style={{ minWidth: '217px', maxWidth: '90%' }}
+              >
+                <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
+                <div className="ml-2 text-alsoit-purple-300">{selectedMessage.team_member.user.name}</div>
+                <div className="ml-2 text-alsoit-gray-75">
+                  {generateMessageWithUserNames(selectedMessage).map((item, index) => (
+                    <span key={index}>{item.value}</span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            {chatAttachmentsFiles.length ? (
+              <div className="flex flex-wrap">
+                {chatAttachmentsFiles.map((file) => (
+                  <div key={file.id} className="flex flex-col justify-center items-center w-[16.6%] mb-1">
+                    <FileIcons
+                      fileExtension={file.extension}
+                      filePath={file.preview}
+                      fileName={file.name}
+                      height="h-8"
+                      width="w-8"
+                    />
+                    <p className="text-center text-[10px]">{file.name}</p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
-          <div className="cursor-pointer" onClick={() => dispatch(setSelectedMessage(null))}>
+          <div className="cursor-pointer" onClick={handleClearAdditionalItems}>
             <ChatRemoveReply />
           </div>
         </div>
+      ) : null}
+      {isRecording || voiceRecordUrl ? (
+        <VoiceAudio isRecording={isRecording} url={voiceRecordUrl} clearVoice={handleClearVoice} />
       ) : null}
       <form
         className="relative flex items-center gap-1 py-[2px] px-1 rounded-bl-md rounded-br-md"
@@ -112,25 +182,40 @@ export default function CreateMessage({ chatId }: CreateMessageProps) {
         <div
           className="flex items-center justify-center h-6 bg-white rounded-[3px] cursor-pointer"
           style={{ minWidth: '24px' }}
+          onClick={() => dispatch(setShowFileAttachModal(true))}
         >
           <ChatFile />
         </div>
         <div className="relative w-full">
-          {error ? <span className="absolute text-red-500 -top-1 left-3">{error}</span> : null}
           <input
             type="text"
             placeholder="Type Message..."
-            ref={messageRef}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
             className="block w-full border-gray-300 rounded-[5px] shadow-sm ring-0 focus:ring-0 sm:text-sm"
           />
         </div>
-        <button
-          type="submit"
-          className="w-10 h-6 font-semibold text-white rounded bg-alsoit-purple-300 text-alsoit-text-sm"
-          style={{ background: 'rgb(191, 1, 254)' }}
-        >
-          Send
-        </button>
+        <div className="flex">
+          <div
+            className={`flex justify-between mr-1 items-center hover:bg-alsoit-purple-50 text-[10px] py-0.5 items-center rounded-md cursor-pointer ${
+              isRecording ? 'bg-alsoit-purple-50' : 'bg-white'
+            }`}
+            style={{ minHeight: '24px' }}
+            onClick={isRecording ? stopRecording : startRecording}
+          >
+            <MicIcon color={isRecording ? '#BF01FE' : '#424242'} />
+            <div className="w-5 flex justify-center">
+              <DropdownArrowIcon color="#424242" />
+            </div>
+          </div>
+          <button
+            type="submit"
+            disabled={!selectedMessage && !chatAttachmentsFiles.length && !voiceRecordUrl && !message}
+            className="w-[34px] h-6 font-semibold text-white rounded-[5px] bg-alsoit-purple-300 text-[10px] disabled:bg-alsoit-gray-75"
+          >
+            Send
+          </button>
+        </div>
       </form>
     </>
   );

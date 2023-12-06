@@ -43,9 +43,7 @@ export default function CardWrapper({
       >
         <div className="grid items-center gap-1 group/header" style={{ gridTemplateColumns: '80% 50px' }}>
           <div
-            className={`relative flex items-center w-full gap-2 px-2 py-1 space-x-1 text-white cursor-default grow dFlex ${
-              openCard ? 'rounded-tl-lg rounded-br-lg' : 'rounded-tr-none rounded-md'
-            }`}
+            className="relative flex items-center w-full gap-2 px-2 py-1 space-x-1 text-white rounded-tl-lg rounded-br-lg cursor-default grow dFlex"
             style={{
               minHeight: '32px',
               backgroundColor: isActiveCollection ? '#00CC25' : '#F7A100'
@@ -70,10 +68,10 @@ export default function CardWrapper({
             <ToolTip title={cardName}>
               <div
                 className={`relative flex items-center w-10 overflow-hidden fade-out ${
-                  isActiveCollection ? 'green' : 'orange'
+                  isActiveCollection ? 'light-green' : 'light-orange'
                 }`}
               >
-                <p className="overflow-hidden text-justify whitespace-no-wrap">{cardName}</p>
+                <p className="overflow-hidden text-justify whitespace-nowrap">{cardName}</p>
               </div>
             </ToolTip>
           )}
