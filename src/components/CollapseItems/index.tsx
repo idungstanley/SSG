@@ -25,7 +25,7 @@ function CollapseItems({
   const [open, setOpen] = useState(true);
   return (
     <div className="w-full my-1">
-      <div className="w-full flex items-center justify-between text-alsoit-text-xi">
+      <div className="flex items-center justify-between w-full text-alsoit-text-xi">
         <div
           className={cl(
             'w-2/5 h-8 flex items-center justify-cente gap-1 rounded-br-lg group',
@@ -33,7 +33,7 @@ function CollapseItems({
           )}
           onClick={() => setOpen(!open)}
         >
-          <span className="w-6 ml-1 flex justify-center">
+          <span className="flex justify-center w-6 ml-1">
             {headerIcon ? (
               <div>{headerIcon}</div>
             ) : (
@@ -54,8 +54,7 @@ function CollapseItems({
             <button className="opacity-0 group-hover:opacity-100">{menuButton}</button>
           </ToolTip>
         </div>
-
-        <div className="border-t-2 border-alsoit-gray-50 h-8 w-3/5 flex items-center">{headerTrailing}</div>
+        <div className="flex items-center w-3/5 h-8 border-t-2 border-alsoit-gray-50">{headerTrailing}</div>
       </div>
       {open && <div> {children}</div>}
     </div>

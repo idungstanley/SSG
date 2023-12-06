@@ -118,7 +118,12 @@ function NewColumn() {
                     newCustomPropertyDetails.style?.is_italic === '1' && 'italic',
                     newCustomPropertyDetails.style?.is_underlined === '1' && 'underline underline-offset-2'
                   )}
-                  styles={{ color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424' }}
+                  styles={{
+                    color: newCustomPropertyDetails.color ? newCustomPropertyDetails.color : '#242424',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    lineHeight: '13.2px'
+                  }}
                 />
                 <button
                   className="absolute flex items-center cursor-pointer right-7 top-7"

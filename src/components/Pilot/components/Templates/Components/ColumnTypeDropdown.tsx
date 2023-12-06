@@ -79,6 +79,7 @@ export default function ColumnTypeDropdown({ mactchingData }: { mactchingData?: 
             <NamedIconPair
               iconColor="text-alsoit-gray-100"
               color="text-alsoit-gray-300"
+              textColor="text-alsoit-gray-300"
               isLeadingIcon={true}
               parentName={mactchingData ? mactchingData.title : (selectedPropertyType?.title as string)}
               parentIcon={mactchingData ? mactchingData.icon : (selectedPropertyType?.icon as JSX.Element)}
