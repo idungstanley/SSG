@@ -1,9 +1,23 @@
 import React from 'react';
 
-export default function SubtaskIcon({ color = '#424242' }: { color?: string }) {
+interface iconProps {
+  color?: string;
+  dimension?: {
+    width: string;
+    height: string;
+  };
+}
+
+export default function SubtaskIcon({ color = '#424242', dimension }: iconProps) {
   return (
     <div>
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width={dimension?.width ?? '18'}
+        height={dimension?.height ?? '18'}
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <g id="Subtask">
           <g id="Group 843">
             <g id="Group 823">

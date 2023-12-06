@@ -1,0 +1,9 @@
+@keyframes recordingAnimationIcon {
+  0% {background-color: transparent;}
+  50% {background-color: #bf01fe;}
+  100% {background-color: transparent;}
+}
+
+.recordingAnimation {
+  animation: recordingAnimationIcon 1.5s infinite;
+}

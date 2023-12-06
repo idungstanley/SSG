@@ -1,16 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../../../../app/hooks';
-import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline';
+// import { useAppSelector } from '../../../../../app/hooks';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import Picker from '../../../../../assets/icons/Picker';
 import AlsoitMenuDropdown from '../../../../DropDowns';
 import ColorPalette from '../../../../ColorPalette/component/ColorPalette';
 import { ListColourProps } from '../../../../tasks/ListItem';
 import { UseEditCustomFieldService } from '../../../../../features/task/taskService';
 import { useMutation } from '@tanstack/react-query';
-import { cl } from '../../../../../utils';
+import { IField } from '../../../../../features/list/list.interfaces';
+import ColumnTypeDropdown from '../Components/ColumnTypeDropdown';
+import Input from '../../../../input/Input';
+import PlusIcon from '../../../../../assets/icons/PlusIcon';
+import PermissionIcon from '../../../../../assets/icons/PermissionIcon';
+import InformationsolidIcon from '../../../../../assets/icons/InformationsolidIcon';
+import CollectionsIcon from '../../../../../assets/icons/chatIcons/CollectionsIcon';
+import ClosePalette from '../../../../../assets/icons/ClosePalette';
+import SavePalette from '../../../../../assets/icons/SavePalette';
+import ToolTip from '../../../../Tooltip/Tooltip';
+import { CiCircleInfo } from 'react-icons/ci';
+import { columnTypesProps } from '../Components/CustomPropertyList';
 
-function EditDropdown() {
-  const { editCustomProperty } = useAppSelector((state) => state.task);
+function EditDropdown({
+  editCustomProperty,
+  mactchingData
+}: {
+  editCustomProperty: IField;
+  mactchingData?: columnTypesProps;
+}) {
+  // const { editCustomProperty } = useAppSelector((state) => state.task);
 
   const [formInputs, setFormInputs] = useState(editCustomProperty?.options ? [...editCustomProperty.options] : []);
   const [propertyTitle, setPropertyTitle] = useState(editCustomProperty?.name || '');
@@ -93,109 +110,132 @@ function EditDropdown() {
   }, [editCustomProperty]);
 
   return (
-    <div className="p-4">
-      <div className="w-full">
-        <p className="my-2 font-semibold text-alsoit-text-xi text-alsoit-gray-100">Tittle</p>
-        <div
-          className="flex items-center w-full gap-1 bg-white rounded-md"
-          style={{ height: '30px', borderRadius: '6px' }}
-        >
-          <input
-            type="text"
-            className={cl(
-              'block border-0 py-1 ring-0 placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-full'
-            )}
-            style={{ color: propertyColor as string }}
-            value={propertyTitle}
-            onChange={handleTitleChange}
-          />
-          <button className="mx-2" onClick={(e) => setOpen(e.currentTarget)}>
-            <Picker />
-          </button>
-          <AlsoitMenuDropdown handleClose={() => setOpen(null)} anchorEl={open}>
-            <ColorPalette handleClick={handleNameColor} />
-          </AlsoitMenuDropdown>
+    <div className="p-2">
+      <div className="flex items-center justify-between w-full gap-2 my-2 mb-3">
+        <div className="w-2/4">
+          <p className="mb-1 ml-1 text-alsoit-text-xi text-alsoit-gray-100">TYPE</p>
+          <ColumnTypeDropdown mactchingData={mactchingData} />
+        </div>
+        <div className="w-2/4">
+          <div className="flex items-center w-full rounded-md" style={{ borderRadius: '6px' }}>
+            <div className="relative flex grow">
+              <Input
+                labelClasses="text-alsoit-text-xi text-alsoit-gray-100 ml-1"
+                placeholder="Name Property"
+                height="h-8"
+                label="TITLE"
+                name="name"
+                value={propertyTitle}
+                type="text"
+                onChange={handleTitleChange}
+                classes="block border-0 ring-0 placeholder-gray-300 focus:ring-0 focus:ring-inset text-alsoit-text-xi sm:text-sm sm:leading-6 w-full"
+                styles={{ color: propertyColor as string }}
+              />
+              <button
+                className="absolute flex items-center cursor-pointer right-7 top-7"
+                onClick={(e) => setOpen(e.currentTarget)}
+              >
+                <Picker />
+              </button>
+              <button
+                className="absolute flex items-center cursor-pointer right-2 top-7"
+                onClick={(e) => setOpen(e.currentTarget)}
+              >
+                <CiCircleInfo />
+              </button>
+            </div>
+            <AlsoitMenuDropdown handleClose={() => setOpen(null)} anchorEl={open}>
+              <ColorPalette handleClick={handleNameColor} />
+            </AlsoitMenuDropdown>
+          </div>
         </div>
       </div>
-
       {formInputs.length > 0 ? (
         <div>
           <div>
-            <h2 className="mt-4 font-semibold text-alsoit-text-xi">DEFINE PROPERTY OPTION</h2>
+            <h2 className="mt-4 mb-1 font-semibold text-alsoit-text-xi">LABEL OPTION</h2>
           </div>
-          {formInputs?.map((i, index) => (
-            <div className="relative w-full" key={i.id}>
-              <div className="flex items-center justify-between w-full my-2 bg-white rounded-md">
-                {i.color && (
-                  <span
-                    className="w-2"
-                    style={{ backgroundColor: i.color, height: '30px', borderRadius: '6px 0 0 6px' }}
-                  ></span>
-                )}
-                <input
-                  min={1}
-                  required
-                  type="text"
-                  placeholder="Please input property option"
-                  name={`input_${index + 1}`}
-                  value={i.name}
-                  onChange={(event) => handleInputChange(event, i.id)}
-                  className="block w-2/3 py-1 placeholder-gray-300 border-0 shadow-sm ring-0 ring-inset focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
-                />
-                <div className="flex items-center gap-1">
-                  <button
-                    className="font-semibold cursor-pointer text-alsoit-text-xi text-alsoit-gray-300 hover:text-alsoit-purple-300"
-                    onClick={(e) => handleClick(e, i.id)}
-                  >
-                    Change Option Color
-                  </button>
-                  <button>
-                    <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
-                  </button>
+          <div className="space-y-2">
+            {formInputs?.map((i, index) => (
+              <div className="relative w-full" key={i.id}>
+                <div className="flex items-center justify-between w-full h-8 bg-white rounded-md">
+                  {i.color && (
+                    <span
+                      className="absolute top-0 bottom-0"
+                      style={{ backgroundColor: i.color, height: '30px', borderRadius: '6px 0 0 6px', width: '5px' }}
+                    ></span>
+                  )}
+                  <input
+                    min={1}
+                    required
+                    type="text"
+                    placeholder="Please input text option"
+                    name={`input_${index + 1}`}
+                    value={i.name}
+                    onChange={(event) => handleInputChange(event, i.id)}
+                    className="block w-2/3 py-1 placeholder-gray-300 border-0 rounded-md ring-0 ring-inset focus:ring-0 focus:ring-inset focus:ring-indigo-600 text-alsoit-gray-300 text-alsoit-text-xi sm:text-sm sm:leading-6"
+                  />
+                  <div className="flex items-center gap-1 mr-2">
+                    <button className="flex items-center cursor-pointer" onClick={(e) => handleClick(e, i.id)}>
+                      <Picker />
+                    </button>
+                    <button>
+                      <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
+                    </button>
+                  </div>
                 </div>
+                <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
+                  <ColorPalette handleClick={handleColor} />
+                </AlsoitMenuDropdown>
               </div>
-              <AlsoitMenuDropdown handleClose={handleClose} anchorEl={anchorEl}>
-                <ColorPalette handleClick={handleColor} />
-              </AlsoitMenuDropdown>
-            </div>
-          ))}
+            ))}
+          </div>
           <button
-            className="flex items-center gap-2 p-2 text-white rounded bg-alsoit-purple-300"
             onClick={handleAddNewOption}
+            className="flex items-center gap-2 p-1 my-2 rounded bg-alsoit-gray-50 text-alsoit-gray-300"
           >
-            <PlusCircleIcon className="w-5 h-5" />
-            <span>Add new option</span>
+            <PlusIcon className="w-3 h-3" />
+            <span>Add option</span>
           </button>
         </div>
       ) : null}
       {}
-      <div className="flex justify-between w-full mt-4">
-        <button
-          style={{ width: '79px', height: '24px' }}
-          className="bg-white rounded text-alsoit-text-md text-alsoit-danger"
-        >
-          Delete Field
-        </button>
-        <div className="flex gap-2">
-          <button
-            style={{ width: '79px', height: '24px' }}
-            className="bg-white rounded text-alsoit-text-md text-alsoit-danger"
+
+      <div className="my-2 mt-2 text-xs">CLICK HERE TO HOST IN TEMPLATE</div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
+            <PermissionIcon />
+            <div className="text-black">Permissions</div>
+            <InformationsolidIcon />
+          </div>
+          <div
+            className="flex items-center justify-center bg-white rounded-sm"
+            style={{
+              minWidth: '16px',
+              height: '16px',
+              fontSize: '8px',
+              padding: '4px 2px',
+              color: 'orange'
+            }}
           >
-            Cancel
-          </button>
-          <button
-            style={{ width: '79px', height: '24px' }}
-            className="bg-white rounded text-alsoit-text-md text-alsoit-gray-300"
-          >
-            Replace
-          </button>
-          <button
-            style={{ width: '79px', height: '24px' }}
-            className="text-white rounded bg-alsoit-success text-alsoit-text-md"
-            onClick={handleEditCustomField}
-          >
-            Save
-          </button>
+            <span className="pr-1">
+              <CollectionsIcon color="orange" />
+            </span>
+            Collection
+          </div>
+        </div>
+        <div className="flex items-center justify-end gap-2 p-1">
+          <ToolTip title="Cancel">
+            <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
+              <ClosePalette fill="white" />
+            </span>
+          </ToolTip>
+          <ToolTip title="Add Property">
+            <span className="cursor-pointer" onClick={handleEditCustomField}>
+              <SavePalette />
+            </span>
+          </ToolTip>
         </div>
       </div>
     </div>

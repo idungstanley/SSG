@@ -266,7 +266,8 @@ export function Head({
     dispatch(setEntityForCustom({ id, type }));
     dispatch(setListForCustom(listId as string));
     dispatch(setEditCustomProperty(undefined));
-    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.PROPERTIES));
   };
 
   const handleRemoveColumn = () => {

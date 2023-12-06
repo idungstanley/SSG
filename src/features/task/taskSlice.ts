@@ -247,6 +247,7 @@ interface TaskState {
   timeSortArr: SortOption[];
   timeLogColumnData: Header[];
   screenRecording: 'idle' | 'recording';
+  voiceRecording: 'idle' | 'recording';
   recorder: MediaRecorder | null;
   stream: MediaStream | null;
   updateCords: number;
@@ -403,6 +404,7 @@ const initialState: TaskState = {
   timeSortArr: [],
   timeLogColumnData: [],
   screenRecording: 'idle',
+  voiceRecording: 'idle',
   stream: null,
   recorder: null,
   updateCords: Date.now(),
@@ -786,6 +788,17 @@ export const taskSlice = createSlice({
     setScreenRecording(state, action: PayloadAction<'idle' | 'recording'>) {
       state.screenRecording = action.payload;
     },
+    setVoiceRecording(state, action: PayloadAction<'idle' | 'recording'>) {
+      state.voiceRecording = action.payload;
+    },
+    setVoiceRecordingMedia(
+      state,
+      action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
+    ) {
+      const { recorder, stream } = action.payload;
+      state.stream = stream;
+      state.recorder = recorder;
+    },
     setScreenRecordingMedia(
       state,
       action: PayloadAction<{ recorder: MediaRecorder | null; stream: MediaStream | null }>
@@ -956,6 +969,8 @@ export const {
   setTimeArr,
   setTimeSortArr,
   setTimeLogColumnData,
+  setVoiceRecording,
+  setVoiceRecordingMedia,
   setScreenRecording,
   setScreenRecordingMedia,
   setUpdateCords,

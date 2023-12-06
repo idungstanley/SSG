@@ -233,6 +233,26 @@ input:checked + .slider:before {
   transform: translate(8px, -50%);
 }
 
+.pilot-modal-toggle .slider, .pilot-modal-toggle .slider.checked {
+  background-color: #A5A5A5!important;
+  transition: 0.5s;
+  outline: none!important;
+}
+
+.pilot-modal-toggle .slider:before {
+  transition: 0.5s;
+  height: 9.47px;
+  width: 9.47px;
+  left: 0.5px;
+  bottom: 0;
+  top: 5.25px;
+}
+
+.pilot-modal-toggle input:checked + .slider:before {
+  transform: translateX(9.5px);
+  top: 0.5px;
+}
+
 .pulsate {
   animation: pulse-animation 1s infinite;
 }

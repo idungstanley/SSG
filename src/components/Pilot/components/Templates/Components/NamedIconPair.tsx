@@ -46,7 +46,7 @@ export default function NamedIconPair({
               type === 'card' && (fadeOutColour ? 'green fade-out' : 'orange fade-out')
             }`}
           >
-            <div className={`overflow-hidden font-semibold ${textColor}`}>{parentName}</div>
+            <div className={`overflow-hidden font-semibold whitespace-nowrap  ${textColor}`}>{parentName}</div>
           </div>
         </ToolTip>
       </div>

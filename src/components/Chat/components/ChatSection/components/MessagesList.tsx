@@ -15,6 +15,7 @@ import { getInitials } from '../../../../../app/helpers';
 import MessageSuccess from '../../../../../assets/icons/chatIcons/MessageSuccess';
 import DownloadIcon from '../../../../../assets/icons/DownloadIcon';
 import FileChatIcons from '../../../../Views/ui/Table/CustomField/Files/FileChatIcon';
+import VoiceAudio from './VoiceAudio';
 
 interface MessagesListProps {
   messages: IMessage[];
@@ -76,7 +77,7 @@ export default function MessagesList({ messages }: MessagesListProps) {
                     isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
                   }`}
                 >
-                  <div className="flex flex-col justify-start gap-1 p-2">
+                  <div className="flex flex-col justify-start p-2">
                     {/* top */}
                     <div className="flex items-center justify-between text-sm text-gray-600">
                       {!isCurrentUser(message.team_member.user.id) ? (
@@ -84,47 +85,8 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       ) : null}
                     </div>
 
-                    {message?.attachments.length ? (
-                      <>
-                        {message.attachments.map((file) => (
-                          <>
-                            <div
-                              key={file.id}
-                              className="w-full p-1 pr-[7px] shadow-sm bg-alsoit-purple-50 sm:text-sm rounded-[5px]"
-                            >
-                              <div className="flex justify-between items-center max-h-[100px] text-sm text-alsoit-gray-300">
-                                <div className="flex items-center">
-                                  <FileChatIcons
-                                    fileExtension={file.physical_file.file_format.extension}
-                                    filePath={file.path}
-                                    fileName={file.physical_file.name}
-                                    height="h-[22px]"
-                                    width="w-[20px]"
-                                  />
-                                  <div className="ml-2">
-                                    <p className="text-[13px]">{file.physical_file.display_name}</p>
-                                  </div>
-                                </div>
-                                <div
-                                  className={`ml-2 p-[3px] ${
-                                    isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
-                                  } rounded-[5px]`}
-                                >
-                                  <DownloadIcon width={16} height={16} />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex text-[13px] text-[#424242]">
-                              <div>{showFileSize(file.physical_file.size)} -</div>
-                              <div className="ml-1">{file.physical_file.file_format.extension}</div>
-                            </div>
-                          </>
-                        ))}
-                      </>
-                    ) : null}
-
                     {message?.reply_on ? (
-                      <div className="relative w-full p-1 overflow-hidden shadow-sm bg-alsoit-purple-50 sm:text-sm">
+                      <div className="relative w-full mb-1 p-1 overflow-hidden shadow-sm bg-alsoit-purple-50 sm:text-sm">
                         <div className="absolute top-0 left-0 h-full bg-alsoit-purple-300" style={{ width: '2px' }} />
                         <div className="ml-2 text-sm text-alsoit-purple-300">
                           {message.reply_on.team_member.user.name}
@@ -137,7 +99,62 @@ export default function MessagesList({ messages }: MessagesListProps) {
                       </div>
                     ) : null}
 
-                    <div className="flex justify-between items-end">
+                    {message?.attachments.length ? (
+                      <>
+                        {message.attachments
+                          .filter((file) => !file.physical_file.name.includes('.webm'))
+                          .map((file) => (
+                            <>
+                              <div
+                                key={file.id}
+                                className="w-full mb-1 p-1 pr-[7px] shadow-sm bg-alsoit-purple-50 sm:text-sm rounded-[5px]"
+                              >
+                                <div className="flex justify-between items-center max-h-[100px] text-sm text-alsoit-gray-300">
+                                  <div className="flex items-center">
+                                    <FileChatIcons
+                                      fileExtension={file.physical_file.file_format.extension}
+                                      filePath={file.path}
+                                      fileName={file.physical_file.name}
+                                      height="h-[22px]"
+                                      width="w-[20px]"
+                                    />
+                                    <div className="ml-2">
+                                      <p className="text-[13px]">{file.physical_file.display_name}</p>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={`ml-2 p-[3px] ${
+                                      isCurrentUser(message.team_member.user.id) ? 'bg-[#E6FAE9]' : 'bg-[#F4F4F4]'
+                                    } rounded-[5px]`}
+                                  >
+                                    <DownloadIcon width={16} height={16} />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex mb-1 text-[13px] text-[#424242]">
+                                <div>{showFileSize(file.physical_file.size)} -</div>
+                                <div className="ml-1">{file.physical_file.file_format.extension}</div>
+                              </div>
+                            </>
+                          ))}
+                      </>
+                    ) : null}
+
+                    {message?.attachments.length ? (
+                      <>
+                        {message.attachments
+                          .filter((file) => file.physical_file.name.includes('.webm'))
+                          .map((file) => (
+                            <div key={file.id} className="w-full">
+                              <div className="flex justify-between items-center text-sm text-alsoit-gray-300">
+                                <VoiceAudio url={file.path} isReadable />
+                              </div>
+                            </div>
+                          ))}
+                      </>
+                    ) : null}
+
+                    <div className="relative">
                       {/* message */}
                       <div className="flex items-center">
                         <p className="text-alsoit-purple-300">
@@ -149,11 +166,21 @@ export default function MessagesList({ messages }: MessagesListProps) {
                               {item.value}
                             </span>
                           ))}
+                          {message.message || (message.reply_on && !message.attachments) ? (
+                            <span className="inline-flex invisible h-[1px]">
+                              <span className="pl-[2px] text-[10px] text-gray-500">
+                                {moment(message.created_at).format('HH:mm')}
+                              </span>
+                              <span>
+                                <MessageSuccess />
+                              </span>
+                            </span>
+                          ) : null}
                         </p>
                       </div>
 
                       {/* bottom */}
-                      <div className="flex items-center pl-3">
+                      <div className="absolute flex items-center bottom-0 right-0">
                         <span className="pl-[2px] text-[10px] text-gray-500">
                           {moment(message.created_at).format('HH:mm')}
                         </span>

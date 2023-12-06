@@ -10,7 +10,7 @@ import {
   setEntityForCustom,
   setNewCustomPropertyDetails
 } from '../../../../../../features/task/taskSlice';
-import { setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
+import { setActiveSubHubManagerTabId, setActiveTabId } from '../../../../../../features/workspace/workspaceSlice';
 import {
   useClearEntityCustomFieldValue,
   useUpdateEntityCustomFieldValue
@@ -60,7 +60,8 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId,
 
   const handleEditCustom = () => {
     dispatch(setEditCustomProperty(currentProperty));
-    dispatch(setActiveTabId(pilotTabs.TEMPLATES));
+    dispatch(setActiveTabId(pilotTabs.ENTITY_MANAGER));
+    dispatch(setActiveSubHubManagerTabId(pilotTabs.PROPERTIES));
     dispatch(setEntityForCustom({ id: undefined, type: undefined }));
     dispatch(
       setNewCustomPropertyDetails({
@@ -111,7 +112,7 @@ function LabelsDropdown({ optionsFromField, allOptions, currentProperty, taskId,
   }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
 
   return (
-    <div className="w-full h-full flex items-center justify-center focus:ring-0" ref={containerRef} tabIndex={0}>
+    <div className="flex items-center justify-center w-full h-full focus:ring-0" ref={containerRef} tabIndex={0}>
       <div className="w-full">
         <button
           type="button"

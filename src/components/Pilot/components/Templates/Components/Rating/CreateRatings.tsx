@@ -1,9 +1,13 @@
 import React, { useState, ChangeEvent } from 'react';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
-import SaveCols from '../SaveCols';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
+import PermissionIcon from '../../../../../../assets/icons/PermissionIcon';
+import InformationsolidIcon from '../../../../../../assets/icons/InformationsolidIcon';
+import ToolTip from '../../../../../Tooltip/Tooltip';
+import ClosePalette from '../../../../../../assets/icons/ClosePalette';
+import SavePalette from '../../../../../../assets/icons/SavePalette';
 
 function CreateRatings() {
   const [value, setValue] = useState<number>(1);
@@ -52,11 +56,11 @@ function CreateRatings() {
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-between items-center gap-2">
-        <div className="w-2/4 block">
+      <div className="flex items-center justify-between w-full gap-2">
+        <div className="block w-2/4">
           <label>Emoji Type</label>
           <div
-            className="w-full h-8 rounded bg-white p-2 border flex items-center cursor-pointer"
+            className="flex items-center w-full h-8 p-2 bg-white border rounded cursor-pointer"
             onClick={() => setIsPickerVisible(!isPickerVisible)}
           >
             {selectedEmoji ? selectedEmoji : 'Select Emoji'}
@@ -79,7 +83,7 @@ function CreateRatings() {
             id="customRange3"
             value={value}
           />
-          <div className="w-full flex justify-between">
+          <div className="flex justify-between w-full">
             <h3>1</h3>
             <h3>2</h3>
             <h3>3</h3>
@@ -98,11 +102,26 @@ function CreateRatings() {
         />
       </div>
       <div>
-        <SaveCols
-          handleSubmit={handleSubmit}
-          header="Ratings"
-          body="This custom property which allows to rate tasks in a given range"
-        />
+        <p className="flex items-center p-1 my-1 rounded text-alsoit-gray-300">Host in template center</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
+            <PermissionIcon />
+            <div className="text-black">Permissions</div>
+            <InformationsolidIcon />
+          </div>
+          <div className="flex items-center justify-end gap-2 p-1">
+            <ToolTip title="Cancel">
+              <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
+                <ClosePalette fill="white" />
+              </span>
+            </ToolTip>
+            <ToolTip title="Add Property">
+              <span className="cursor-pointer" onClick={handleSubmit}>
+                <SavePalette />
+              </span>
+            </ToolTip>
+          </div>
+        </div>
       </div>
     </div>
   );

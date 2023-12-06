@@ -3042,11 +3042,6 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/recordrtc@^5.6.11":
-  version "5.6.13"
-  resolved "https://registry.yarnpkg.com/@types/recordrtc/-/recordrtc-5.6.13.tgz#a968ed8d2ae04240a4816a3214e4e3d8532f590c"
-  integrity sha512-1OZMY09w9wRQ8y8A158GhCPQr/ClKrR9yT3Y18uUB8Q+V8KDhQj+JhiIrV9jrVVw8CbqisQ31R4pVLJduK60rQ==
-
 "@types/redux-persist@^4.3.1":
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@types/redux-persist/-/redux-persist-4.3.1.tgz#aa4c876859e0bea5155e5f7980e5b8c4699dc2e6"
@@ -10364,9 +10359,9 @@ react-hot-toast@^2.2.0:
     goober "^2.1.10"
 
 react-icons@^4.7.1:
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.11.0.tgz#4b0e31c9bfc919608095cc429c4f1846f4d66c65"
-  integrity sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.12.0.tgz#54806159a966961bfd5cdb26e492f4dafd6a8d78"
+  integrity sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==
 
 react-infinite-scroll-hook@^4.0.3:
   version "4.1.1"
@@ -12153,6 +12148,11 @@ watchpack@^2.4.0:
   dependencies:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
+
+wavesurfer.js@^7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.5.0.tgz#46811af622106a1fdaa1aa75a0bdd68221e54a04"
+  integrity sha512-1wDn0c9wJfZNZTYzEW1NvWJrTXHFqJahWpUZDbj4HGdz+/dfme0kw6LBh9AFkKYfYX/UnkxqNA/nJYWnBfJN8g==
 
 wbuf@^1.1.0, wbuf@^1.7.3:
   version "1.7.3"
