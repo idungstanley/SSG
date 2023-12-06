@@ -1,4 +1,3 @@
-import { TrashIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
@@ -12,6 +11,7 @@ import InformationsolidIcon from '../../../../../../assets/icons/Informationsoli
 import ToolTip from '../../../../../Tooltip/Tooltip';
 import ClosePalette from '../../../../../../assets/icons/ClosePalette';
 import SavePalette from '../../../../../../assets/icons/SavePalette';
+import TrashIcon from '../../../../../../assets/icons/chatIcons/TrashIcon';
 
 function CreateDropdownField() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -133,7 +133,7 @@ function CreateDropdownField() {
                     <Picker />
                   </button>
                   <button onClick={() => handleRemoveOption(i.id)}>
-                    <TrashIcon className="w-4 h-4 text-gray-300 transition cursor-pointer hover:text-primary-300" />
+                    <TrashIcon dimensions={{ width: 16, height: 16 }} />
                   </button>
                 </div>
               </div>

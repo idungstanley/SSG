@@ -7,7 +7,7 @@ import EmailIcon from '../../../assets/icons/EmailIcon';
 import EditIcon from '../../../assets/icons/chatIcons/EditIcon';
 import TrashIcon from '../../../assets/icons/chatIcons/TrashIcon';
 import PermissionIcon from '../../../assets/icons/chatIcons/PermissionIcon';
-import { columnTypesProps } from './Templates/Components/CustomPropertyList';
+// import { columnTypesProps } from './Templates/Components/CustomPropertyList';
 import ChatAddModal from '../../Chat/components/ChatAddModal';
 import ToolTip from '../../Tooltip/Tooltip';
 
@@ -17,25 +17,26 @@ export interface ICollection {
 }
 
 interface ICollectionWrapperProps {
-  collection: columnTypesProps;
   titleElement?: JSX.Element;
   type?: string;
   bodyElement?: JSX.Element;
+  isActiveColumn: boolean;
   cardName?: string;
+  setActiveColumn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function CardWrapper({
-  collection,
   titleElement,
   cardName,
   bodyElement,
-  type = 'chat'
+  isActiveColumn,
+  type = 'chat',
+  setActiveColumn
 }: ICollectionWrapperProps) {
-  const [isActiveCollection, setActiveCollection] = useState(collection.active);
   const [openCard, setOpenCard] = useState<boolean>(false);
 
   return (
-    <div className="flex flex-col mb-2 rounded-md" style={{ background: isActiveCollection ? '#E6FAE9' : '#FEF6E6' }}>
+    <div className="flex flex-col mb-2 rounded-md" style={{ background: isActiveColumn ? '#E6FAE9' : '#FEF6E6' }}>
       {/* header */}
       <div
         className="grid items-center justify-between w-full h-8 gap-2 group"
@@ -43,10 +44,12 @@ export default function CardWrapper({
       >
         <div className="grid items-center gap-1 group/header" style={{ gridTemplateColumns: '80% 50px' }}>
           <div
-            className="relative flex items-center w-full gap-2 px-2 py-1 space-x-1 text-white rounded-tl-lg rounded-br-lg cursor-default grow dFlex"
+            className={`relative flex items-center w-full gap-2 px-2 py-1 space-x-1 text-white  cursor-default grow dFlex ${
+              openCard ? 'rounded-tl-lg rounded-br-lg' : 'rounded-md rounded-tr-none'
+            }`}
             style={{
               minHeight: '32px',
-              backgroundColor: isActiveCollection ? '#00CC25' : '#F7A100'
+              backgroundColor: isActiveColumn ? '#00CC25' : '#F7A100'
             }}
           >
             <div
@@ -68,7 +71,7 @@ export default function CardWrapper({
             <ToolTip title={cardName}>
               <div
                 className={`relative flex items-center w-10 overflow-hidden fade-out ${
-                  isActiveCollection ? 'light-green' : 'light-orange'
+                  isActiveColumn ? 'light-green' : 'light-orange'
                 }`}
               >
                 <p className="overflow-hidden text-justify whitespace-nowrap">{cardName}</p>
@@ -148,10 +151,10 @@ export default function CardWrapper({
                   <input
                     className="inputShow"
                     type="checkbox"
-                    checked={isActiveCollection}
-                    onChange={() => setActiveCollection(!isActiveCollection)}
+                    checked={isActiveColumn}
+                    onChange={() => setActiveColumn(!isActiveColumn)}
                   />
-                  <div className={`slider ${isActiveCollection ? 'checked' : ''}`}></div>
+                  <div className={`slider ${isActiveColumn ? 'checked' : ''}`}></div>
                 </label>
               </div>
             </div>

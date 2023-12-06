@@ -86,27 +86,29 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
   const fields: Record<string, JSX.Element> = {
     priority: <TaskPriority task={task as ImyTaskData} activeColumn={columnIndex} />,
     status: value ? (
-      <div
-        className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium text-center text-white capitalize"
-        style={{
-          backgroundColor:
-            task.id === '0' || task.id === currentTaskStatusId
-              ? task?.status?.color || newTaskStatus?.color
-              : task?.status?.color
-        }}
-        onClick={() => {
-          dispatch(setCurrentTaskStatusId(task.id as string));
-          dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
-          dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
-        }}
-      >
-        <StatusDropdown
-          taskCurrentStatus={task.status}
-          taskStatuses={task.task_statuses}
-          statusDropdownType="name"
-          task={task}
-          activeColumn={columnIndex}
-        />
+      <div className="w-full" style={{ height: '90%' }}>
+        <div
+          className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium rounded-sm text-center text-white capitalize"
+          style={{
+            backgroundColor:
+              task.id === '0' || task.id === currentTaskStatusId
+                ? task?.status?.color || newTaskStatus?.color
+                : task?.status?.color
+          }}
+          onClick={() => {
+            dispatch(setCurrentTaskStatusId(task.id as string));
+            dispatch(setSelectedTaskParentId((task.parent_id || task.list_id) as string));
+            dispatch(setSelectedTaskType(task?.parent_id ? EntityType.subtask : EntityType.task));
+          }}
+        >
+          <StatusDropdown
+            taskCurrentStatus={task.status}
+            taskStatuses={task.task_statuses}
+            statusDropdownType="name"
+            task={task}
+            activeColumn={columnIndex}
+          />
+        </div>
       </div>
     ) : (
       <></>

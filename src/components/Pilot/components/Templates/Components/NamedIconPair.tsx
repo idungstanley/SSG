@@ -1,20 +1,18 @@
 import React from 'react';
 import { FaCaretRight } from 'react-icons/fa';
 import ToolTip from '../../../../Tooltip/Tooltip';
-
-type NamedIconPairType = 'card' | 'property';
+import BlurEffect from '../../../../BlurEffect';
 
 interface NamedIconPairProps {
   parentName: string;
-  parentIcon: JSX.Element;
+  parentIcon?: JSX.Element;
   childName: string;
-  childIcon: JSX.Element;
+  childIcon?: JSX.Element;
   isLeadingIcon?: boolean;
-  fadeOutColour?: boolean;
   color?: string;
   textColor?: string;
   iconColor?: string;
-  type?: NamedIconPairType;
+  backgroundImage?: string;
 }
 
 export default function NamedIconPair({
@@ -23,11 +21,10 @@ export default function NamedIconPair({
   isLeadingIcon = false,
   childIcon,
   childName,
-  fadeOutColour,
-  type = 'property',
   textColor,
   iconColor,
-  color = 'text-white'
+  color = 'text-white',
+  backgroundImage = 'linear-gradient(to right, transparent , white)'
 }: NamedIconPairProps) {
   return (
     <div
@@ -39,14 +36,18 @@ export default function NamedIconPair({
     >
       {/* First Section */}
       <div className="flex items-center w-full gap-1">
-        <div className={`flex items-center justify-center w-5 h-5 cursor-pointer ${textColor}`}>{parentIcon}</div>
+        {parentIcon && (
+          <div className={`flex items-center justify-center w-5 h-5 cursor-pointer ${textColor}`}>{parentIcon}</div>
+        )}
         <ToolTip title={parentName}>
-          <div
-            className={`relative flex items-center overflow-hidden  ${
-              type === 'card' && (fadeOutColour ? 'green fade-out' : 'orange fade-out')
-            }`}
-          >
-            <div className={`overflow-hidden font-semibold whitespace-nowrap  ${textColor}`}>{parentName}</div>
+          <div className="relative flex items-center overflow-hidden">
+            <BlurEffect backgroundImage={backgroundImage} top="0" right="0" bottom="0" width="10px" height="" left="" />
+            <div
+              className={`overflow-hidden whitespace-nowrap  ${textColor}`}
+              style={{ fontSize: '11px', fontWeight: '600', lineHeight: '13.2px' }}
+            >
+              {parentName}
+            </div>
           </div>
         </ToolTip>
       </div>
@@ -57,14 +58,26 @@ export default function NamedIconPair({
         </span>
         {/* Second Section */}
         <div className="flex items-center w-full gap-1">
-          <div className={`flex items-center justify-center w-5 h-5 cursor-pointer ${textColor}`}>{childIcon}</div>
+          {childIcon && (
+            <div className={`flex items-center justify-center w-5 h-5 cursor-pointer ${textColor}`}>{childIcon}</div>
+          )}
           <ToolTip title={childName}>
-            <div
-              className={`relative flex items-center overflow-hidden  ${
-                type === 'card' && (fadeOutColour ? 'green fade-out' : 'orange fade-out')
-              }`}
-            >
-              <p className={`overflow-hidden font-semibold whitespace-nowrap ${textColor}`}>{childName}</p>
+            <div className="relative flex items-center overflow-hidden">
+              <BlurEffect
+                backgroundImage={backgroundImage}
+                top="0"
+                right="0"
+                bottom="0"
+                width="10px"
+                height=""
+                left=""
+              />
+              <p
+                className={`overflow-hidden whitespace-nowrap  ${textColor}`}
+                style={{ fontSize: '11px', fontWeight: '600', lineHeight: '13.2px' }}
+              >
+                {childName}
+              </p>
             </div>
           </ToolTip>
         </div>

@@ -103,15 +103,15 @@ export default function ChatForPilot() {
           {/* main section depends of active tab */}
           {/* {selectedSection ? selectedSection.element : null} */}
           {!activeChat ? (
-            <div className="flex justify-between items-center p-2 px-4">
-              <div className="flex items-center rounded-md bg-alsoit-gray-75 p-2" style={{ color: 'orange' }}>
+            <div className="flex items-center justify-between p-2 px-4">
+              <div className="flex items-center p-2 rounded-md bg-alsoit-gray-75" style={{ color: 'orange' }}>
                 <span className="pr-1">
                   <AddCollectionIcon color="orange" />
                 </span>
                 ADD CHAT OR COLLECTION
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex justify-center bg-alsoit-gray-125 items-center h-6 w-6 rounded-md">
+                <div className="flex items-center justify-center w-6 h-6 rounded-md bg-alsoit-gray-125">
                   <ChatFilter />
                 </div>
                 <div
@@ -131,7 +131,7 @@ export default function ChatForPilot() {
                     </label>
                   </span>
                 </div>
-                <div className="chatSearch flex justify-center bg-white items-center rounded-md">
+                <div className="flex items-center justify-center bg-white rounded-md chatSearch">
                   <span className="chatSearch_icon">
                     <ChatSearch color="#919191" />
                   </span>
