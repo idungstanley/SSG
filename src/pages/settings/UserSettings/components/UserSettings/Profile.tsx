@@ -91,6 +91,8 @@ function Profile() {
     onSuccess: () => {
       queryClient.invalidateQueries(['self']);
       dispatch(setAvatarFile(null));
+      setCrop(undefined);
+      setCompletedCrop(undefined);
     }
   });
 
@@ -159,7 +161,6 @@ function Profile() {
         y: 0
       };
       setCrop(startedPosition as Crop);
-      setCompletedCrop(startedPosition as PixelCrop);
     }
   }, [avatarFile?.preview, crop, completedCrop]);
 
@@ -338,7 +339,7 @@ function Profile() {
         {showAvatarUpload && <UploadAvatar />}
 
         <Menu
-          open={!!avatarFile && !!crop}
+          open={!!avatarFile}
           onClose={() => {
             dispatch(setAvatarFile(null));
             setCrop(undefined);
@@ -357,7 +358,13 @@ function Profile() {
           }}
         >
           <div key="avatar_image" className="flex flex-col items-center min-w-[400px] p-4">
-            <ReactCrop crop={crop} onChange={(c) => setCrop(c)} onComplete={(c) => setCompletedCrop(c)} aspect={9 / 9}>
+            <ReactCrop
+              crop={crop}
+              onChange={(c) => setCrop(c)}
+              onComplete={(c) => setCompletedCrop(c)}
+              aspect={1}
+              circularCrop
+            >
               <img ref={imgRef} src={avatarFile?.preview} style={{ maxHeight: '300px' }} />
             </ReactCrop>
             {!!completedCrop && (
@@ -366,10 +373,10 @@ function Profile() {
                   <canvas
                     ref={previewCanvasRef}
                     style={{
-                      border: '1px solid black',
                       objectFit: 'contain',
                       width: completedCrop.width,
-                      height: completedCrop.height
+                      height: completedCrop.height,
+                      borderRadius: '50%'
                     }}
                   />
                 </div>
