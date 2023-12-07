@@ -20,6 +20,7 @@ const pilotFromLS = JSON.parse(localStorage.getItem('pilot') || '""') as {
 };
 const showTabLabelFromLS = !!pilotFromLS.showTabLabel;
 const hotkeyIdsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.HOT_KEYS) ?? '[]') as string[];
+const featureButtonsFromLS = JSON.parse(localStorage.getItem(STORAGE_KEYS.FEATURE_BUTTONS) ?? '[]') as string[];
 
 interface popoutItems {
   calendar: boolean;
@@ -93,6 +94,7 @@ interface workspaceState {
   draggableActiveStatusId: string | null;
   isFavoritePinned: boolean;
   activeHotkeyIds: string[];
+  activeFeatureButtonsIds: string[];
   nestedTimeEntityId: string | null;
   activeView: IView | null;
   entityForPermissions?: IList | IWallet | IHub;
@@ -166,6 +168,7 @@ const initialState: workspaceState = {
   draggableActiveStatusId: null,
   isFavoritePinned: false,
   activeHotkeyIds: hotkeyIdsFromLS,
+  activeFeatureButtonsIds: featureButtonsFromLS,
   nestedTimeEntityId: null,
   activeView: null,
   entityForPermissions: undefined,
@@ -274,6 +277,9 @@ export const wsSlice = createSlice({
     },
     setActiveHotkeyIds(state, action: PayloadAction<string[]>) {
       state.activeHotkeyIds = action.payload;
+    },
+    setActiveFeatureButtonsIds(state, action: PayloadAction<string[]>) {
+      state.activeFeatureButtonsIds = action.payload;
     },
     setShowWallet(state, action: PayloadAction<boolean>) {
       state.showWallet = action.payload;
@@ -496,6 +502,7 @@ export const {
   setWorkSpaceSettingsObj,
   setDraggableActiveStatusId,
   setActiveHotkeyIds,
+  setActiveFeatureButtonsIds,
   setNestedTimeEntityId,
   setActiveView,
   setEntityForPermissions,

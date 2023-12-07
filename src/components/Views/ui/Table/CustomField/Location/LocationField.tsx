@@ -49,7 +49,7 @@ function LocationField({ taskCustomFields, taskId, fieldId, activeColumn, task }
   };
 
   useEffect(() => {
-    if (containerRef.current && activeColumn) {
+    if (containerRef.current && activeColumn && taskColumnIndex) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
         containerRef.current.focus();
       }

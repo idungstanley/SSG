@@ -35,7 +35,7 @@ export default function MinPilot({ featureTabs, activeSection, setShowModal, sho
         {activeSection?.element}
       </div>
 
-      <Header isMinified menu={<Menu setShowModal={setShowModal} />} />
+      <Header isMinified menu={<Menu featureTabs={featureTabs} />} />
 
       <MinHotkeysList tabs={featureTabs} setShowModal={setShowModal} showModal={showModal} />
 
