@@ -38,7 +38,7 @@ export default function Chat() {
   }, [selectedItem?.id]);
 
   const connect = (id: string) => {
-    // * show / hide pusher logs
+    // * show / hide pusher logs ok
     // Pusher.logToConsole = true;
 
     if (id === selectedChatId) {
