@@ -64,7 +64,8 @@ const STORAGE_KEYS = {
   CURRENT_WORKSPACE_ID: 'currentWorkspaceId',
   IS_PILOT_MINIFIED: 'isPilotMinified',
   EXTENDED_BAR_WIDTH: 'extendedBarWidth',
-  HOT_KEYS: 'hotkeys'
+  HOT_KEYS: 'hotkeys',
+  FEATURE_BUTTONS: 'featureButtons'
 };
 
 export const LIMITS = {
