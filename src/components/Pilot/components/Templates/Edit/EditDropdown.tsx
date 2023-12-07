@@ -22,10 +22,13 @@ import { columnTypesProps } from '../Components/CustomPropertyList';
 
 function EditDropdown({
   editCustomProperty,
+  setShowPermissionExt,
   mactchingData
 }: {
   editCustomProperty: IField;
   mactchingData?: columnTypesProps;
+  showPermissionExt?: boolean;
+  setShowPermissionExt?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // const { editCustomProperty } = useAppSelector((state) => state.task);
 
@@ -204,7 +207,10 @@ function EditDropdown({
       <div className="my-2 mt-2 text-xs">CLICK HERE TO HOST IN TEMPLATE</div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
+          <div
+            className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit"
+            onClick={() => setShowPermissionExt?.((prev) => !prev)}
+          >
             <PermissionIcon />
             <div className="text-black">Permissions</div>
             <InformationsolidIcon />

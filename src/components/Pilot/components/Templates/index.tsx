@@ -14,6 +14,7 @@ import PlusCircle from '../../../../assets/icons/AddCircle';
 import AddCircleWhite from '../../../../assets/icons/propertyIcons/AddCircleWhite';
 import StackIcon from '../../../../assets/icons/propertyIcons/StackIcon';
 import SearchCancel from '../../../../assets/icons/propertyIcons/SearchCancel';
+import PermissionExtended from './Properties/component/PermissionExtended';
 
 const mockChatsData = [
   {
@@ -181,7 +182,7 @@ function Templates() {
                       <ChatSearch color="#424242" />
                     </span>
                     <input
-                      className="ring-0 focus:ring-0 focus:outline-0"
+                      className="ring-0 focus:ring-0 focus:outline-0 grow"
                       type="text"
                       value={searchValue}
                       placeholder="Search Property"
@@ -212,11 +213,14 @@ function Templates() {
 
           if (matchingObject) {
             const [isActiveCollection, setActiveCollection] = useState(matchingObject.active);
+            const [showPermissionExt, setShowPermissionExt] = useState<boolean>(false);
             return (
               <CardWrapper
                 isActiveColumn={isActiveCollection}
                 setActiveColumn={setActiveCollection}
                 type="properties"
+                showBottomElement={showPermissionExt}
+                bottomElement={<PermissionExtended />}
                 titleElement={
                   <NamedIconPair
                     isLeadingIcon={true}
@@ -233,7 +237,11 @@ function Templates() {
                 cardName={Capitalize(collection.name)}
                 bodyElement={
                   <div className="p-2 pl-4">
-                    <EditDropdown editCustomProperty={collection} mactchingData={matchingData} />
+                    <EditDropdown
+                      setShowPermissionExt={setShowPermissionExt}
+                      editCustomProperty={collection}
+                      mactchingData={matchingData}
+                    />
                   </div>
                 }
               />
