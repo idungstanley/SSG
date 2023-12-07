@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { UseUpdateTaskPrioritiesServices } from '../../features/task/taskService';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { priorities } from '../../app/constants/priorities';
 import { priorityArr } from '../../utils/PriorityArr';
 import Priority from '../../assets/icons/Priority';
 import { Task } from '../../features/task/interface.tasks';
 import { PriorityDropDownModal } from './PriorityDropDownModal';
 import AlsoitMenuDropdown from '../DropDowns';
+import { setTaskRowFocus } from '../../features/task/taskSlice';
 
 export interface priorityType {
   id: string;
@@ -24,10 +25,17 @@ interface TaskCurrentPriorityProps {
 }
 
 export default function PriorityDropdown({ taskCurrentPriority, icon, activeColumn, task }: TaskCurrentPriorityProps) {
+  const dispatch = useAppDispatch();
   const { priority, priorityList, setPriority } = priorityArr();
 
-  const { selectedTasksArray, selectedListIds, selectedTaskParentId, taskColumnIndex, KeyBoardSelectedTaskData } =
-    useAppSelector((state) => state.task);
+  const {
+    selectedTasksArray,
+    selectedListIds,
+    selectedTaskParentId,
+    taskColumnIndex,
+    KeyBoardSelectedTaskData,
+    taskRowFocus
+  } = useAppSelector((state) => state.task);
 
   const [isOpen, setIsOpen] = useState<HTMLElement | null>(null);
 
@@ -43,7 +51,9 @@ export default function PriorityDropdown({ taskCurrentPriority, icon, activeColu
 
   const handleCloseDropdown = () => {
     setIsOpen(null);
+    dispatch(setTaskRowFocus(!taskRowFocus));
   };
+
   const handleOpenDropdown = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setIsOpen(event.currentTarget);
   };

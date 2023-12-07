@@ -3,7 +3,12 @@ import { UserPlusIcon } from '@heroicons/react/24/solid';
 import { useGetTeamMembers } from '../../../../features/settings/teamMembers/teamMemberService';
 import GroupAssignee from './GroupAssignee';
 import { ICheckListItems, Task } from '../../../../features/task/interface.tasks';
-import { ImyTaskData, setSelectedTaskParentId, setSelectedTaskType } from '../../../../features/task/taskSlice';
+import {
+  ImyTaskData,
+  setSelectedTaskParentId,
+  setSelectedTaskType,
+  setTaskRowFocus
+} from '../../../../features/task/taskSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { ITeamMembersAndGroup } from '../../../../features/settings/teamMembersAndGroups.interfaces';
 import { useGetTeamMemberGroups } from '../../../../features/settings/teamMemberGroups/teamMemberGroupService';
@@ -36,7 +41,9 @@ export default function Assignee({
 }) {
   const dispatch = useAppDispatch();
 
-  const { currTeamMemberId, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
+  const { currTeamMemberId, KeyBoardSelectedTaskData, taskColumnIndex, taskRowFocus } = useAppSelector(
+    (state) => state.task
+  );
 
   const [searchInput, setSearchInput] = useState<string>('');
   const [teams, setTeams] = useState<boolean>(false);
@@ -53,6 +60,7 @@ export default function Assignee({
 
   const handleClose = () => {
     setAnchorEl(null);
+    dispatch(setTaskRowFocus(!taskRowFocus));
   };
   // Get Team Members
   const { data } = teams ? useGetTeamMemberGroups(0) : useGetTeamMembers({ page: 0, query: '' });

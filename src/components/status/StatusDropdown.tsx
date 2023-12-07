@@ -6,7 +6,7 @@ import { Status, Task } from '../../features/task/interface.tasks';
 import StatusIconComp from '../../assets/icons/StatusIconComp';
 import ToolTip from '../Tooltip/Tooltip';
 import { ITask_statuses } from '../../features/list/list.interfaces';
-import { setNewTaskStatus, setStatusId } from '../../features/task/taskSlice';
+import { setNewTaskStatus, setStatusId, setTaskRowFocus } from '../../features/task/taskSlice';
 import { StatusDropDownModal } from './Components/StatusDropDownModal';
 import AlsoitMenuDropdown from '../DropDowns';
 
@@ -26,7 +26,7 @@ export default function StatusDropdown({
   activeColumn
 }: StatusDropdownProps) {
   const dispatch = useAppDispatch();
-  const { currentTaskStatusId, updateCords, taskColumnIndex, KeyBoardSelectedTaskData } = useAppSelector(
+  const { currentTaskStatusId, updateCords, taskColumnIndex, KeyBoardSelectedTaskData, taskRowFocus } = useAppSelector(
     (state) => state.task
   );
   // const { activeItemId } = useAppSelector((state) => state.workspace);
@@ -57,6 +57,7 @@ export default function StatusDropdown({
 
   const handleCloseStatusDropdown = () => {
     setIsOpen(null);
+    dispatch(setTaskRowFocus(!taskRowFocus));
   };
   const handleOpenStatusDropdown = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.stopPropagation();
