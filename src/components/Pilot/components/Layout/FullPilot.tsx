@@ -42,7 +42,7 @@ export default function FullPilot({ featureTabs, activeSection, setShowModal, sh
           {showOverlay && <div className="absolute inset-0 top-0 left-0 z-10 bg-black opacity-50" />}
           <Header
             isMinified={false}
-            menu={<Menu setShowModal={setShowModal} />}
+            menu={<Menu featureTabs={featureTabs} />}
             additionalNavItems={
               <>
                 <div
