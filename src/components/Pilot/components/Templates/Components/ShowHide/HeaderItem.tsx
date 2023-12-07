@@ -14,12 +14,12 @@ function HeaderItem({ listItem }: HeaderItemProps) {
     <div key={listItem.field}>
       {listItem.value.toLowerCase() !== 'task' && (
         <div
-          className="capitalize gap-3 flex items-center cursor-pointer mt-0 pl-4 py-2 text-slate-600 hover:bg-gray-300 z-30 w-full"
+          className="z-30 flex items-center w-full gap-3 py-2 pl-4 mt-0 capitalize cursor-pointer text-slate-600 hover:bg-gray-300"
           onClick={() => dispatch(hideTaskColumns(listItem.id))}
           key={listItem.field}
         >
           {!listItem.hidden ? (
-            <p className="flex w-11/12 justify-between items-center">
+            <p className="flex items-center justify-between w-11/12">
               <span>{listItem.value}</span>
               <span>
                 <BsCheck2 />

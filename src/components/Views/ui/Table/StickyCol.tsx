@@ -32,8 +32,6 @@ import ToolTip from '../../../Tooltip/Tooltip';
 import DetailsOnHover from '../../../Dropdown/DetailsOnHover/DetailsOnHover';
 import { EntityType } from '../../../../utils/EntityTypes/EntityType';
 import SubtasksIcon from '../../../../assets/icons/SubtasksIcon';
-// import SaveIcon from '../../../../assets/icons/SaveIcon';
-// import Close from '../../../../assets/icons/Close';
 import toast from 'react-hot-toast';
 import Toast from '../../../../common/Toast';
 import { LIMITS } from '../../../../app/config/dimensions';
@@ -45,6 +43,8 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
   taskIndex?: number;
   showSubTasks?: boolean;
   setShowSubTasks: (i: boolean) => void;
+  eitableContent: boolean;
+  setEitableContent: (i: boolean) => void;
   paddingLeft?: number;
   taskStatusId?: string;
   isListParent: boolean;
@@ -62,6 +62,8 @@ interface ColProps extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 
 export function StickyCol({
+  eitableContent,
+  setEitableContent,
   showSubTasks,
   setShowSubTasks,
   children,
@@ -111,7 +113,6 @@ export function StickyCol({
   } = useAppSelector((state) => state.task);
 
   const [isChecked, setIsChecked] = useState(false);
-  const [eitableContent, setEitableContent] = useState(false);
   const [selectedIndexArray, setSelectedIndexArray] = useState<number[]>([]);
 
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
@@ -450,9 +451,9 @@ export function StickyCol({
                           hoverElement={
                             <div
                               className={`${task.name.length > 20 ? 'truncate' : ''} font-semibold alsoit-gray-300 ${
-                                saveSettingOnline?.CompactView ? 'trantext-alsoit-text-md' : 'text-alsoit-text-lg'
+                                saveSettingOnline?.CompactView ? 'text-alsoit-text-md' : 'text-alsoit-text-lg'
                               }`}
-                              style={{ maxWidth: '90%', whiteSpace: 'nowrap' }}
+                              style={{ whiteSpace: 'nowrap' }}
                             >
                               {taskUpperCase ? task.name.toUpperCase() : Capitalize(task.name)}
                             </div>

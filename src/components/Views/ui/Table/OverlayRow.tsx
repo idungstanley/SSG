@@ -19,6 +19,8 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
   return (
     <div style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}>
       <StickyCol
+        eitableContent={false}
+        setEitableContent={() => ({})}
         showSubTasks={false}
         setShowSubTasks={() => ({})}
         style={{ zIndex: 10 }}

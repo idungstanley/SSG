@@ -39,7 +39,7 @@ export default function Badges({ task, setShowSubtasks, showSubtasks }: BadgeTas
           <DetailsOnHover
             content={<p>{task.description}</p>}
             hoverElement={
-              <button className="p-1 border rounded-md bg-white ">
+              <button className="p-1 border rounded-md hover:bg-white ">
                 <Description
                   width={saveSettingOnline?.CompactView ? '8px' : '12px'}
                   height={saveSettingOnline?.CompactView ? '8px' : '12px'}
@@ -52,7 +52,7 @@ export default function Badges({ task, setShowSubtasks, showSubtasks }: BadgeTas
 
         {task.has_attachments && (
           <ToolTip title="Attach File">
-            <button className="p-1 border rounded-md bg-white">
+            <button className="p-1 border rounded-md hover:bg-white">
               <AttachFile
                 width={saveSettingOnline?.CompactView ? '8px' : '12px'}
                 height={saveSettingOnline?.CompactView ? '8px' : '12px'}
@@ -64,7 +64,7 @@ export default function Badges({ task, setShowSubtasks, showSubtasks }: BadgeTas
         {task.descendants_count > 0 && (
           <ToolTip title="Subtask">
             <button
-              className="relative p-1 border rounded-md bg-white"
+              className="relative p-1 border rounded-md hover:bg-white"
               onClick={(e) => onShowAddSubtaskField(e, task.id)}
             >
               <SubtaskWithCount
