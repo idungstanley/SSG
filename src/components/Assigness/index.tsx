@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AlsoitMenuDropdown from '../DropDowns';
 import { useGetTeamMembers } from '../../features/settings/teamMembers/teamMemberService';
 import AvatarWithInitials from '../avatar/AvatarWithInitials';
@@ -8,6 +8,8 @@ import SearchIcon from '../../assets/icons/SearchIcon';
 import { ITeamMembersAndGroup } from '../../features/settings/teamMembersAndGroups.interfaces';
 import { useGetTeamMemberGroups } from '../../features/settings/teamMemberGroups/teamMemberGroupService';
 import RoundedCheckbox from '../Checkbox/RoundedCheckbox';
+import { useAppDispatch } from '../../app/hooks';
+import { setTaskColumnIndex, setTaskRowFocus } from '../../features/task/taskSlice';
 interface AasigneeDropdownProps {
   anchor: HTMLElement | null;
   setAnchor: React.Dispatch<React.SetStateAction<HTMLElement | null>>;
@@ -16,11 +18,19 @@ interface AasigneeDropdownProps {
 }
 
 function AssigneeDropdown({ anchor, setAnchor, handleClick, allowGroups = true }: AasigneeDropdownProps) {
+  const dispatch = useAppDispatch();
+
+  // const { KeyBoardSelectedTaskData, taskRowFocus } = useAppSelector((state) => state.task);
+
+  const [optionsArr] = useState<string[]>(['members', 'groups']);
   const [members, setMembers] = useState(false);
   const [groups, setGroups] = useState(false);
   const [searhItem, setSearchItem] = useState<string>('');
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+
   const { data: teamMembers } = useGetTeamMembers({ page: 0, query: '' });
   const { data: teamMembersGroup } = useGetTeamMemberGroups(0);
+
   const filteredMembers = teamMembers?.data.team_members.filter((member) =>
     member.user.name.toLowerCase().includes(searhItem.toLowerCase())
   );
@@ -28,13 +38,45 @@ function AssigneeDropdown({ anchor, setAnchor, handleClick, allowGroups = true }
   const filteredGroups = teamMembersGroup?.data.team_member_groups.filter((group) =>
     group.name?.toLowerCase().includes(searhItem.toLowerCase())
   );
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowUp' && focusedIndex && focusedIndex > 0) {
+        setFocusedIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
+      } else if (event.key === 'ArrowDown') {
+        setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : Math.min(prevIndex + 1, optionsArr.length - 1)));
+      }
+
+      if (event.key === 'Enter' && focusedIndex !== null) {
+        if (optionsArr[focusedIndex] === 'members') {
+          groups && !members && setGroups(false);
+          setMembers(!members);
+        } else {
+          members && !groups && setMembers(false);
+          setGroups(!groups);
+        }
+        dispatch(setTaskRowFocus(true));
+        dispatch(setTaskColumnIndex(null));
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [focusedIndex]);
+
+  // useEffect(() => {
+  //   if (task.id === KeyBoardSelectedTaskData?.id) dispatch(setTaskRowFocus(!taskRowFocus));
+  // }, [task, KeyBoardSelectedTaskData]);
+
   return (
     <div>
       <AlsoitMenuDropdown anchorEl={anchor} handleClose={() => setAnchor(null)}>
         {/* <h1>Assignees</h1> */}
         <div style={{ width: '178px' }}>
           <div className="flex items-center justify-between max-w-full h-8 bg-white px-4 w-full">
-            <SearchIcon />
+            <SearchIcon className="w-4 h-4" />
             <input
               type="text"
               onChange={(e) => setSearchItem(e.target.value)}

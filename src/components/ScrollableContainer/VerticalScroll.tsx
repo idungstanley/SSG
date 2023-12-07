@@ -212,7 +212,7 @@ export function VerticalScroll({ children, bgColor, place, ...props }: CustomScr
 
   return (
     <div
-      className={`relative flex w-full overflow-hidden ${bgColor} ${isThumbVisible ? 'pr-1' : ''}`}
+      className={`relative flex w-full overflow-hidden ${bgColor ? bgColor : ''} ${isThumbVisible ? 'pr-1' : ''}`}
       style={{
         paddingRight: place == 'pilot-hotkeys' ? '3px' : '0'
       }}
