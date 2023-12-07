@@ -78,6 +78,7 @@ export function Row({
 
   const [showSubTasks, setShowSubTasks] = useState(false);
   const [isCopied, setIsCopied] = useState<number>(0);
+  const [eitableContent, setEitableContent] = useState(false);
 
   const rowRef = useRef<HTMLTableRowElement | null>(null);
 
@@ -191,6 +192,8 @@ export function Row({
         // }}
       >
         <StickyCol
+          eitableContent={eitableContent}
+          setEitableContent={setEitableContent}
           showSubTasks={showChildren}
           setShowSubTasks={setShowSubTasks}
           toggleRootTasks={toggleRootTasks}
@@ -278,7 +281,7 @@ export function Row({
                 </button>
               </ToolTip>
             )}
-            <TaskSettingsDropDown />
+            <TaskSettingsDropDown setEitableContent={setEitableContent} task={task} />
           </div>
         </StickyCol>
 
