@@ -51,19 +51,12 @@ export function DropDownFieldModal({
         setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : Math.min(prevIndex + 1, filteredOptions.length - 1)));
       }
 
-      if (
-        event.key === 'Enter' &&
-        focusedIndex !== null &&
-        isArray(filteredOptions) &&
-        focusedIndex < filteredOptions.length
-      ) {
+      if (event.key === 'Enter' && focusedIndex !== null && isArray(filteredOptions) && filteredOptions.length > 0) {
         handleClick(filteredOptions[focusedIndex]);
+      } else if (event.key === 'Enter' && focusedIndex !== null && filteredOptions && filteredOptions.length < 1) {
+        handleEditCustom();
       }
     };
-
-    if (!isArray(filteredOptions) && btnRef.current) {
-      btnRef.current.focus();
-    }
 
     document.addEventListener('keydown', handleKeyDown);
 

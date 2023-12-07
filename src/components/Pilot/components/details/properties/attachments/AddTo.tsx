@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cl } from '../../../../../../utils';
 import { GrAttachment, GrOnedrive } from 'react-icons/gr';
 import { FcDocument, FcGoogle } from 'react-icons/fc';
@@ -44,6 +44,9 @@ export default function AddTo({ locationn }: { locationn?: string }) {
   const [selectedViews, setSelectedViews] = useState<string>(paletteViews.BOARD);
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState<HTMLDivElement | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const deleteAttachment = useMutation(useDeleteAttachment, {
     onSuccess: () => {
@@ -154,8 +157,21 @@ export default function AddTo({ locationn }: { locationn?: string }) {
     }
   ];
 
+  useEffect(() => {
+    if (locationn === 'list view') {
+      document.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key === 'ArrowDown') {
+          setFocusedIndex(0);
+        }
+        if (event.key === 'Enter' && focusedIndex !== null) {
+          setShowDropdown(containerRef.current);
+        }
+      });
+    }
+  }, [locationn]);
+
   return (
-    <div className="h-full pb-2 m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
+    <div ref={containerRef} className="h-full pb-2 m-3 text-gray-500 rounded-md bg-alsoit-gray-50">
       <div className="flex justify-between h-8">
         <div className="flex items-center justify-between gap-2">
           <div
@@ -237,7 +253,13 @@ export default function AddTo({ locationn }: { locationn?: string }) {
         )}
       </div>
       {toggleDetails ? (
-        <div className="grid grid-cols-4 gap-2 p-2 m-2 bg-white place-items-center">
+        <div
+          className={`${
+            attachments?.data.attachments?.length
+              ? 'grid grid-cols-4 gap-2 p-2 m-2 bg-white place-items-center'
+              : 'flex justify-center w-11/12 mx-auto py-2 my-2 bg-white'
+          }`}
+        >
           {attachments?.data.attachments?.length ? (
             attachments?.data.attachments.map((file) => {
               return (
