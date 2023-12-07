@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ICustomField, setOpenFileUploadModal } from '../../../../../../features/task/taskSlice';
 import PlusIcon from '../../../../../../assets/icons/PlusIcon';
 import AlsoitMenuDropdown from '../../../../../DropDowns';
@@ -28,11 +28,20 @@ function FilesField({ taskCustomFields, taskId, fieldId, listId, activeColumn, t
   const { fileUploadProps, KeyBoardSelectedTaskData, taskColumnIndex } = useAppSelector((state) => state.task);
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && open === null) {
+      setOpen(containerRef.current);
+    } else if (event.key === 'Enter' && open !== null) {
+      dispatch(
+        setOpenFileUploadModal({
+          ...fileUploadProps,
+          listId,
+          taskId,
+          fieldId
+        })
+      );
       setOpen(containerRef.current);
     }
   };
-
   useEffect(() => {
     if (containerRef.current && activeColumn && taskColumnIndex) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
@@ -42,7 +51,7 @@ function FilesField({ taskCustomFields, taskId, fieldId, listId, activeColumn, t
     }
 
     return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
-  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn]);
+  }, [task, KeyBoardSelectedTaskData, taskColumnIndex, activeColumn, open]);
 
   return (
     <div ref={containerRef} tabIndex={0}>
@@ -77,11 +86,13 @@ function FilesField({ taskCustomFields, taskId, fieldId, listId, activeColumn, t
         </button>
       </div>
 
-      <AlsoitMenuDropdown anchorEl={open} handleClose={() => setOpen(null)}>
-        <div style={{ width: '230px', height: '320px' }}>
-          <AddTo locationn="list view" />
-        </div>
-      </AlsoitMenuDropdown>
+      {open && (
+        <AlsoitMenuDropdown anchorEl={open} handleClose={() => setOpen(null)}>
+          <div style={{ width: '230px', height: '320px' }}>
+            <AddTo locationn="list view" />
+          </div>
+        </AlsoitMenuDropdown>
+      )}
     </div>
   );
 }

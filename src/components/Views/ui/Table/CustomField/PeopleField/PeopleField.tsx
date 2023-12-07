@@ -9,6 +9,7 @@ import { useGetTeamMembers } from '../../../../../../features/settings/teamMembe
 import GroupAssignee from '../../../../../../pages/workspace/tasks/assignTask/GroupAssignee';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { Task } from '../../../../../../features/task/interface.tasks';
+import AlsoitMenuDropdown from '../../../../../DropDowns';
 
 interface PeopleField {
   taskCustomFields?: ICustomField;
@@ -55,6 +56,7 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty, 
       value: singleUser ? [{ value: member.id, type: type }] : [...existValues, { value: member.id, type }],
       fieldId
     });
+    setAnchorEl(null);
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -90,7 +92,11 @@ function PeopleField({ taskCustomFields, taskId, fieldId, entityCustomProperty, 
         )}
       </button>
 
-      <AssigneeDropdown anchor={anchorEl} setAnchor={setAnchorEl} handleClick={handleClick} allowGroups={allowGroups} />
+      {anchorEl && (
+        <AlsoitMenuDropdown anchorEl={anchorEl} handleClose={() => setAnchorEl(null)}>
+          <AssigneeDropdown handleClick={handleClick} allowGroups={allowGroups} task={task as Task} />
+        </AlsoitMenuDropdown>
+      )}
     </div>
   );
 }
