@@ -19,19 +19,23 @@ export interface ICollection {
 interface ICollectionWrapperProps {
   titleElement?: JSX.Element;
   type?: string;
+  bottomElement?: JSX.Element;
   bodyElement?: JSX.Element;
   isActiveColumn: boolean;
   cardName?: string;
+  showBottomElement?: boolean;
   setActiveColumn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function CardWrapper({
   titleElement,
   cardName,
+  bottomElement,
   bodyElement,
   isActiveColumn,
   type = 'chat',
-  setActiveColumn
+  setActiveColumn,
+  showBottomElement
 }: ICollectionWrapperProps) {
   const [openCard, setOpenCard] = useState<boolean>(false);
 
@@ -162,6 +166,7 @@ export default function CardWrapper({
         </div>
       </div>
       {openCard && <div>{bodyElement}</div>}
+      {showBottomElement && bottomElement && openCard && <div>{bottomElement}</div>}
     </div>
   );
 }
