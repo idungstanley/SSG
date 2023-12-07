@@ -86,7 +86,7 @@ export function Header({ isInsights }: IHeader) {
   return (
     <>
       <section
-        className="flex items-center justify-between w-full overflow-y-hidden overflow-x-scroll p-4 border-b"
+        className="flex items-center justify-between w-full header-scrollbar-hide scrollbar-hide overflow-y-hidden overflow-x-scroll p-4 border-b"
         style={{ height: '50px' }}
       >
         <div className="flex items-center">{renderChangeView()}</div>
