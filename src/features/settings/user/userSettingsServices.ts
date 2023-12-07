@@ -88,6 +88,19 @@ export const UseUpdateUserSettings = () => {
   });
 };
 
+// Update Avatar
+export const UseUpdateAvatar = (blob: Blob) => {
+  const url = '/auth/account/avatar';
+  const formData = new FormData();
+  formData.append('avatar', blob);
+  const response = requestNew({
+    url,
+    method: 'POST',
+    data: formData
+  });
+  return response;
+};
+
 // Remove Avatar
 export const UseRemoveAvatar = () => {
   const url = '/auth/account/avatar';

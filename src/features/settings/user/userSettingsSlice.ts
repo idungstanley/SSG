@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserData } from '../../workspace/workspace.interfaces';
+import { UploadedUppyFile } from '@uppy/core';
 
 interface userSettingState {
   name: string | undefined;
@@ -25,6 +26,7 @@ interface userSettingState {
   is_clock_time: number | undefined;
   clock_limit: number;
   clock_stop_reminder: number;
+  avatarFile: UploadedUppyFile<Record<string, unknown>, Record<string, unknown>> | null;
 }
 
 const initialState: userSettingState = {
@@ -50,7 +52,8 @@ const initialState: userSettingState = {
   clock_type: undefined,
   is_clock_time: undefined,
   clock_limit: 8,
-  clock_stop_reminder: 5
+  clock_stop_reminder: 5,
+  avatarFile: null
 };
 
 export const userSettingSlice = createSlice({
@@ -98,6 +101,12 @@ export const userSettingSlice = createSlice({
     setShowAvatarUpload(state, action: PayloadAction<boolean>) {
       state.showAvatarUpload = action.payload;
     },
+    setAvatarFile(
+      state,
+      action: PayloadAction<UploadedUppyFile<Record<string, unknown>, Record<string, unknown>> | null>
+    ) {
+      state.avatarFile = action.payload;
+    },
     setShowConfirmationModal(state, action: PayloadAction<boolean>) {
       state.showConfirmationModal = action.payload;
     },
@@ -130,6 +139,7 @@ export const {
   setUserData,
   setCurrentUserModal,
   setShowAvatarUpload,
+  setAvatarFile,
   setShowConfirmationModal,
   setActiveTab,
   setStatus,
