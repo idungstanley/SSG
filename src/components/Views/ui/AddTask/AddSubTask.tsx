@@ -61,6 +61,8 @@ export function AddSubTask({
       {/* current task */}
       <tr style={style} className="contents group">
         <StickyCol
+          eitableContent={false}
+          setEitableContent={() => ({})}
           showSubTasks={showSubTasks}
           setShowSubTasks={setShowSubTasks}
           style={{ zIndex: 3 }}
