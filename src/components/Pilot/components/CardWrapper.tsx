@@ -7,8 +7,6 @@ import EmailIcon from '../../../assets/icons/EmailIcon';
 import EditIcon from '../../../assets/icons/chatIcons/EditIcon';
 import TrashIcon from '../../../assets/icons/chatIcons/TrashIcon';
 import PermissionIcon from '../../../assets/icons/chatIcons/PermissionIcon';
-// import { columnTypesProps } from './Templates/Components/CustomPropertyList';
-import ChatAddModal from '../../Chat/components/ChatAddModal';
 import ToolTip from '../../Tooltip/Tooltip';
 
 export interface ICollection {
@@ -18,7 +16,6 @@ export interface ICollection {
 
 interface ICollectionWrapperProps {
   titleElement?: JSX.Element;
-  type?: string;
   bottomElement?: JSX.Element;
   bodyElement?: JSX.Element;
   isActiveColumn: boolean;
@@ -33,7 +30,6 @@ export default function CardWrapper({
   bottomElement,
   bodyElement,
   isActiveColumn,
-  type = 'chat',
   setActiveColumn,
   showBottomElement
 }: ICollectionWrapperProps) {
@@ -65,11 +61,6 @@ export default function CardWrapper({
               <CollapseIcon color="#A854F7" active={true} onToggle={() => null} hoverBg="white" />
             </div>
             {titleElement}
-            {type === 'chat' && (
-              <div className="hidden group-hover/header:flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
-                <ChatAddModal />
-              </div>
-            )}
           </div>
           {cardName && !openCard && (
             <ToolTip title={cardName}>

@@ -1,8 +1,12 @@
-export default function SavePalette() {
+interface Props {
+  color?: string;
+}
+
+export default function SavePalette({ color }: Props) {
   /* eslint-disable max-len */
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="24" height="24" rx="4" fill="#2BD54A" />
+      <rect width="24" height="24" rx="4" fill={color ? color : '#2BD54A'} />
       <mask
         id="mask0_4132_97766"
         style={{ maskType: 'alpha' }}

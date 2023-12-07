@@ -35,7 +35,7 @@ export const useGetChat = (id: string | null) =>
     }
   );
 
-const createChat = (data: { id?: string | null; name?: string; type?: itemType }) => {
+const createChat = (data: { id: string; name: string; type: itemType }) => {
   const request = requestNew({
     url: 'chats',
     method: 'POST',

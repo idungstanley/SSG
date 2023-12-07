@@ -11,7 +11,6 @@ interface ISelectedItem {
 interface ChatState {
   showChat: boolean;
   showMembersInChatSideOver: boolean;
-  showCreateChatSideOver: boolean;
   selectedItem: ISelectedItem | null;
   activeChat: string;
   selectedMessage: IMessage | null;
@@ -22,7 +21,6 @@ interface ChatState {
 const initialState: ChatState = {
   showChat: false,
   showMembersInChatSideOver: false,
-  showCreateChatSideOver: false,
   selectedItem: null,
   activeChat: '',
   selectedMessage: null,
@@ -39,9 +37,6 @@ export const chatSlice = createSlice({
     },
     setShowMembersInChatSideOver: (state, action: PayloadAction<boolean>) => {
       state.showMembersInChatSideOver = action.payload;
-    },
-    setShowCreateChatSideOver: (state, action: PayloadAction<boolean>) => {
-      state.showCreateChatSideOver = action.payload;
     },
     setSelectedItem: (state, action: PayloadAction<ISelectedItem | null>) => {
       state.selectedItem = action.payload;
@@ -68,7 +63,6 @@ export const chatSlice = createSlice({
 export const {
   setShowChat,
   setShowMembersInChatSideOver,
-  setShowCreateChatSideOver,
   setSelectedItem,
   setActiveChat,
   setSelectedMessage,

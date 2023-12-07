@@ -7,7 +7,6 @@ import EditIcon from '../../../../assets/icons/chatIcons/EditIcon';
 import PermissionIcon from '../../../../assets/icons/chatIcons/PermissionIcon';
 import TrashIcon from '../../../../assets/icons/chatIcons/TrashIcon';
 import CollapseIcon from '../../../Views/ui/collapseIcon/CollapseIcon';
-import ChatAddModal from '../ChatAddModal';
 import ToolTip from '../../../Tooltip/Tooltip';
 import ChatTooltipWrapper from '../ChatTooltipWrapper/ChatTooltipWrapper';
 import UnreadMessagesIcon from '../../../../assets/icons/chatIcons/UnreadMessagesIcon';
@@ -83,9 +82,6 @@ export default function CollectionWrapper({ collection }: ICollectionWrapperProp
               <CollapseIcon color="#A854F7" active={true} onToggle={() => null} hoverBg="white" />
             </div>
             {collection.name}
-            <div className="hidden group-hover/header:flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
-              <ChatAddModal />
-            </div>
           </div>
         </div>
         <div className="flex items-center gap-1">
