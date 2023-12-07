@@ -35,13 +35,13 @@ export default function HeaderTimeModal() {
       style={{ borderRadius: '5px', maxHeight: '92vh' }}
     >
       <div className="flex justify-between items-center mx-2 group">
-        <div className="w-1/4 opacity-0 group-hover:opacity-100 cursor-move">
+        <div className="opacity-0 group-hover:opacity-100 cursor-move">
           <Dradnddrop />
         </div>
         <div
           className={cl(
             clock_type === 'd' ? 'flex gap-2 flex-col w-full' : ' w-full mx-auto',
-            'w-2/4 my-2 flex justify-center items-center flex-col'
+            'w-3/4 my-2 flex justify-center items-center flex-col'
           )}
         >
           {clock_type === 'd' ? (
@@ -62,16 +62,13 @@ export default function HeaderTimeModal() {
             <AnalogClock time={clock} setTime={setClock} zone={zone} />
           )}
           <span
-            className={cl(
-              'flex justify-center text-alsoit-text-lg tracking-widest',
-              clock_type === 'd' ? 'text-left' : 'text-center'
-            )}
+            className={cl('flex justify-center text-alsoit-text-lg tracking-widest w-full text-center')}
             style={{ lineHeight: '5.6px' }}
           >
-            {dayjs().format('dddd, D MMMM')}
+            {dayjs().format('dddd, D MMMM YYYY')}
           </span>
         </div>
-        <div className="flex items-center justify-end w-1/4 opacity-0 group-hover:opacity-100">
+        <div className="flex items-center justify-end opacity-0 group-hover:opacity-100">
           {pinCalendar ? (
             <ToolTip title="Pin calendar and schedule card" placement="left-end">
               <div

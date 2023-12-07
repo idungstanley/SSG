@@ -92,7 +92,7 @@ export function Item({ filter, initialFilters }: ItemProps) {
   }, [subtasksFilters, isSubtasksFiltersUpdated]);
 
   return (
-    <div className="flex items-center w-full space-x-2 justify-between">
+    <div className="flex scrollbar-hide whitespace-nowrap overflow-x-scroll items-center w-full max-w-[84vw] space-x-2 justify-between">
       <Label
         isButton={filters.findIndex((i) => i.id === id) !== 0}
         disabled={filters.findIndex((i) => i.id === id) > 1}

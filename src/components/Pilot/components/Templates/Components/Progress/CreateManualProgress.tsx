@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import SaveCols from '../SaveCols';
 import { useAppSelector } from '../../../../../../app/hooks';
 import { useCreateDropdownField } from '../../../../../../features/list/listService';
+import PermissionIcon from '../../../../../../assets/icons/PermissionIcon';
+import InformationsolidIcon from '../../../../../../assets/icons/InformationsolidIcon';
+import ClosePalette from '../../../../../../assets/icons/ClosePalette';
+import ToolTip from '../../../../../Tooltip/Tooltip';
+import SavePalette from '../../../../../../assets/icons/SavePalette';
 
 function CreateManualProgress() {
   const [startValue, setStartValue] = useState<string>('');
@@ -42,12 +46,12 @@ function CreateManualProgress() {
   };
   return (
     <div className="w-full">
-      <div className="w-full flex gap-2">
+      <div className="flex w-full gap-2">
         <div className="w-full 2/4">
           <label>Start value</label>
           <input
             type="number"
-            className="h-10 rounded text-alsoit-text-lg w-full border-0 ring-0 outline-0 focus:border-0 focus:ring-0 focus:outline-0"
+            className="w-full h-10 border-0 rounded text-alsoit-text-lg ring-0 outline-0 focus:border-0 focus:ring-0 focus:outline-0"
             placeholder="Enter start value"
             value={startValue}
             min={1}
@@ -59,7 +63,7 @@ function CreateManualProgress() {
           <label>End value</label>
           <input
             type="number"
-            className="h-10 rounded text-alsoit-text-lg w-full border-0 ring-0 outline-0 focus:border-0 focus:ring-0 focus:outline-0"
+            className="w-full h-10 border-0 rounded text-alsoit-text-lg ring-0 outline-0 focus:border-0 focus:ring-0 focus:outline-0"
             placeholder="Enter end value"
             max={100}
             value={endValue}
@@ -69,11 +73,26 @@ function CreateManualProgress() {
         </div>
       </div>
       <div>
-        <SaveCols
-          handleSubmit={handleSubmit}
-          header="Progress"
-          body="This custom property which allows to track progress of tasks"
-        />
+        <p className="flex items-center p-1 my-1 rounded text-alsoit-gray-300">Host in template center</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
+            <PermissionIcon />
+            <div className="text-black">Permissions</div>
+            <InformationsolidIcon />
+          </div>
+          <div className="flex items-center justify-end gap-2 p-1">
+            <ToolTip title="Cancel">
+              <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
+                <ClosePalette fill="white" />
+              </span>
+            </ToolTip>
+            <ToolTip title="Add Property">
+              <span className="cursor-pointer" onClick={handleSubmit}>
+                <SavePalette />
+              </span>
+            </ToolTip>
+          </div>
+        </div>
       </div>
     </div>
   );

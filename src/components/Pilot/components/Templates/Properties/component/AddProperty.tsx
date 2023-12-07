@@ -1,52 +1,57 @@
-import React from 'react';
-import { IoIosAddCircleOutline } from 'react-icons/io';
-import { cl } from '../../../../../../utils';
+import React, { useState } from 'react';
 import NewColumn from '../../Components/NewColumn';
-import ToolTip from '../../../../../Tooltip/Tooltip';
-import ClosePalette from '../../../../../../assets/icons/ClosePalette';
-import SavePalette from '../../../../../../assets/icons/SavePalette';
-import PermissionIcon from '../../../../../../assets/icons/PermissionIcon';
-import InformationsolidIcon from '../../../../../../assets/icons/InformationsolidIcon';
+import { useAppSelector } from '../../../../../../app/hooks';
+import CustomPropertyList from '../../Components/CustomPropertyList';
+import NamedIconPair from '../../Components/NamedIconPair';
+import CollapseIcon from '../../../../../Views/ui/collapseIcon/CollapseIcon';
 
 export default function AddProperty() {
+  const { columnTypes } = CustomPropertyList('white');
+  const [openCard, setOpenCard] = useState<boolean>(false);
+
+  const { newCustomPropertyDetails } = useAppSelector((state) => state.task);
+  const selectedPropertyType = React.useMemo(
+    () =>
+      columnTypes.find((option) => option.children.find((child) => child.id === newCustomPropertyDetails.id)) || null,
+    [newCustomPropertyDetails, columnTypes]
+  );
+
+  const selectedChildProperty = React.useMemo(
+    () => selectedPropertyType?.children.find((option) => option.id === newCustomPropertyDetails.id),
+    [selectedPropertyType, newCustomPropertyDetails.id]
+  );
+  const title = '';
+
   return (
-    <div className="text-gray-500 bg-gray-100 rounded-md">
-      <div className="flex h-8">
+    <div className="w-full text-gray-500 bg-gray-100 rounded-md">
+      <div className="grid h-8 " style={{ gridTemplateColumns: '36% 50%' }}>
         <div className="flex items-center uppercase">
           <div
-            className="flex items-center justify-between gap-1 p-2 uppercase rounded-tl-lg rounded-br-lg bg-alsoit-gray-75 grow"
-            style={{ width: '135px' }}
+            className={`flex items-center w-full gap-2 h-8 p-2 uppercase  bg-alsoit-gray-75 grow ${
+              openCard ? 'rounded-tl-lg rounded-br-lg' : 'rounded-md rounded-tr-none'
+            }`}
+            onClick={() => setOpenCard((prev) => !prev)}
           >
-            <span className="w-4 h-4">
-              <IoIosAddCircleOutline className={cl('text-base text-white cursor-pointer')} />
+            <span>
+              <CollapseIcon color="#919191" active={!openCard} onToggle={() => ({})} hoverBg="white" />
             </span>
-            <p className="justify-center text-xs bg-['#b2b2b2'] text-white truncate">ADD PROPERTY</p>
+            <NamedIconPair
+              isLeadingIcon={true}
+              backgroundImage="linear-gradient(to right, transparent , #B2B2B2)"
+              parentName={selectedPropertyType ? (selectedPropertyType?.title as string) : 'Type'}
+              parentIcon={selectedPropertyType ? (selectedPropertyType?.icon as JSX.Element) : undefined}
+              childIcon={selectedChildProperty ? (selectedChildProperty?.icon as JSX.Element) : undefined}
+              childName={selectedChildProperty ? (selectedChildProperty?.name as string) : 'Title'}
+            />
           </div>
+          <p>{title}</p>
         </div>
       </div>
-      <div className="p-2 pl-4">
-        <NewColumn />
-        <p className="flex items-center p-1 my-1 rounded text-alsoit-gray-300">Host in template center</p>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 p-1 rounded bg-alsoit-gray-50 w-fit">
-            <PermissionIcon />
-            <div className="text-black">Permissions</div>
-            <InformationsolidIcon />
-          </div>
-          <div className="flex items-center justify-end gap-2 p-1">
-            <ToolTip title="Cancel">
-              <span onClick={() => ({})} className="cursor-pointer text-[#FF3738] hover:text-white">
-                <ClosePalette fill="white" />
-              </span>
-            </ToolTip>
-            <ToolTip title="Add Property">
-              <span className="cursor-pointer" onClick={() => ({})}>
-                <SavePalette />
-              </span>
-            </ToolTip>
-          </div>
+      {openCard && (
+        <div className="p-2 pb-4 pl-4">
+          <NewColumn />
         </div>
-      </div>
+      )}
     </div>
   );
 }

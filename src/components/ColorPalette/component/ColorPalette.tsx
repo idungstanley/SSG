@@ -56,7 +56,7 @@ export default function ColorPalette({ handleClick, activeColor }: PaletteProps)
 
   return (
     <VerticalScroll>
-      <div style={{ width: '300px', height: '162px' }}>
+      <div style={{ minWidth: '300px', height: '162px' }}>
         <div className="grid content-center w-full grid-cols-8 p-2 font-semibold bg-white rounded gap-3.5 place-items-center">
           {colorBoxes}
         </div>

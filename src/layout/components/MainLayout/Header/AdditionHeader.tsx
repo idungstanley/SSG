@@ -417,7 +417,7 @@ export default function AdditionalHeader({ isInsights }: IAdditionalHeaderProps)
                 : moment(HeaderClock, `${date_format?.toLocaleUpperCase()} HH:mm a`).format('HH:mm')}
             </span>
             {clockModal && (
-              <HeaderModal clickAway={true} toggleFn={setClockModal} styles="top-10 right-36 w-44">
+              <HeaderModal clickAway={false} toggleFn={setClockModal} styles="top-10 right-36 w-44">
                 <HeaderTimeModal />
               </HeaderModal>
             )}

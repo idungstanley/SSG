@@ -22,6 +22,7 @@ import { generateViewsUrl } from '../../../../../../../utils/generateViewsUrl';
 import { IHub } from '../../../../../../../features/hubs/hubs.interfaces';
 import { APP_TASKS } from '../../../../../../../app/constants/app';
 import { setStatusTaskListDetails } from '../../../../../../../features/list/listSlice';
+import { setEntityForCustom } from '../../../../../../../features/task/taskSlice';
 
 export default function SubHubList({ hubs, placeHubType }: ListProps) {
   const dispatch = useAppDispatch();
@@ -33,6 +34,7 @@ export default function SubHubList({ hubs, placeHubType }: ListProps) {
 
   const handleLocation = (id: string, name: string, item: IHub) => {
     dispatch(setStatusTaskListDetails({ listId: undefined, listName: undefined }));
+    dispatch(setEntityForCustom({ id, type: EntityType.hub }));
     const viewsUrl = generateViewsUrl(id, activeView?.id as string, item, EntityType.hub) as string;
     if (openedEntitiesIds.includes(id)) {
       dispatch(setOpenedEntitiesIds(openedEntitiesIds.filter((item) => item !== id)));
