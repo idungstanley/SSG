@@ -67,6 +67,9 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
 
   const [arrangedHeaders, setArrangedHeaders] = useState<string[]>([]);
 
+  const COL_HEIGHT = { height: '90%' };
+  const COL_INNER_STYLES =
+    'flex flex-col items-center justify-center w-full h-full px-1 rounded-sm text-center border-2 border-transparent hover:border-white';
   const COL_BG = taskId === task.id ? ACTIVE_COL_BG : selectedRow ? 'bg-alsoit-purple-50' : DEFAULT_COL_BG;
   const isSelected = selectedTasksArray.includes(task.id);
   const columnIndex = arrangedHeaders.map((columns): boolean => {
@@ -84,11 +87,17 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
 
   // fields config
   const fields: Record<string, JSX.Element> = {
-    priority: <TaskPriority task={task as ImyTaskData} activeColumn={columnIndex} />,
+    priority: (
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <TaskPriority task={task as ImyTaskData} activeColumn={columnIndex} />
+        </div>
+      </div>
+    ),
     status: value ? (
-      <div className="w-full" style={{ height: '90%' }}>
+      <div className="w-full" style={COL_HEIGHT}>
         <div
-          className="top-0 flex flex-col items-center justify-center w-full h-full px-1 text-xs font-medium rounded-sm text-center text-white capitalize"
+          className={`top-0 text-white capitalize text-xs font-medium ${COL_INNER_STYLES} `}
           style={{
             backgroundColor:
               task.id === '0' || task.id === currentTaskStatusId
@@ -113,59 +122,95 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
     ) : (
       <></>
     ),
-    created_at: <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="created_at" />,
+    created_at: (
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="created_at" />
+        </div>
+      </div>
+    ),
     updated_at: <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" type="updated_at" />,
     start_date: (
-      <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" task={task} type="start_date" />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <DateFormat date={value as string} activeColumn={columnIndex} font="text-sm" task={task} type="start_date" />
+        </div>
+      </div>
     ),
     end_date: (
-      <DateFormat
-        date={value as string}
-        activeColumn={columnIndex}
-        font="text-sm"
-        task={task}
-        type="end_date"
-        isDueDate={true}
-      />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <DateFormat
+            date={value as string}
+            activeColumn={columnIndex}
+            font="text-sm"
+            task={task}
+            type="end_date"
+            isDueDate={true}
+          />
+        </div>
+      </div>
     ),
     dropdown: (
-      <DropdownFieldWrapper
-        taskId={task.id}
-        fieldId={fieldId}
-        taskCustomFields={task.custom_fields}
-        entityCustomProperty={task.custom_field_columns}
-        activeColumn={columnIndex}
-        task={task}
-      />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <DropdownFieldWrapper
+            taskId={task.id}
+            fieldId={fieldId}
+            taskCustomFields={task.custom_fields}
+            entityCustomProperty={task.custom_field_columns}
+            activeColumn={columnIndex}
+            task={task}
+          />
+        </div>
+      </div>
     ),
     labels: (
-      <LabelsWrapper
-        entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
-        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
-        taskId={task.id}
-        task={task}
-        activeColumn={columnIndex}
-      />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <LabelsWrapper
+            entityCustomProperty={task.custom_field_columns?.find((i) => i.id === fieldId)}
+            taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+            taskId={task.id}
+            task={task}
+            activeColumn={columnIndex}
+          />
+        </div>
+      </div>
     ),
-    tags: <TagsWrapper tags={task.tags} />,
+    tags: (
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <TagsWrapper tags={task.tags} />
+        </div>
+      </div>
+    ),
     text: (
-      <TextField
-        taskId={task.id}
-        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
-        fieldId={fieldId}
-        activeColumn={columnIndex}
-        task={task}
-      />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <TextField
+            taskId={task.id}
+            taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+            fieldId={fieldId}
+            activeColumn={columnIndex}
+            task={task}
+          />
+        </div>
+      </div>
     ),
     email: (
-      <EmailWebsiteField
-        taskId={task.id}
-        taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
-        fieldId={fieldId}
-        fieldType="email"
-        activeColumn={columnIndex}
-        task={task}
-      />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <EmailWebsiteField
+            taskId={task.id}
+            taskCustomFields={task.custom_fields?.find((i) => i.id === fieldId)}
+            fieldId={fieldId}
+            fieldType="email"
+            activeColumn={columnIndex}
+            task={task}
+          />
+        </div>
+      </div>
     ),
     longtext: (
       <TextField
@@ -224,12 +269,16 @@ export function Col({ value, field, fieldId, task, styles, selectedRow, ...props
       />
     ),
     assignees: (
-      <Assignee
-        task={task as ImyTaskData}
-        itemId={task.id}
-        option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
-        activeColumn={columnIndex}
-      />
+      <div className="w-full" style={COL_HEIGHT}>
+        <div className={`${COL_INNER_STYLES}`}>
+          <Assignee
+            task={task as ImyTaskData}
+            itemId={task.id}
+            option={`${task.id !== '0' ? EntityType.task : 'getTeamId'}`}
+            activeColumn={columnIndex}
+          />
+        </div>
+      </div>
     ),
     progress_manual: (
       <ManualProgress
