@@ -249,7 +249,7 @@ export function Row({
             {/* effects */}
             <ToolTip title="Apply Effects">
               <button
-                className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                className="p-1 hover:bg-white border rounded-md opacity-0 group-hover:opacity-100"
                 style={{ backgroundColor: 'orange' }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -260,7 +260,7 @@ export function Row({
             {'tags' in task ? (
               <ToolTip title="Tags">
                 <div
-                  className="bg-white rounded-md opacity-0 group-hover:opacity-100"
+                  className="hover:bg-white rounded-md opacity-0 group-hover:opacity-100"
                   onClick={(e) => e.preventDefault()}
                 >
                   <ManageTagsDropdown entityId={task.id} tagsArr={task.tags as Tag[]} entityType="task" />
@@ -271,7 +271,7 @@ export function Row({
             {task.descendants_count < 1 && level < MAX_SUBTASKS_LEVEL && (
               <ToolTip title="Subtask">
                 <button
-                  className="p-1 bg-white border rounded-md opacity-0 group-hover:opacity-100"
+                  className="p-1 hover:bg-white border rounded-md opacity-0 group-hover:opacity-100"
                   onClick={(e) => onShowAddSubtaskField(e, task.id)}
                 >
                   <SubtasksIcon className={saveSettingOnline?.CompactView ? 'w-2 h-2' : 'w-3 h-3'} />
