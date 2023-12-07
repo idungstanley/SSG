@@ -11,7 +11,6 @@ import LockPersonIcon from '../../../../../../assets/icons/propertyIcons/LockPer
 export default function PermissionExtended() {
   const [invite, setInvite] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<string>('');
-  //   const [open, setOpen] = useState(false);
 
   return (
     <div
@@ -59,8 +58,6 @@ export default function PermissionExtended() {
               </span>
             </div>
           )}
-
-          {/* <MakePublicPrivate isPublic={data?.data.is_public} /> */}
         </div>
         <div
           className="underline text-alsoit-gray-100"
