@@ -192,9 +192,7 @@ export function Table({ heads, data, label, listName, listColor, isBlockedShowCh
       </div>
       <ScrollableHorizontalListsContainer ListColor={listColor} returnScrollLeft={handleScrollLeft}>
         {/* draggable item */}
-        <DragOverlay dropAnimation={null}>
-          {draggableItem ? <OverlayRow columns={columns} task={draggableItem} /> : null}
-        </DragOverlay>
+        <DragOverlay dropAnimation={null}>{draggableItem ? <OverlayRow task={draggableItem} /> : null}</DragOverlay>
         <div className="table-container" id={label}>
           <table
             style={

@@ -33,7 +33,7 @@ const MIN = 119;
 const MAX = 320;
 
 export default function FullTabs({ tabs }: TabsProps) {
-  const { showTabLabel } = useAppSelector((state) => state.workspace);
+  const { showTabLabel, activeFeatureButtonsIds } = useAppSelector((state) => state.workspace);
   const { pilotWidth } = useAppSelector((state) => state.account);
 
   const [tabItems, setTabItems] = useState(
@@ -64,6 +64,16 @@ export default function FullTabs({ tabs }: TabsProps) {
     direction: 'YB'
   });
 
+  const featureButtonsLimitSize = () => {
+    const currentShowedItems = tabItems.length - activeFeatureButtonsIds.length;
+    if (currentShowedItems < 8) {
+      return currentShowedItems * 40;
+    }
+    return 0;
+  };
+
+  const sizeLimit = featureButtonsLimitSize();
+
   const TAB_WIDTH = 60;
   const SLIDE_TOGGLE_WIDTH = 40;
 
@@ -81,12 +91,16 @@ export default function FullTabs({ tabs }: TabsProps) {
     <>
       {showTabLabel ? (
         <VerticalScroll place="pilot-hotkeys" style={{ margin: 0 }}>
-          <div style={{ height: size }}>
+          <div style={{ height: sizeLimit ? sizeLimit + 'px' : size }}>
             <div ref={blockRef} className={cl('relative h-fit col-span-1 border-r-0 flex items-center')}>
               <nav ref={navRef} className={cl('relative h-full grid grid-cols-1 divide-y grow')} aria-label="Tabs">
                 <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
                   {tabItems.map((tab) => (
-                    <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                    <>
+                      {!activeFeatureButtonsIds.includes(tab.id) && (
+                        <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                      )}
+                    </>
                   ))}
                 </SortableProvider>
               </nav>
@@ -103,13 +117,23 @@ export default function FullTabs({ tabs }: TabsProps) {
               </div>
               <SortableProvider disableOverflow={disableOverflow} items={tabItems} setItems={setTabItems}>
                 {showingTabItems.map((tab) => (
-                  <div key={tab.label}>
-                    <ToolTip title={tab.label} enterDelay={300}>
-                      <div className="h-full">
-                        <Tab key={tab.id} id={tab.id} icon={tab.icon} label={tab.label} showTabLabel={showTabLabel} />
+                  <>
+                    {!activeFeatureButtonsIds.includes(tab.id) && (
+                      <div key={tab.label}>
+                        <ToolTip title={tab.label} enterDelay={300}>
+                          <div className="h-full">
+                            <Tab
+                              key={tab.id}
+                              id={tab.id}
+                              icon={tab.icon}
+                              label={tab.label}
+                              showTabLabel={showTabLabel}
+                            />
+                          </div>
+                        </ToolTip>
                       </div>
-                    </ToolTip>
-                  </div>
+                    )}
+                  </>
                 ))}
               </SortableProvider>
             </nav>

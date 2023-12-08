@@ -195,6 +195,9 @@ code {
   height: 48px !important;
 }
 
+.header-scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

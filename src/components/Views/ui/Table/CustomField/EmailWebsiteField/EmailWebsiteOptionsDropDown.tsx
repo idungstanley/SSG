@@ -23,12 +23,10 @@ export function EmailWebsiteDropDown({ fieldOptions, fieldType, taskId }: Props)
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown' && focusedIndex === null) {
-        setFocusedIndex(0);
-      } else if (event.key === 'ArrowUp' && focusedIndex !== null && focusedIndex > 0) {
+      if (event.key === 'ArrowUp' && focusedIndex !== null && focusedIndex > 0) {
         setFocusedIndex((prevIndex) => (prevIndex !== null ? prevIndex - 1 : null));
-      } else if (event.key === 'ArrowDown' && focusedIndex !== null && focusedIndex < fieldOptions.length - 1) {
-        setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : prevIndex + 1));
+      } else if (event.key === 'ArrowDown') {
+        setFocusedIndex((prevIndex) => (prevIndex === null ? 0 : Math.min(prevIndex + 1, fieldOptions.length - 1)));
       }
 
       if (event.key === 'Enter' && focusedIndex !== null && focusedIndex < fieldOptions.length) {

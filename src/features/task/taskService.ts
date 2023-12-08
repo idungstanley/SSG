@@ -720,7 +720,6 @@ export const UseGetEverythingTasks = () => {
         if (lastPage?.data?.paginator.has_more_pages) {
           return Number(lastPage.data.paginator.page) + 1;
         }
-
         return false;
       },
       cacheTime: 0
@@ -737,7 +736,7 @@ export const UseGetFullTaskList = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const { draggableItemId } = useAppSelector((state) => state.list);
+  // const { draggableItemId } = useAppSelector((state) => state.list);
 
   const hub_id = itemType === EntityType.hub || itemType === EntityType.subHub ? itemId : null;
   const wallet_id = itemType === EntityType.wallet || itemType === EntityType.subWallet ? itemId : null;
@@ -756,7 +755,7 @@ export const UseGetFullTaskList = ({
       filters,
       isFiltersUpdated,
       sortArrUpdate,
-      draggableItemId,
+      // draggableItemId,
       toggleAllSubtask,
       separateSubtasksMode,
       splitSubTaskState
@@ -776,7 +775,7 @@ export const UseGetFullTaskList = ({
       });
     },
     {
-      enabled: (!!hub_id || !!wallet_id) && !draggableItemId && isFiltersUpdated,
+      enabled: (!!hub_id || !!wallet_id) && isFiltersUpdated,
       onSuccess: (data) => {
         data.pages.map((page) => page.data.tasks.map((task) => queryClient.setQueryData(['task', task.id], task)));
       },
@@ -1101,7 +1100,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
     (state) => state.task
   );
   const { currentWorkspaceId } = useAppSelector((state) => state.auth);
-  const { draggableItemId } = useAppSelector((state) => state.list);
+  // const { draggableItemId } = useAppSelector((state) => state.list);
 
   const sortArrUpdate = sortAbleArr.length <= 0 ? null : sortAbleArr;
 
@@ -1116,7 +1115,7 @@ export const getTaskListService = (listId: string | null | undefined) => {
       filters,
       isFiltersUpdated,
       sortArrUpdate,
-      draggableItemId,
+      // `draggableItemId`,
       toggleAllSubtask,
       separateSubtasksMode,
       splitSubTaskState

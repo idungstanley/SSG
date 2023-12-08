@@ -5,7 +5,7 @@ import CalenderIcon from '../../assets/icons/CalenderIcon';
 import DatePicker from '../DatePicker/DatePicker';
 import { UseUpdateTaskDateService, useMultipleUpdateTasksDate } from '../../features/task/taskService';
 import { Task } from '../../features/task/interface.tasks';
-import { setSelectedTaskParentId, setSelectedTaskType } from '../../features/task/taskSlice';
+import { setSelectedTaskParentId, setSelectedTaskType, setTaskRowFocus } from '../../features/task/taskSlice';
 import { EntityType } from '../../utils/EntityTypes/EntityType';
 import { setPickedDateState } from '../../features/workspace/workspaceSlice';
 import { isDateInPast, isDateSame } from './CheckDate';
@@ -83,16 +83,19 @@ export default function DateFormat({
     setAnchorEl(null);
     setShowDatePicker(!showDataPicker);
     setTaskId(task?.id as string);
+    dispatch(setTaskRowFocus(true));
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {
-      setShowDatePicker(!!containerRef.current);
+      setAnchorEl(containerRef.current);
+      setShowDatePicker(true);
+      dispatch(setTaskRowFocus(false));
     }
   };
 
   useEffect(() => {
-    if (containerRef.current && activeColumn) {
+    if (containerRef.current && activeColumn && taskColumnIndex) {
       if (task?.id === KeyBoardSelectedTaskData?.id && activeColumn[taskColumnIndex]) {
         containerRef.current.focus();
       }
