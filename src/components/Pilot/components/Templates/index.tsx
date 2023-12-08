@@ -97,16 +97,18 @@ function Templates() {
   return (
     <div className="flex-col w-full h-full gap-3 p-2 pl-4 space-y-2 overflow-scroll">
       <span
-        className={`flex items-center justify-between  ${customFiledsColumns.length === 0 || isSearch ? 'gap-20' : ''}`}
+        className={`flex items-center justify-between  ${customFiledsColumns.length === 0 ? 'gap-20' : ''}`}
         style={{ fontSize: '11px', fontWeight: '600', lineHeight: '13.2px' }}
       >
         <div
-          className="flex items-center w-32 h-8 gap-1 p-2 text-white rounded-md cursor-pointer bg-alsoit-gray-75 hover:bg-alsoit-gray-100"
+          className="flex items-center h-8 gap-1 p-2 text-white rounded-md cursor-pointer w-fit bg-alsoit-gray-75 hover:bg-alsoit-gray-100"
           onClick={() => setAddProperties((prev) => !prev)}
           onMouseEnter={() => setBtnHover(true)}
           onMouseLeave={() => setBtnHover(false)}
         >
-          {btnHover ? <AddCircleWhite /> : <PlusCircle color="white" />}
+          <span className="flex items-center justify-center w-5 h-5">
+            {btnHover ? <AddCircleWhite /> : <PlusCircle color="white" />}
+          </span>
           <span>ADD PROPERTY</span>
         </div>
         {customFiledsColumns.length === 0 ? (
@@ -114,7 +116,7 @@ function Templates() {
         ) : (
           mockChatsData.length && (
             <div
-              className={`flex items-center gap-2 ${isSearch ? 'grow' : ''}`}
+              className="flex items-center gap-2"
               style={{ fontSize: '10px', fontWeight: '500', lineHeight: '12px' }}
             >
               {!isSearch ? (
@@ -177,7 +179,7 @@ function Templates() {
                 </>
               ) : (
                 <>
-                  <div className="relative flex items-center justify-start h-8 bg-white rounded-md grow chatSearch">
+                  <div className="relative flex items-center justify-start w-64 h-8 bg-white rounded-md chatSearch">
                     <span className="chatSearch_icon">
                       <ChatSearch color="#424242" />
                     </span>

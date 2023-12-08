@@ -32,7 +32,7 @@ export default function PermissionExtended() {
               className="relative flex items-center justify-between h-8 bg-white border rounded-md cursor-pointer"
               onClick={() => setInvite(!invite)}
             >
-              <span className="ml-2 text-alsoit-gray-100">Invite by name or email</span>
+              <span className="ml-2 text-orange-300">Invite by name or email</span>
               <button className="absolute flex items-center justify-center w-16 h-5 text-white rounded-md bg-alsoit-purple-300 right-2">
                 Invite
               </button>
@@ -59,13 +59,10 @@ export default function PermissionExtended() {
             </div>
           )}
         </div>
-        <div
-          className="underline text-alsoit-gray-100"
-          style={{ fontSize: '10px', fontWeight: '600', lineHeight: '12px' }}
-        >
+        <div className="text-orange-300 underline " style={{ fontSize: '10px', fontWeight: '600', lineHeight: '12px' }}>
           DEFAULT SHARE
         </div>
-        <div className="flex items-center justify-between w-full h-8 gap-2 mt-2">
+        <div className="flex items-center justify-between w-full h-8 gap-2 mt-2 text-orange-300">
           <div className="flex items-center gap-1">
             <ArrowRightFilled />
             <span>Share With</span>
@@ -84,12 +81,12 @@ export default function PermissionExtended() {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between w-full h-8 gap-2 mt-2">
+        <div className="flex items-center justify-between w-full h-8 gap-2 mt-2 text-orange-300">
           <div className="flex items-center gap-1">
             <ArrowRightFilled />
             <span>Added to list</span>
             <div className="flex items-center justify-between w-4 h-4 p-1 bg-white rounded">
-              <PersonAddIcon />
+              <PersonAddIcon color="orange" />
             </div>
           </div>
           <div className="flex items-center">
@@ -98,8 +95,8 @@ export default function PermissionExtended() {
         </div>
         <div className="flex items-center justify-center w-full mt-3">
           <div className="flex items-center justify-center h-6 gap-2 bg-white rounded-md w-52">
-            <LockPersonIcon />
-            <p>Make Private</p>
+            <LockPersonIcon color="orange" />
+            <p className="text-orange-300">Make Private</p>
           </div>
         </div>
       </div>

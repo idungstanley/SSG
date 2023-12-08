@@ -32,7 +32,7 @@ export default function AddProperty() {
             }`}
             onClick={() => setOpenCard((prev) => !prev)}
           >
-            <span>
+            <span className="flex items-center justify-center w-5 h-5">
               <CollapseIcon color="#919191" active={!openCard} onToggle={() => ({})} hoverBg="white" />
             </span>
             <NamedIconPair
