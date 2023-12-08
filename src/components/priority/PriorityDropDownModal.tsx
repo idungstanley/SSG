@@ -32,7 +32,7 @@ type Props = {
 export function PriorityDropDownModal({ priorityList, setIsOpen, taskCurrentPriority, task }: Props) {
   const dispatch = useAppDispatch();
 
-  const { taskRowFocus, KeyBoardSelectedTaskData } = useAppSelector((state) => state.task);
+  const { KeyBoardSelectedTaskData } = useAppSelector((state) => state.task);
 
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
@@ -64,7 +64,7 @@ export function PriorityDropDownModal({ priorityList, setIsOpen, taskCurrentPrio
   }, [focusedIndex]);
 
   useEffect(() => {
-    if (task.id === KeyBoardSelectedTaskData?.id) dispatch(setTaskRowFocus(!taskRowFocus));
+    if (task.id === KeyBoardSelectedTaskData?.id) dispatch(setTaskRowFocus(false));
   }, [task, KeyBoardSelectedTaskData]);
   return (
     <div className="overflow-y-auto" key="priority">
