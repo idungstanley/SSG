@@ -218,7 +218,6 @@ function Templates() {
               <CardWrapper
                 isActiveColumn={isActiveCollection}
                 setActiveColumn={setActiveCollection}
-                type="properties"
                 showBottomElement={showPermissionExt}
                 bottomElement={<PermissionExtended />}
                 titleElement={

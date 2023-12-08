@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppSelector } from '../../../app/hooks';
 import { useGetChats } from '../../../features/chat/chatService';
-import FullScreenMessage from '../../CenterMessage/FullScreenMessage';
 import { Spinner } from '../../../common';
-import { setShowCreateChatSideOver } from '../../../features/chat/chatSlice';
 import { ExtendedListColumnProps } from '../../../pages/workspace/tasks/component/views/ListColumns';
 import { ScrollableHorizontalListsContainer } from '../../ScrollableContainer/ScrollableHorizontalListsContainer';
 import { ChatRow } from './ChatRow';
@@ -15,7 +13,6 @@ import ChatMe from '../../../assets/icons/ChatMe';
 import ChatAssign from '../../../assets/icons/ChatAssign';
 import ArrowDrop from '../../../assets/icons/ArrowDrop';
 import ChatSearch from '../../../assets/icons/ChatSearch';
-import ChatAddModal from './ChatAddModal';
 import CollapseIcon from '../../Views/ui/collapseIcon/CollapseIcon';
 import DropdownArrowIcon from '../../../assets/icons/chatIcons/DropdownArrowIcon';
 import CollectionsIcon from '../../../assets/icons/chatIcons/CollectionsIcon';
@@ -67,8 +64,6 @@ const heads: ExtendedListColumnProps[] = [
 ];
 
 export default function ChatsList() {
-  const dispatch = useAppDispatch();
-
   const { pilotSideOver } = useAppSelector((state) => state.slideOver);
   const { type, id } = pilotSideOver;
 
@@ -108,15 +103,7 @@ export default function ChatsList() {
       </div>
     );
 
-  return !data?.length ? (
-    <FullScreenMessage
-      title="No chats."
-      description="Create one."
-      showCta={true}
-      ctaText="Create chat"
-      ctaOnClick={() => dispatch(setShowCreateChatSideOver(true))}
-    />
-  ) : (
+  return data?.length ? (
     <>
       <div className="h-full gap-1 p-2 px-4">
         <div
@@ -146,9 +133,6 @@ export default function ChatsList() {
                     />
                   </div>
                   DESIGNERS
-                  <div className="hidden group-hover/header:flex items-center justify-center h-6 bg-white rounded-[5px] w-12">
-                    <ChatAddModal />
-                  </div>
                 </div>
               </div>
             </div>
@@ -309,10 +293,10 @@ export default function ChatsList() {
                   </table>
                 </div>
               </ScrollableHorizontalListsContainer>
-              <div className="flex items-center gap-1 px-2 pl-7 pb-4">
+              <div className="flex items-center gap-1 px-2 pl-7 pt-2 pb-4">
                 <div
-                  className="flex justify-center items-center rounded-sm bg-alsoit-gray-50 py-1 px-2"
-                  style={{ minWidth: '16px', minHeight: '16px', fontSize: '8px', color: 'orange' }}
+                  className="flex justify-center items-center rounded-sm bg-alsoit-gray-50 py-1 px-2 text-[10px]"
+                  style={{ minWidth: '16px', minHeight: '16px', color: 'orange' }}
                 >
                   <span className="pr-1">
                     <PermissionIcon color="orange" />
@@ -346,5 +330,5 @@ export default function ChatsList() {
         </div>
       </div>
     </>
-  );
+  ) : null;
 }
