@@ -5,16 +5,16 @@ import TaskTag from '../../../Tag/ui/TaskTag';
 import { generateGrid } from '../../lib';
 import { Col } from './Col';
 import { StickyCol } from './StickyCol';
-import { listColumnProps } from '../../../../pages/workspace/tasks/component/views/ListColumns';
+import { columnsHead } from '../../../../pages/workspace/tasks/component/views/ListColumns';
 import Dradnddrop from '../../../../assets/icons/Dradnddrop';
 
 interface OverlayRowProps {
   task: Task;
-  columns: listColumnProps[];
 }
 
-export function OverlayRow({ task, columns }: OverlayRowProps) {
-  const otherColumns = columns.slice(1);
+export function OverlayRow({ task }: OverlayRowProps) {
+  const columns = columnsHead.filter((i) => !i.hidden);
+  const defaultCols = columns.slice(1);
 
   return (
     <div style={{ minWidth: 500, display: 'grid', gridTemplateColumns: generateGrid(columns.length) }}>
@@ -57,7 +57,7 @@ export function OverlayRow({ task, columns }: OverlayRowProps) {
         </div>
       </StickyCol>
 
-      {otherColumns.map((col) => (
+      {defaultCols.map((col) => (
         <Col
           fieldId={col.id}
           field={col.field}
